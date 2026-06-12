@@ -1,0 +1,66 @@
+import {
+  pgTable, serial, varchar, text, integer, boolean,
+  timestamp, jsonb, real, pgEnum,
+} from 'drizzle-orm/pg-core'
+
+export const categoryEnum = pgEnum('category', ['AI', 'UI', 'Performance', 'Safety', 'Store', 'System'])
+export const capabilityStatusEnum = pgEnum('capability_status', ['draft', 'needs_review', 'ready', 'deprecated'])
+export const complexityEnum = pgEnum('complexity', ['Simple', 'Medium', 'Advanced'])
+export const demoStatusEnum = pgEnum('demo_status', ['planned', 'implemented', 'deprecated'])
+export const sourceTypeEnum = pgEnum('source_type', ['what_new_page', 'doc_page', 'sample_code', 'wwdc_session', 'news_post', 'third_party'])
+export const ingestionStatusEnum = pgEnum('ingestion_status', ['pending', 'running', 'parsed', 'classified', 'failed'])
+
+export const capabilities = pgTable('capabilities', {
+  id: serial('id').primaryKey(),
+  slug: varchar('slug', { length: 255 }).notNull().unique(),
+  name: varchar('name', { length: 255 }).notNull(),
+  summary: text('summary').notNull(),
+  whyItMatters: text('why_it_matters'),
+  category: categoryEnum('category').notNull(),
+  frameworks: text('frameworks').array().notNull().default([]),
+  availability: varchar('availability', { length: 100 }).default('iOS 27+'),
+  hardwareConstraints: text('hardware_constraints'),
+  gotchas: text('gotchas'),
+  impactScore: integer('impact_score').default(3).notNull(),
+  viewCount: integer('view_count').default(0).notNull(),
+  rankScore: real('rank_score').default(0).notNull(),
+  status: capabilityStatusEnum('status').default('needs_review').notNull(),
+  demoId: integer('demo_id'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+})
+
+export const sources = pgTable('sources', {
+  id: serial('id').primaryKey(),
+  capabilityId: integer('capability_id').references(() => capabilities.id, { onDelete: 'cascade' }),
+  type: sourceTypeEnum('type').notNull(),
+  title: varchar('title', { length: 500 }).notNull(),
+  url: varchar('url', { length: 1000 }).notNull(),
+  summary: text('summary'),
+  official: boolean('official').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+export const demos = pgTable('demos', {
+  id: serial('id').primaryKey(),
+  capabilityId: integer('capability_id').references(() => capabilities.id, { onDelete: 'cascade' }),
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  complexity: complexityEnum('complexity').notNull(),
+  codeSnippet: text('code_snippet'),
+  repoUrl: varchar('repo_url', { length: 1000 }),
+  previewMediaUrl: varchar('preview_media_url', { length: 1000 }),
+  status: demoStatusEnum('status').default('planned').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+export const ingestionEvents = pgTable('ingestion_events', {
+  id: serial('id').primaryKey(),
+  topicInput: varchar('topic_input', { length: 500 }).notNull(),
+  sourceUrl: varchar('source_url', { length: 1000 }),
+  status: ingestionStatusEnum('status').default('pending').notNull(),
+  parsedPayload: jsonb('parsed_payload'),
+  errorMessage: text('error_message'),
+  capabilityId: integer('capability_id'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
