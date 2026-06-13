@@ -91,6 +91,7 @@ export const userStreaks = pgTable('user_streaks', {
   clerkId: varchar('clerk_id', { length: 255 }).notNull().unique(),
   currentStreak: integer('current_streak').default(0).notNull(),
   longestStreak: integer('longest_streak').default(0).notNull(),
-  lastActivityDate: varchar('last_activity_date', { length: 10 }),
+  lastActivityDate: varchar('last_activity_date', { length: 10 }), // legacy, unused
+  lastActivityAt: timestamp('last_activity_at'),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })

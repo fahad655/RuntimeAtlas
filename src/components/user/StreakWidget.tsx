@@ -1,39 +1,27 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useUser } from '@clerk/nextjs'
-import { CircularRing } from './CircularRing'
-
-interface StreakData {
-  currentStreak: number
-  longestStreak: number
-}
+import { Flame } from 'lucide-react'
 
 export function StreakWidget() {
   const { isSignedIn, isLoaded } = useUser()
-  const [data, setData] = useState<StreakData | null>(null)
+  const [streak, setStreak] = useState<number | null>(null)
 
   useEffect(() => {
     if (!isSignedIn) return
-    fetch('/api/user/profile').then(r => r.json()).then(setData)
+    fetch('/api/user/profile').then(r => r.json()).then(d => setStreak(d.currentStreak ?? 0))
   }, [isSignedIn])
 
-  if (!isLoaded || !isSignedIn || !data) return null
+  if (!isLoaded || !isSignedIn || streak === null) return null
 
-  const active = data.currentStreak > 0
-  const max = Math.max(data.longestStreak, 7) // ring fills against either longest streak or 7 days
+  const active = streak > 0
 
   return (
-    <CircularRing
-      value={data.currentStreak}
-      max={max}
-      size={32}
-      strokeWidth={3}
-      trackClass={active ? 'text-orange-900/50' : 'text-muted/30'}
-      progressClass={active ? 'text-orange-400' : 'text-muted-foreground'}
-    >
-      <span className={`text-[10px] font-bold leading-none ${active ? 'text-orange-400' : 'text-muted-foreground'}`}>
-        {data.currentStreak}
+    <div className="flex items-center gap-1 text-sm" title={`${streak}-day streak`}>
+      <Flame className={active ? 'h-4 w-4 text-orange-400' : 'h-4 w-4 text-muted-foreground'} />
+      <span className={active ? 'font-semibold text-orange-400' : 'text-muted-foreground'}>
+        {streak}
       </span>
-    </CircularRing>
+    </div>
   )
 }
