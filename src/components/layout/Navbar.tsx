@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { ThemeToggle } from './ThemeToggle'
 import { SignInButton, SignUpButton, UserButton, useUser } from '@clerk/nextjs'
@@ -9,10 +10,9 @@ import { Button } from '@/components/ui/button'
 
 const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 
-const NAV_ITEMS = [
+const PUBLIC_NAV = [
   { href: '/features', label: 'Features' },
   { href: '/demos', label: 'Demos' },
-  { href: '/engine', label: 'Engine' },
 ]
 
 function AuthSection() {
@@ -49,6 +49,16 @@ function AuthSection() {
 
 export function Navbar() {
   const pathname = usePathname()
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  useEffect(() => {
+    setIsAdmin(localStorage.getItem('ra-admin') === '1')
+  }, [pathname]) // re-check whenever route changes (covers login/logout)
+
+  const navItems = isAdmin
+    ? [...PUBLIC_NAV, { href: '/engine', label: 'Engine' }]
+    : PUBLIC_NAV
+
   return (
     <nav className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex h-14 items-center justify-between">
@@ -60,7 +70,7 @@ export function Navbar() {
         </Link>
 
         <div className="flex items-center gap-0.5">
-          {NAV_ITEMS.map(item => (
+          {navItems.map(item => (
             <Link
               key={item.href}
               href={item.href}

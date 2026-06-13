@@ -43,7 +43,11 @@ export default function AdminPage() {
         </div>
         <form
           className="w-full flex gap-2"
-          onSubmit={e => { e.preventDefault(); setAuthed(true) }}
+          onSubmit={e => {
+            e.preventDefault()
+            localStorage.setItem('ra-admin', '1')
+            setAuthed(true)
+          }}
         >
           <Input
             type="password"
@@ -64,7 +68,11 @@ export default function AdminPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
       <div className="flex items-center justify-between mb-10">
         <h1 className="text-3xl font-bold">Admin</h1>
-        <Button variant="ghost" size="sm" onClick={() => setAuthed(false)} className="text-muted-foreground">
+        <Button
+          variant="ghost" size="sm"
+          onClick={() => { localStorage.removeItem('ra-admin'); setAuthed(false) }}
+          className="text-muted-foreground"
+        >
           Lock
         </Button>
       </div>
