@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { ViewTracker } from '@/components/features/ViewTracker'
 import { DemoSection } from '@/components/features/DemoSection'
+import { ProgressButton } from '@/components/user/ProgressButton'
 import { highlightSwift } from '@/lib/highlighter'
 import type { Metadata } from 'next'
 
@@ -136,12 +137,15 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
           ))}
         </div>
 
-        <div className="flex items-center gap-1.5 mt-4">
-          <span className="text-xs text-muted-foreground mr-1">Impact</span>
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className={cn('h-2 w-2 rounded-full', i < cap.impactScore ? 'bg-violet-400' : 'bg-muted')} />
-          ))}
-          <span className="text-xs text-muted-foreground ml-1">{cap.impactScore}/5</span>
+        <div className="flex items-center justify-between gap-4 mt-4 flex-wrap">
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-muted-foreground mr-1">Impact</span>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className={cn('h-2 w-2 rounded-full', i < cap.impactScore ? 'bg-violet-400' : 'bg-muted')} />
+            ))}
+            <span className="text-xs text-muted-foreground ml-1">{cap.impactScore}/5</span>
+          </div>
+          <ProgressButton capabilityId={cap.id} />
         </div>
       </header>
 

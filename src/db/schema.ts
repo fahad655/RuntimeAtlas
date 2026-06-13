@@ -68,3 +68,29 @@ export const ingestionEvents = pgTable('ingestion_events', {
   capabilityId: integer('capability_id'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
+
+// ── User auth / progress tables ─────────────────────────────────────────────
+
+export const userProfiles = pgTable('user_profiles', {
+  id: serial('id').primaryKey(),
+  clerkId: varchar('clerk_id', { length: 255 }).notNull().unique(),
+  subscribedFrameworks: text('subscribed_frameworks').array().notNull().default([]),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+})
+
+export const userProgress = pgTable('user_progress', {
+  id: serial('id').primaryKey(),
+  clerkId: varchar('clerk_id', { length: 255 }).notNull(),
+  capabilityId: integer('capability_id').references(() => capabilities.id, { onDelete: 'cascade' }).notNull(),
+  completedAt: timestamp('completed_at').defaultNow().notNull(),
+})
+
+export const userStreaks = pgTable('user_streaks', {
+  id: serial('id').primaryKey(),
+  clerkId: varchar('clerk_id', { length: 255 }).notNull().unique(),
+  currentStreak: integer('current_streak').default(0).notNull(),
+  longestStreak: integer('longest_streak').default(0).notNull(),
+  lastActivityDate: varchar('last_activity_date', { length: 10 }),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+})

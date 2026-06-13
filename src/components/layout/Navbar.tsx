@@ -3,12 +3,49 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { ThemeToggle } from './ThemeToggle'
+import { SignInButton, SignUpButton, UserButton, useUser } from '@clerk/nextjs'
+import { StreakWidget } from '@/components/user/StreakWidget'
+import { Button } from '@/components/ui/button'
+
+const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 
 const NAV_ITEMS = [
   { href: '/features', label: 'Features' },
   { href: '/demos', label: 'Demos' },
   { href: '/engine', label: 'Engine' },
 ]
+
+function AuthSection() {
+  const { isSignedIn, isLoaded } = useUser()
+
+  if (!isLoaded) return <div className="w-20" />
+
+  if (isSignedIn) {
+    return (
+      <div className="flex items-center gap-3">
+        <StreakWidget />
+        <Link
+          href="/home"
+          className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+        >
+          My Progress
+        </Link>
+        <UserButton />
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <SignInButton mode="modal">
+        <Button variant="ghost" size="sm" className="text-sm">Sign in</Button>
+      </SignInButton>
+      <SignUpButton mode="modal">
+        <Button size="sm" className="text-sm bg-violet-600 hover:bg-violet-500 text-white">Sign up</Button>
+      </SignUpButton>
+    </div>
+  )
+}
 
 export function Navbar() {
   const pathname = usePathname()
@@ -37,8 +74,9 @@ export function Navbar() {
               {item.label}
             </Link>
           ))}
-          <div className="ml-2 pl-2 border-l border-border/40">
+          <div className="ml-2 pl-2 border-l border-border/40 flex items-center gap-2">
             <ThemeToggle />
+            {hasClerk && <AuthSection />}
           </div>
         </div>
       </div>
