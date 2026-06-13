@@ -13,7 +13,7 @@ export function IngestTrigger({ secret, onSuccess }: Props) {
   const [topic, setTopic] = useState('')
   const [url, setUrl] = useState('')
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<{ error?: string; capabilityId?: number } | null>(null)
+  const [result, setResult] = useState<{ error?: string; capabilityId?: number; existingSlug?: string; existingName?: string } | null>(null)
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -26,7 +26,7 @@ export function IngestTrigger({ secret, onSuccess }: Props) {
         headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret },
         body: JSON.stringify({ topic: topic.trim(), url: url.trim() || undefined }),
       })
-      const data = await res.json() as { error?: string; capabilityId?: number }
+      const data = await res.json() as { error?: string; capabilityId?: number; existingSlug?: string; existingName?: string }
       setResult(data)
       if (!data.error) {
         setTopic('')
@@ -73,7 +73,19 @@ export function IngestTrigger({ secret, onSuccess }: Props) {
           : <><Zap className="h-4 w-4 mr-2" /> Run ingestion</>}
       </Button>
       {result?.error && (
-        <p className="text-sm text-destructive">{result.error}</p>
+        <div className="text-sm text-destructive space-y-1">
+          <p>{result.error}</p>
+          {result.existingSlug && (
+            <a
+              href={`/features/${result.existingSlug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-amber-400 underline underline-offset-2"
+            >
+              View: {result.existingName}
+            </a>
+          )}
+        </div>
       )}
       {result?.capabilityId && !result.error && (
         <p className="text-sm text-emerald-400">

@@ -4,11 +4,12 @@ import { eq } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { ExternalLink, FlaskConical, AlertTriangle, Zap, BookOpen, Video, Code2 } from 'lucide-react'
+import { ExternalLink, FlaskConical, AlertTriangle, Zap, BookOpen, Video, Code2, Sparkles, RefreshCw } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { CopyButton } from '@/components/features/CopyButton'
 import { ViewTracker } from '@/components/features/ViewTracker'
+import { DemoSection } from '@/components/features/DemoSection'
+import { highlightSwift } from '@/lib/highlighter'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -43,9 +44,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const data = await getData(slug)
   if (!data) return {}
+  const { cap } = data
+  const ogUrl = `/api/og?name=${encodeURIComponent(cap.name)}&summary=${encodeURIComponent(cap.summary)}&category=${cap.category}&impact=${cap.impactScore}&changeType=${cap.changeType}`
   return {
-    title: data.cap.name,
-    description: data.cap.summary,
+    title: cap.name,
+    description: cap.summary,
+    openGraph: {
+      title: cap.name,
+      description: cap.summary,
+      images: [{ url: ogUrl, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: cap.name,
+      description: cap.summary,
+      images: [ogUrl],
+    },
   }
 }
 
@@ -58,6 +72,13 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
   const wwdcSources = capSources.filter(s => s.type === 'wwdc_session')
   const docSources = capSources.filter(s => s.type !== 'wwdc_session')
   const allSources = [...wwdcSources, ...docSources]
+
+  const [newCodeHtml, oldCodeHtml] = await Promise.all([
+    demo?.codeSnippet ? highlightSwift(demo.codeSnippet) : null,
+    demo?.previousCodeSnippet && cap.changeType === 'updated'
+      ? highlightSwift(demo.previousCodeSnippet)
+      : null,
+  ])
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
@@ -76,7 +97,27 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
           <Badge variant="outline" className={cn('text-xs', CATEGORY_COLORS[cap.category])}>
             {cap.category}
           </Badge>
+          {cap.changeType === 'new' && (
+            <Badge variant="outline" className="text-xs bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+              <Sparkles className="h-3 w-3 mr-1" /> New in iOS 27
+            </Badge>
+          )}
+          {cap.changeType === 'updated' && (
+            <Badge variant="outline" className="text-xs bg-amber-500/10 text-amber-400 border-amber-500/20">
+              <RefreshCw className="h-3 w-3 mr-1" /> Updated in iOS 27
+            </Badge>
+          )}
+          {cap.changeType === 'deprecated' && (
+            <Badge variant="outline" className="text-xs bg-red-500/10 text-red-400 border-red-500/20">
+              Deprecated in iOS 27
+            </Badge>
+          )}
           <Badge variant="outline" className="text-xs">{cap.availability}</Badge>
+          {cap.verifiedOnBeta && (
+            <Badge variant="outline" className="text-xs bg-sky-500/10 text-sky-400 border-sky-500/20">
+              ✓ {cap.verifiedOnBeta}
+            </Badge>
+          )}
           {demo && (
             <Badge variant="outline" className="text-xs bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
               <FlaskConical className="h-3 w-3 mr-1" /> Demo available
@@ -106,6 +147,23 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
 
       <Separator className="mb-10" />
 
+      {/* What changed vs previous iOS */}
+      {cap.changesSince && (
+        <section className="mb-10">
+          <div className="flex items-center gap-2 mb-4">
+            <RefreshCw className="h-5 w-5 text-amber-400 shrink-0" />
+            <h2 className="text-xl font-semibold">What changed from iOS 26</h2>
+          </div>
+          <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-5 space-y-2">
+            {cap.changesSince.split('\n').filter(Boolean).map((line, i) => (
+              <p key={i} className="text-sm text-muted-foreground leading-relaxed">
+                {line.replace(/^[•\-\*]\s*/, '• ')}
+              </p>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Why it matters */}
       {cap.whyItMatters && (
         <section className="mb-10">
@@ -129,40 +187,31 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
           <div className="flex items-center gap-2 mb-4">
             <FlaskConical className="h-5 w-5 text-emerald-400 shrink-0" />
             <h2 className="text-xl font-semibold">Tiny Demo</h2>
-            <Badge variant="outline" className="text-xs ml-auto">{demo.complexity}</Badge>
           </div>
 
-          <div className="rounded-xl border border-border/50 overflow-hidden">
-            <div className="px-5 py-4 border-b border-border/30 bg-muted/20">
-              <h3 className="font-semibold text-sm">{demo.title}</h3>
-              <p className="text-xs text-muted-foreground mt-1">{demo.description}</p>
+          <DemoSection
+            title={demo.title}
+            description={demo.description}
+            complexity={demo.complexity}
+            changeType={cap.changeType}
+            newCodeHtml={newCodeHtml}
+            oldCodeHtml={oldCodeHtml}
+            rawNewCode={demo.codeSnippet ?? null}
+            rawOldCode={demo.previousCodeSnippet ?? null}
+          />
+
+          {demo.repoUrl && (
+            <div className="px-5 py-3 mt-3">
+              <a
+                href={demo.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition-colors"
+              >
+                View full repo <ExternalLink className="h-3.5 w-3.5" />
+              </a>
             </div>
-
-            {demo.codeSnippet && (
-              <div>
-                <div className="flex items-center justify-between px-4 py-2 border-b border-border/30 bg-muted/30">
-                  <span className="text-xs text-muted-foreground font-mono">Swift</span>
-                  <CopyButton code={demo.codeSnippet} />
-                </div>
-                <pre className="overflow-x-auto p-5 text-xs font-mono leading-relaxed bg-muted/10">
-                  <code>{demo.codeSnippet}</code>
-                </pre>
-              </div>
-            )}
-
-            {demo.repoUrl && (
-              <div className="px-5 py-3 border-t border-border/30 bg-muted/10">
-                <a
-                  href={demo.repoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition-colors"
-                >
-                  View full repo <ExternalLink className="h-3.5 w-3.5" />
-                </a>
-              </div>
-            )}
-          </div>
+          )}
         </section>
       )}
 

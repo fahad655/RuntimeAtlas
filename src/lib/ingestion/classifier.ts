@@ -1,4 +1,5 @@
 import { generateText, Output } from 'ai'
+import { anthropic } from '@ai-sdk/anthropic'
 import { z } from 'zod'
 import type { ScrapedDoc } from './scraper'
 
@@ -13,11 +14,14 @@ const CapabilitySchema = z.object({
   hardwareConstraints: z.string().optional().describe('Hardware, region, or device model limitations if any'),
   gotchas: z.string().optional().describe('Common pitfalls, API quirks, beta limitations, private vs public status'),
   impactScore: z.number().int().min(1).max(5).describe('1=niche edge case, 3=solid addition, 5=every app developer must know this'),
+  changeType: z.enum(['new', 'updated', 'deprecated']).describe('"new" if this API/feature did not exist before iOS 27; "updated" if it existed before but has significant changes; "deprecated" if it was removed or deprecated'),
+  changesSince: z.string().optional().describe('Only if changeType is "updated" or "deprecated": 2-4 bullet points (starting with "•") describing what concretely changed vs the previous iOS version'),
   demo: z.object({
     title: z.string().describe('Demo project name, e.g. "On-Device Text Summarizer"'),
     description: z.string().describe('1-2 sentence description of what the demo app shows'),
     complexity: z.enum(['Simple', 'Medium', 'Advanced']),
-    codeSnippet: z.string().describe('Real, compilable Swift/SwiftUI code demonstrating the core API. Include imports. ~30-60 lines. No pseudocode.'),
+    codeSnippet: z.string().describe('Real, compilable Swift/SwiftUI code demonstrating the core iOS 27 API. Include imports. ~30-60 lines. No pseudocode.'),
+    previousCodeSnippet: z.string().optional().describe('Only when changeType is "updated": the equivalent compilable Swift code using the OLD pre-iOS-27 approach, covering the same use-case as codeSnippet. Must be real code with imports — not pseudocode. This is the "before" side of the diff shown to developers.'),
     keyApis: z.array(z.string()).describe('Key Apple API names used in the demo'),
   }),
 })
@@ -39,7 +43,7 @@ export async function classifyAndBrief(
     : ''
 
   const { output } = await generateText({
-    model: 'anthropic/claude-sonnet-4.6',
+    model: anthropic('claude-sonnet-4-6'),
     output: Output.object({ schema: CapabilitySchema }),
     prompt: `You are an expert iOS engineer and technical writer creating content for RuntimeAtlas — a reference site that makes new iOS SDK capabilities immediately scannable and usable.
 

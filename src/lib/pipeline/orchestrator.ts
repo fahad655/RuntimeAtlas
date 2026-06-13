@@ -2,12 +2,46 @@ import { db } from '@/db'
 import { capabilities, sources, demos, ingestionEvents } from '@/db/schema'
 import { scrapeForTopic } from '@/lib/ingestion/scraper'
 import { classifyAndBrief } from '@/lib/ingestion/classifier'
-import { eq } from 'drizzle-orm'
+import { eq, desc } from 'drizzle-orm'
+
+const STOP_WORDS = new Set(['the', 'and', 'for', 'with', 'api', 'ios', 'apple', 'new', 'using', 'via'])
+
+function wordSet(text: string): Set<string> {
+  return new Set(
+    text.toLowerCase().split(/\W+/).filter(w => w.length >= 3 && !STOP_WORDS.has(w))
+  )
+}
+
+async function findDuplicate(topicInput: string): Promise<{ slug: string; name: string } | null> {
+  const existing = await db
+    .select({ slug: capabilities.slug, name: capabilities.name, status: capabilities.status })
+    .from(capabilities)
+  const topicWords = wordSet(topicInput)
+  if (topicWords.size === 0) return null
+
+  for (const cap of existing) {
+    if (cap.status === 'deprecated') continue
+    const nameWords = wordSet(cap.name)
+    const overlap = [...topicWords].filter(w => nameWords.has(w)).length
+    // Flag if ≥60% of topic words appear in the existing capability name
+    if (overlap / topicWords.size >= 0.6) return cap
+  }
+  return null
+}
 
 export async function runIngestionPipeline(
   topicInput: string,
   providedUrl?: string,
 ): Promise<{ eventId: number; capabilityId?: number }> {
+  // Duplicate pre-flight check before creating any DB records
+  const duplicate = await findDuplicate(topicInput)
+  if (duplicate) {
+    throw Object.assign(
+      new Error(`Duplicate detected: "${topicInput}" likely matches existing capability "${duplicate.name}"`),
+      { code: 'DUPLICATE', existingSlug: duplicate.slug, existingName: duplicate.name },
+    )
+  }
+
   const [event] = await db.insert(ingestionEvents).values({
     topicInput,
     sourceUrl: providedUrl ?? null,
@@ -30,6 +64,20 @@ export async function runIngestionPipeline(
       scraped.wwdcSession?.title,
     )
 
+    // Post-LLM slug dedup (catches cases where LLM normalises to an existing slug)
+    const [slugConflict] = await db
+      .select({ id: capabilities.id, name: capabilities.name })
+      .from(capabilities)
+      .where(eq(capabilities.slug, classified.slug))
+      .limit(1)
+
+    if (slugConflict) {
+      throw Object.assign(
+        new Error(`Slug conflict: "${classified.slug}" already exists as "${slugConflict.name}"`),
+        { code: 'DUPLICATE', existingSlug: classified.slug, existingName: slugConflict.name },
+      )
+    }
+
     // Step 3: Write capability
     const [cap] = await db.insert(capabilities).values({
       slug: classified.slug,
@@ -43,6 +91,8 @@ export async function runIngestionPipeline(
       gotchas: classified.gotchas ?? null,
       impactScore: classified.impactScore,
       rankScore: classified.impactScore * 10,
+      changeType: classified.changeType,
+      changesSince: classified.changesSince ?? null,
       status: 'needs_review',
     }).returning()
 
@@ -75,6 +125,7 @@ export async function runIngestionPipeline(
       description: classified.demo.description,
       complexity: classified.demo.complexity,
       codeSnippet: classified.demo.codeSnippet,
+      previousCodeSnippet: classified.demo.previousCodeSnippet ?? null,
       status: 'planned',
     }).returning()
 
@@ -97,5 +148,55 @@ export async function runIngestionPipeline(
       })
       .where(eq(ingestionEvents.id, event.id))
     throw err
+  }
+}
+
+export async function refreshCapability(capabilityId: number): Promise<void> {
+  // Find original topic from ingestion events
+  const [event] = await db
+    .select({ topicInput: ingestionEvents.topicInput, sourceUrl: ingestionEvents.sourceUrl })
+    .from(ingestionEvents)
+    .where(eq(ingestionEvents.capabilityId, capabilityId))
+    .orderBy(desc(ingestionEvents.createdAt))
+    .limit(1)
+
+  if (!event) throw new Error(`No ingestion event found for capability ${capabilityId}`)
+
+  const scraped = await scrapeForTopic(event.topicInput, event.sourceUrl ?? undefined)
+  const classified = await classifyAndBrief(
+    event.topicInput,
+    scraped.docsContent,
+    scraped.wwdcSession?.transcript ?? '',
+    scraped.wwdcSession?.title,
+  )
+
+  // Update capability fields (preserve status, verifiedOnBeta)
+  await db.update(capabilities).set({
+    name: classified.name,
+    summary: classified.summary,
+    whyItMatters: classified.whyItMatters,
+    category: classified.category,
+    frameworks: classified.frameworks,
+    availability: classified.availability,
+    hardwareConstraints: classified.hardwareConstraints ?? null,
+    gotchas: classified.gotchas ?? null,
+    impactScore: classified.impactScore,
+    rankScore: classified.impactScore * 10,
+    changeType: classified.changeType,
+    changesSince: classified.changesSince ?? null,
+    status: 'needs_review',
+    updatedAt: new Date(),
+  }).where(eq(capabilities.id, capabilityId))
+
+  // Update linked demo
+  const [cap] = await db.select({ demoId: capabilities.demoId }).from(capabilities).where(eq(capabilities.id, capabilityId))
+  if (cap?.demoId) {
+    await db.update(demos).set({
+      title: classified.demo.title,
+      description: classified.demo.description,
+      complexity: classified.demo.complexity,
+      codeSnippet: classified.demo.codeSnippet,
+      previousCodeSnippet: classified.demo.previousCodeSnippet ?? null,
+    }).where(eq(demos.id, cap.demoId))
   }
 }

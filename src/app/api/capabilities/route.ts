@@ -1,19 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/db'
 import { capabilities } from '@/db/schema'
-import { and, eq, desc, sql } from 'drizzle-orm'
+import { and, eq, desc, or, ilike } from 'drizzle-orm'
 import type { Category } from '@/types'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
-  const category = searchParams.get('category') as Category | null
+  const category  = searchParams.get('category') as Category | null
   const framework = searchParams.get('framework')
-  const hasDemo = searchParams.get('hasDemo')
-  const sort = searchParams.get('sort') ?? 'rank'
-  const status = (searchParams.get('status') ?? 'ready') as 'ready' | 'needs_review'
+  const hasDemo   = searchParams.get('hasDemo')
+  const sort      = searchParams.get('sort') ?? 'rank'
+  const q         = searchParams.get('q')?.trim()
+  const status    = (searchParams.get('status') ?? 'ready') as 'ready' | 'needs_review'
 
   const conditions = [eq(capabilities.status, status)]
   if (category) conditions.push(eq(capabilities.category, category))
+  if (q) conditions.push(
+    or(
+      ilike(capabilities.name, `%${q}%`),
+      ilike(capabilities.summary, `%${q}%`),
+      ilike(capabilities.whyItMatters, `%${q}%`),
+    )!
+  )
 
   const orderCol =
     sort === 'trending' ? desc(capabilities.viewCount) :
@@ -26,7 +34,6 @@ export async function GET(req: NextRequest) {
     .orderBy(orderCol)
     .limit(200)
 
-  // Post-filter for array fields (framework) and boolean (hasDemo)
   if (framework) rows = rows.filter(c => c.frameworks.includes(framework))
   if (hasDemo === 'true') rows = rows.filter(c => c.demoId != null)
 

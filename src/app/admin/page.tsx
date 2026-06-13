@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { IngestTrigger } from '@/components/admin/IngestTrigger'
 import { ReviewCard } from '@/components/admin/ReviewCard'
+import { SuggestionsPanel } from '@/components/admin/SuggestionsPanel'
 import { Lock } from 'lucide-react'
 import type { InferSelectModel } from 'drizzle-orm'
 import type { capabilities } from '@/db/schema'
@@ -69,13 +70,19 @@ export default function AdminPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Ingest trigger */}
-        <div>
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-4">
-            New ingestion
-          </h2>
+        {/* Left column: ingest + suggestions */}
+        <div className="space-y-8">
+          <div>
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-4">
+              New ingestion
+            </h2>
+            <div className="rounded-xl border border-border/50 p-5">
+              <IngestTrigger secret={secret} onSuccess={fetchPending} />
+            </div>
+          </div>
+
           <div className="rounded-xl border border-border/50 p-5">
-            <IngestTrigger secret={secret} onSuccess={fetchPending} />
+            <SuggestionsPanel secret={secret} onIngestStarted={fetchPending} />
           </div>
         </div>
 
@@ -85,16 +92,14 @@ export default function AdminPage() {
             <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
               Review queue
             </h2>
-            <span className="text-xs text-muted-foreground">
-              {pending.length} pending
-            </span>
+            <span className="text-xs text-muted-foreground">{pending.length} pending</span>
           </div>
 
           {loading ? (
-            <div className="text-center py-16 text-muted-foreground text-sm">Loading...</div>
+            <div className="text-center py-16 text-muted-foreground text-sm">Loading…</div>
           ) : pending.length === 0 ? (
             <div className="text-center py-16 text-muted-foreground text-sm rounded-xl border border-border/30 border-dashed">
-              Queue is empty. Run an ingestion to add capabilities.
+              Queue is empty. Run an ingestion or use suggestions above.
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

@@ -23,12 +23,29 @@ export function CapabilityCard({ capability }: { capability: Capability }) {
       <Card className="group h-full p-5 border-border/50 bg-card/50 hover:bg-card hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5 transition-all duration-200 cursor-pointer flex flex-col">
         {/* Header row */}
         <div className="flex items-start justify-between gap-3 mb-3">
-          <Badge
-            variant="outline"
-            className={cn('text-xs font-medium shrink-0', CATEGORY_COLORS[capability.category])}
-          >
-            {capability.category}
-          </Badge>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <Badge
+              variant="outline"
+              className={cn('text-xs font-medium shrink-0', CATEGORY_COLORS[capability.category])}
+            >
+              {capability.category}
+            </Badge>
+            {capability.changeType === 'new' && (
+              <Badge variant="outline" className="text-xs font-medium shrink-0 bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+                New
+              </Badge>
+            )}
+            {capability.changeType === 'updated' && (
+              <Badge variant="outline" className="text-xs font-medium shrink-0 bg-amber-500/10 text-amber-400 border-amber-500/20">
+                Updated
+              </Badge>
+            )}
+            {capability.changeType === 'deprecated' && (
+              <Badge variant="outline" className="text-xs font-medium shrink-0 bg-red-500/10 text-red-400 border-red-500/20">
+                Deprecated
+              </Badge>
+            )}
+          </div>
           {/* Impact dots */}
           <div className="flex items-center gap-1 pt-0.5">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -52,6 +69,13 @@ export function CapabilityCard({ capability }: { capability: Capability }) {
         <p className="text-xs text-muted-foreground line-clamp-2 mb-4 flex-1">
           {capability.summary}
         </p>
+
+        {/* Beta badge */}
+        {capability.verifiedOnBeta && (
+          <p className="text-[10px] text-muted-foreground/60 mb-3">
+            Verified on {capability.verifiedOnBeta}
+          </p>
+        )}
 
         {/* Footer */}
         <div className="flex items-center justify-between mt-auto pt-3 border-t border-border/30">

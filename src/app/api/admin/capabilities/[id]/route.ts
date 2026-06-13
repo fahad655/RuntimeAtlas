@@ -38,6 +38,7 @@ export async function PATCH(
   if (body.frameworks !== undefined) updates.frameworks = body.frameworks
   if (body.gotchas !== undefined) updates.gotchas = body.gotchas
   if (body.hardwareConstraints !== undefined) updates.hardwareConstraints = body.hardwareConstraints
+  if ((body as Record<string, unknown>).verifiedOnBeta !== undefined) updates.verifiedOnBeta = (body as Record<string, unknown>).verifiedOnBeta
 
   const [updated] = await db.update(capabilities)
     .set(updates)
@@ -46,4 +47,14 @@ export async function PATCH(
 
   if (!updated) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json({ capability: updated })
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  if (!authorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const { id } = await params
+  await db.delete(capabilities).where(eq(capabilities.id, parseInt(id)))
+  return NextResponse.json({ success: true })
 }

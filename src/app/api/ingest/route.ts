@@ -18,6 +18,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'topic is required' }, { status: 400 })
   }
 
-  const result = await runIngestionPipeline(topic, url || undefined)
-  return NextResponse.json({ success: true, ...result })
+  try {
+    const result = await runIngestionPipeline(topic, url || undefined)
+    return NextResponse.json({ success: true, ...result })
+  } catch (err) {
+    if (err instanceof Error && (err as NodeJS.ErrnoException & { code?: string }).code === 'DUPLICATE') {
+      const e = err as Error & { existingSlug: string; existingName: string }
+      return NextResponse.json(
+        { error: err.message, existingSlug: e.existingSlug, existingName: e.existingName },
+        { status: 409 },
+      )
+    }
+    throw err
+  }
 }

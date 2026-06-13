@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "runtimeatlas": {
+      "type": "http",
+      "url": "https://runtimeatlas.vercel.app/api/mcp",
+      "description": "iOS 27 SDK capability reference and migration toolkit"
+    }
+  }
+}
