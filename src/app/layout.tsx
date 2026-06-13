@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <Navbar />
-          <main>{children}</main>
+          <main className="pt-16">{children}</main>
           <Toaster richColors position="bottom-right" />
         </ThemeProvider>
       </body>

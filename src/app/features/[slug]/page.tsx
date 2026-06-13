@@ -3,8 +3,7 @@ import { capabilities, sources, demos } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { ExternalLink, FlaskConical, AlertTriangle, Zap, BookOpen, Video, Code2, Sparkles, RefreshCw } from 'lucide-react'
+import { ExternalLink, FlaskConical, AlertTriangle, Zap, BookOpen, Video, Code2, Sparkles, RefreshCw, ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { ViewTracker } from '@/components/features/ViewTracker'
@@ -21,14 +20,14 @@ const CATEGORY_COLORS: Record<string, string> = {
   Performance: 'bg-green-500/10 text-green-400 border-green-500/20',
   Safety:      'bg-orange-500/10 text-orange-400 border-orange-500/20',
   Store:       'bg-teal-500/10 text-teal-400 border-teal-500/20',
-  System:      'bg-gray-500/10 text-gray-400 border-gray-500/20',
+  System:      'bg-zinc-500/10 text-zinc-400 border-zinc-500/20',
 }
 
 const SOURCE_ICONS: Record<string, React.ReactNode> = {
-  wwdc_session: <Video className="h-4 w-4" />,
-  sample_code:  <Code2 className="h-4 w-4" />,
+  wwdc_session:  <Video className="h-4 w-4" />,
+  sample_code:   <Code2 className="h-4 w-4" />,
   what_new_page: <BookOpen className="h-4 w-4" />,
-  doc_page:     <BookOpen className="h-4 w-4" />,
+  doc_page:      <BookOpen className="h-4 w-4" />,
 }
 
 async function getData(slug: string) {
@@ -82,83 +81,102 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
   ])
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+    <div className="max-w-2xl mx-auto px-5 sm:px-6 py-12">
       <ViewTracker slug={slug} />
 
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
-        <Link href="/features" className="hover:text-foreground transition-colors">Features</Link>
-        <span>/</span>
-        <span className="text-foreground truncate">{cap.name}</span>
-      </div>
+      {/* Back */}
+      <Link
+        href="/features"
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10 group"
+      >
+        <ChevronLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
+        Capabilities
+      </Link>
 
-      {/* Header */}
-      <header className="mb-10">
-        <div className="flex flex-wrap gap-2 mb-4">
-          <Badge variant="outline" className={cn('text-xs', CATEGORY_COLORS[cap.category])}>
+      {/* ── Header ── */}
+      <header className="mb-12">
+        <div className="flex flex-wrap gap-1.5 mb-5">
+          <Badge variant="outline" className={cn('text-xs border', CATEGORY_COLORS[cap.category])}>
             {cap.category}
           </Badge>
           {cap.changeType === 'new' && (
-            <Badge variant="outline" className="text-xs bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+            <Badge variant="outline" className="text-xs border bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
               <Sparkles className="h-3 w-3 mr-1" /> New in iOS 27
             </Badge>
           )}
           {cap.changeType === 'updated' && (
-            <Badge variant="outline" className="text-xs bg-amber-500/10 text-amber-400 border-amber-500/20">
+            <Badge variant="outline" className="text-xs border bg-amber-500/10 text-amber-400 border-amber-500/20">
               <RefreshCw className="h-3 w-3 mr-1" /> Updated in iOS 27
             </Badge>
           )}
           {cap.changeType === 'deprecated' && (
-            <Badge variant="outline" className="text-xs bg-red-500/10 text-red-400 border-red-500/20">
-              Deprecated in iOS 27
+            <Badge variant="outline" className="text-xs border bg-red-500/10 text-red-400 border-red-500/20">
+              Deprecated
             </Badge>
           )}
-          <Badge variant="outline" className="text-xs">{cap.availability}</Badge>
+          <Badge variant="outline" className="text-xs border border-white/[0.1] text-muted-foreground">
+            {cap.availability}
+          </Badge>
           {cap.verifiedOnBeta && (
-            <Badge variant="outline" className="text-xs bg-sky-500/10 text-sky-400 border-sky-500/20">
+            <Badge variant="outline" className="text-xs border bg-sky-500/10 text-sky-400 border-sky-500/20">
               ✓ {cap.verifiedOnBeta}
             </Badge>
           )}
           {demo && (
-            <Badge variant="outline" className="text-xs bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
-              <FlaskConical className="h-3 w-3 mr-1" /> Demo available
+            <Badge variant="outline" className="text-xs border bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+              <FlaskConical className="h-3 w-3 mr-1" /> Demo
             </Badge>
           )}
         </div>
 
-        <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-4">{cap.name}</h1>
-        <p className="text-lg text-muted-foreground leading-relaxed">{cap.summary}</p>
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight leading-tight mb-4">
+          {cap.name}
+        </h1>
+        <p className="text-base text-muted-foreground leading-relaxed">{cap.summary}</p>
 
+        {/* Frameworks */}
         <div className="flex flex-wrap gap-1.5 mt-5">
           {cap.frameworks.map(fw => (
-            <span key={fw} className="text-xs font-mono bg-muted/50 text-muted-foreground rounded-md px-2 py-1">
+            <span
+              key={fw}
+              className="text-xs font-mono bg-white/[0.04] text-muted-foreground/80 rounded-lg px-2.5 py-1 border border-white/[0.07]"
+            >
               {fw}
             </span>
           ))}
         </div>
 
-        <div className="flex items-center justify-between gap-4 mt-4 flex-wrap">
+        {/* Impact + CTA */}
+        <div className="flex items-center justify-between gap-4 mt-6 flex-wrap">
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-muted-foreground mr-1">Impact</span>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className={cn('h-2 w-2 rounded-full', i < cap.impactScore ? 'bg-violet-400' : 'bg-muted')} />
-            ))}
+            <span className="text-xs text-muted-foreground">Impact</span>
+            <div className="flex items-center gap-[3px] ml-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={cn('h-[5px] w-[5px] rounded-full', i < cap.impactScore ? 'bg-violet-400' : 'bg-white/10')}
+                />
+              ))}
+            </div>
             <span className="text-xs text-muted-foreground ml-1">{cap.impactScore}/5</span>
           </div>
           <ProgressButton capabilityId={cap.id} />
         </div>
       </header>
 
-      <Separator className="mb-10" />
+      {/* Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent mb-12" />
 
-      {/* What changed vs previous iOS */}
+      {/* ── What changed ── */}
       {cap.changesSince && (
-        <section className="mb-10">
-          <div className="flex items-center gap-2 mb-4">
-            <RefreshCw className="h-5 w-5 text-amber-400 shrink-0" />
-            <h2 className="text-xl font-semibold">What changed from iOS 26</h2>
+        <section className="mb-12">
+          <div className="flex items-center gap-2.5 mb-5">
+            <div className="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
+              <RefreshCw className="h-3.5 w-3.5 text-amber-400" />
+            </div>
+            <h2 className="text-lg font-semibold">What changed from iOS 26</h2>
           </div>
-          <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-5 space-y-2">
+          <div className="rounded-2xl border border-amber-500/15 bg-amber-500/[0.04] p-5 space-y-2.5">
             {cap.changesSince.split('\n').filter(Boolean).map((line, i) => (
               <p key={i} className="text-sm text-muted-foreground leading-relaxed">
                 {line.replace(/^[•\-\*]\s*/, '• ')}
@@ -168,16 +186,18 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
         </section>
       )}
 
-      {/* Why it matters */}
+      {/* ── Why it matters ── */}
       {cap.whyItMatters && (
-        <section className="mb-10">
-          <div className="flex items-center gap-2 mb-4">
-            <Zap className="h-5 w-5 text-violet-400 shrink-0" />
-            <h2 className="text-xl font-semibold">Why you should care</h2>
+        <section className="mb-12">
+          <div className="flex items-center gap-2.5 mb-5">
+            <div className="w-7 h-7 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
+              <Zap className="h-3.5 w-3.5 text-violet-400" />
+            </div>
+            <h2 className="text-lg font-semibold">Why you should care</h2>
           </div>
-          <div className="space-y-2 pl-7">
+          <div className="space-y-2.5 pl-[calc(1.75rem+0.625rem)]">
             {cap.whyItMatters.split('\n').filter(Boolean).map((line, i) => (
-              <p key={i} className="text-muted-foreground text-sm leading-relaxed">
+              <p key={i} className="text-sm text-muted-foreground leading-relaxed">
                 {line.replace(/^[•\-\*]\s*/, '• ')}
               </p>
             ))}
@@ -185,12 +205,14 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
         </section>
       )}
 
-      {/* Demo */}
+      {/* ── Demo ── */}
       {demo && (
-        <section className="mb-10">
-          <div className="flex items-center gap-2 mb-4">
-            <FlaskConical className="h-5 w-5 text-emerald-400 shrink-0" />
-            <h2 className="text-xl font-semibold">Tiny Demo</h2>
+        <section className="mb-12">
+          <div className="flex items-center gap-2.5 mb-5">
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
+              <FlaskConical className="h-3.5 w-3.5 text-emerald-400" />
+            </div>
+            <h2 className="text-lg font-semibold">Tiny Demo</h2>
           </div>
 
           <DemoSection
@@ -205,7 +227,7 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
           />
 
           {demo.repoUrl && (
-            <div className="px-5 py-3 mt-3">
+            <div className="mt-3 px-1">
               <a
                 href={demo.repoUrl}
                 target="_blank"
@@ -219,10 +241,15 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
         </section>
       )}
 
-      {/* Source map */}
+      {/* ── Sources ── */}
       {allSources.length > 0 && (
-        <section className="mb-10">
-          <h2 className="text-xl font-semibold mb-4">Source map</h2>
+        <section className="mb-12">
+          <div className="flex items-center gap-2.5 mb-5">
+            <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+              <BookOpen className="h-3.5 w-3.5 text-blue-400" />
+            </div>
+            <h2 className="text-lg font-semibold">Source map</h2>
+          </div>
           <div className="space-y-2">
             {allSources.map(src => (
               <a
@@ -230,7 +257,7 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
                 href={src.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 rounded-lg border border-border/50 hover:border-border hover:bg-muted/30 transition-all group"
+                className="flex items-center gap-3 p-3.5 rounded-xl border border-white/[0.07] bg-white/[0.02] hover:border-violet-500/20 hover:bg-white/[0.05] transition-all group"
               >
                 <span className="text-muted-foreground shrink-0">
                   {SOURCE_ICONS[src.type] ?? <BookOpen className="h-4 w-4" />}
@@ -243,30 +270,32 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
                     {src.type.replace(/_/g, ' ')}{src.official ? ' · Official' : ''}
                   </div>
                 </div>
-                <ExternalLink className="h-4 w-4 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
             ))}
           </div>
         </section>
       )}
 
-      {/* Gotchas */}
+      {/* ── Gotchas ── */}
       {cap.gotchas && (
-        <section className="mb-10">
-          <div className="flex items-center gap-2 mb-4">
-            <AlertTriangle className="h-5 w-5 text-amber-400 shrink-0" />
-            <h2 className="text-xl font-semibold">Gotchas</h2>
+        <section className="mb-12">
+          <div className="flex items-center gap-2.5 mb-5">
+            <div className="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
+              <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
+            </div>
+            <h2 className="text-lg font-semibold">Gotchas</h2>
           </div>
-          <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-5">
+          <div className="rounded-2xl border border-amber-500/15 bg-amber-500/[0.04] p-5">
             <p className="text-sm text-muted-foreground leading-relaxed">{cap.gotchas}</p>
           </div>
         </section>
       )}
 
-      {/* Hardware constraints */}
+      {/* ── Requirements ── */}
       {cap.hardwareConstraints && (
         <section>
-          <h2 className="text-xl font-semibold mb-3">Requirements</h2>
+          <h2 className="text-lg font-semibold mb-3">Requirements</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">{cap.hardwareConstraints}</p>
         </section>
       )}

@@ -51,7 +51,7 @@ export function FilterBar() {
   const q              = params.get('q') ?? ''
 
   return (
-    <div className="space-y-3 mb-6">
+    <div className="space-y-3 mb-8">
       {/* Row 1: search */}
       <form onSubmit={submitSearch} className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
@@ -88,12 +88,12 @@ export function FilterBar() {
           </SelectContent>
         </Select>
 
-        <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer select-none">
+        <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer select-none hover:text-foreground transition-colors">
           <input
             type="checkbox"
             checked={hasDemo}
             onChange={e => set('hasDemo', e.target.checked ? 'true' : '')}
-            className="rounded border-border h-4 w-4 accent-violet-500"
+            className="rounded border-white/[0.15] h-4 w-4 accent-violet-500"
           />
           Has demo
         </label>
@@ -113,8 +113,8 @@ export function FilterBar() {
             className={cn(
               'text-xs px-2.5 py-1 rounded-full border transition-colors',
               !frameworkValue
-                ? 'bg-violet-600 border-violet-600 text-white'
-                : 'border-border/50 text-muted-foreground hover:border-border hover:text-foreground',
+                ? 'bg-violet-600/90 border-violet-600/80 text-white'
+                : 'border-white/[0.1] text-muted-foreground hover:border-white/[0.2] hover:text-foreground',
             )}
           >
             All frameworks

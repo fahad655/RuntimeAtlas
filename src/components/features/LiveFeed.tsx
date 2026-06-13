@@ -30,9 +30,9 @@ export async function LiveFeed() {
   if (!items.length) return null
 
   return (
-    <div className="border-y border-border/40 bg-muted/10 py-2.5 mb-16 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-4 overflow-x-auto scrollbar-none">
-        <span className="shrink-0 text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
+    <div className="border-y border-white/[0.06] bg-white/[0.02] py-2.5 mb-16 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center gap-4 overflow-x-auto scrollbar-none">
+        <span className="shrink-0 text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">
           Live
         </span>
         <div className="flex items-center gap-1 shrink-0">

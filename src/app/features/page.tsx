@@ -39,11 +39,13 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
   const caps = await getCapabilities(sp)
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-1">iOS 27 Capabilities</h1>
-        <p className="text-muted-foreground text-sm">
-          {caps.length} {caps.length === 1 ? 'capability' : 'capabilities'} tracked
+    <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14">
+      {/* Header */}
+      <div className="mb-10">
+        <h1 className="text-4xl font-bold tracking-tight">iOS 27 Capabilities</h1>
+        <p className="text-muted-foreground text-sm mt-2">
+          <span className="text-foreground font-semibold tabular-nums">{caps.length}</span>{' '}
+          {caps.length === 1 ? 'capability' : 'capabilities'} tracked
         </p>
       </div>
 
@@ -52,11 +54,11 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
       </Suspense>
 
       {caps.length === 0 ? (
-        <div className="text-center py-32 text-muted-foreground">
-          No capabilities match your filters.
+        <div className="text-center py-40 text-muted-foreground">
+          <p className="text-base">No capabilities match your filters.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mt-6">
           {caps.map(cap => <CapabilityCard key={cap.id} capability={cap} />)}
         </div>
       )}
