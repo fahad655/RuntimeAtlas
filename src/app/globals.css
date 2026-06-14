@@ -120,22 +120,21 @@
 }
 
 /* ── Blob float animations ── */
+/* Movements must be >> blur radius to be perceptible.  */
+/* Blob 1 has blur-[140px], so ≥180px movement needed.   */
 @keyframes blob-drift-1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25%       { transform: translate(-35px, -28px) scale(1.05); }
-  50%       { transform: translate(22px, -45px) scale(0.96); }
-  75%       { transform: translate(-18px, 32px) scale(1.03); }
+  0%, 100% { transform: translate(0, 0)       scale(1);    opacity: 0.13; }
+  33%       { transform: translate(-180px, -120px) scale(1.18); opacity: 0.22; }
+  66%       { transform: translate( 100px, -160px) scale(0.88); opacity: 0.08; }
 }
 @keyframes blob-drift-2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  30%       { transform: translate(28px, -18px) scale(1.06); }
-  60%       { transform: translate(-38px, 24px) scale(0.94); }
-  85%       { transform: translate(16px, 42px) scale(1.02); }
+  0%, 100% { transform: translate(0, 0)       scale(1);    opacity: 0.09; }
+  40%       { transform: translate( 160px, -80px)  scale(1.2);  opacity: 0.15; }
+  75%       { transform: translate(-120px,  140px) scale(0.85); opacity: 0.06; }
 }
 @keyframes blob-drift-3 {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  40%       { transform: translate(-50%, -50%) scale(1.1); }
-  70%       { transform: translate(-50%, -50%) scale(0.92); }
+  0%, 100% { transform: translate(-50%, -50%) scale(1);    opacity: 0.05; }
+  50%       { transform: translate(-50%, -50%) scale(1.35); opacity: 0.10; }
 }
 
 @layer base {

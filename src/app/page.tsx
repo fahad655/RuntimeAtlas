@@ -29,24 +29,24 @@ export default async function LandingPage() {
         {/* Animated ambient light blobs */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div
-            className="absolute top-[15%] right-[10%] w-[700px] h-[700px] rounded-full opacity-[0.13] blur-[140px]"
+            className="absolute top-[10%] right-[5%] w-[800px] h-[800px] rounded-full blur-[140px]"
             style={{
-              background: 'radial-gradient(circle, #7C3AED, transparent 70%)',
-              animation: 'blob-drift-1 22s ease-in-out infinite',
+              background: 'radial-gradient(circle, #7C3AED, transparent 65%)',
+              animation: 'blob-drift-1 20s ease-in-out infinite',
             }}
           />
           <div
-            className="absolute bottom-[10%] left-[5%] w-[500px] h-[500px] rounded-full opacity-[0.09] blur-[120px]"
+            className="absolute bottom-[5%] left-[0%] w-[600px] h-[600px] rounded-full blur-[120px]"
             style={{
-              background: 'radial-gradient(circle, #4F46E5, transparent 70%)',
-              animation: 'blob-drift-2 28s ease-in-out infinite',
+              background: 'radial-gradient(circle, #4338CA, transparent 65%)',
+              animation: 'blob-drift-2 26s ease-in-out infinite',
             }}
           />
           <div
-            className="absolute top-1/2 left-1/2 w-[1000px] h-[600px] rounded-full opacity-[0.05] blur-[180px]"
+            className="absolute top-1/2 left-1/2 w-[1100px] h-[700px] rounded-full blur-[160px]"
             style={{
-              background: 'radial-gradient(ellipse, #8B5CF6, transparent 60%)',
-              animation: 'blob-drift-3 18s ease-in-out infinite',
+              background: 'radial-gradient(ellipse, #6D28D9, transparent 55%)',
+              animation: 'blob-drift-3 16s ease-in-out infinite',
             }}
           />
         </div>
