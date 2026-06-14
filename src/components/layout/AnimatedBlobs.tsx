@@ -54,7 +54,7 @@ export function AnimatedBlobs() {
   }, [])
 
   return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden>
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
       {/* blob 1 – upper-right violet */}
       <div
         ref={refs[0]}

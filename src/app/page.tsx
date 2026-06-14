@@ -27,7 +27,7 @@ export default async function LandingPage() {
   return (
     <div className="min-h-screen animate-page-enter">
       {/* ── Hero ── */}
-      <section className="relative min-h-[calc(100vh-4rem)] flex items-center">
+      <section className="relative min-h-[calc(100dvh-4rem)] flex items-center overflow-hidden">
         {/* JS-animated ambient blobs (RAF, no CSS keyframes) */}
         <AnimatedBlobs />
 
