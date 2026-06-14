@@ -50,7 +50,7 @@ export default async function LandingPage() {
                 className="bg-clip-text text-transparent"
                 style={{ backgroundImage: 'linear-gradient(135deg, #a78bfa 0%, #818cf8 50%, #c084fc 100%)' }}
               >
-                explained and
+                explained and{' '}
                 <br className="hidden sm:block" />
                 ready to ship.
               </span>
