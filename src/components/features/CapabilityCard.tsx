@@ -32,6 +32,7 @@ export function CapabilityCard({ capability }: { capability: Capability }) {
         'hover:border-violet-500/25 hover:bg-white/[0.06]',
         'hover:shadow-[0_8px_32px_-8px_rgba(124,58,237,0.18)]',
         'hover:-translate-y-0.5',
+        'active:scale-[0.96] active:brightness-110',
       )}>
         {/* Header */}
         <div className="flex items-start justify-between gap-3 mb-4">

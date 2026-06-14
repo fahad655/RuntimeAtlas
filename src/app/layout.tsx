@@ -4,6 +4,7 @@ import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
 import { ThemeProvider } from '@/components/layout/ThemeProvider'
 import { Navbar } from '@/components/layout/Navbar'
+import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Toaster } from '@/components/ui/sonner'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
@@ -27,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <Navbar />
-          <main className="pt-16">{children}</main>
+          <main className="pt-16"><PageWrapper>{children}</PageWrapper></main>
           <Toaster richColors position="bottom-right" />
         </ThemeProvider>
       </body>

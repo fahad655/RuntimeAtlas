@@ -119,6 +119,25 @@
   --sidebar-ring: oklch(0.55 0.25 265);
 }
 
+/* ── Blob float animations ── */
+@keyframes blob-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25%       { transform: translate(-35px, -28px) scale(1.05); }
+  50%       { transform: translate(22px, -45px) scale(0.96); }
+  75%       { transform: translate(-18px, 32px) scale(1.03); }
+}
+@keyframes blob-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  30%       { transform: translate(28px, -18px) scale(1.06); }
+  60%       { transform: translate(-38px, 24px) scale(0.94); }
+  85%       { transform: translate(16px, 42px) scale(1.02); }
+}
+@keyframes blob-drift-3 {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  40%       { transform: translate(-50%, -50%) scale(1.1); }
+  70%       { transform: translate(-50%, -50%) scale(0.92); }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

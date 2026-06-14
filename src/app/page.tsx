@@ -26,19 +26,28 @@ export default async function LandingPage() {
     <div className="min-h-screen">
       {/* ── Hero ── */}
       <section className="relative min-h-[calc(100vh-4rem)] flex items-center overflow-hidden">
-        {/* Ambient light blobs */}
-        <div className="pointer-events-none absolute inset-0">
+        {/* Animated ambient light blobs */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div
-            className="absolute top-[15%] right-[10%] w-[700px] h-[700px] rounded-full opacity-[0.12] blur-[140px]"
-            style={{ background: 'radial-gradient(circle, #7C3AED, transparent 70%)' }}
+            className="absolute top-[15%] right-[10%] w-[700px] h-[700px] rounded-full opacity-[0.13] blur-[140px]"
+            style={{
+              background: 'radial-gradient(circle, #7C3AED, transparent 70%)',
+              animation: 'blob-drift-1 22s ease-in-out infinite',
+            }}
           />
           <div
-            className="absolute bottom-[10%] left-[5%] w-[500px] h-[500px] rounded-full opacity-[0.08] blur-[120px]"
-            style={{ background: 'radial-gradient(circle, #4F46E5, transparent 70%)' }}
+            className="absolute bottom-[10%] left-[5%] w-[500px] h-[500px] rounded-full opacity-[0.09] blur-[120px]"
+            style={{
+              background: 'radial-gradient(circle, #4F46E5, transparent 70%)',
+              animation: 'blob-drift-2 28s ease-in-out infinite',
+            }}
           />
           <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] rounded-full opacity-[0.04] blur-[180px]"
-            style={{ background: 'radial-gradient(ellipse, #8B5CF6, transparent 60%)' }}
+            className="absolute top-1/2 left-1/2 w-[1000px] h-[600px] rounded-full opacity-[0.05] blur-[180px]"
+            style={{
+              background: 'radial-gradient(ellipse, #8B5CF6, transparent 60%)',
+              animation: 'blob-drift-3 18s ease-in-out infinite',
+            }}
           />
         </div>
 
@@ -122,7 +131,7 @@ export default async function LandingPage() {
               {
                 icon: <BookOpen className="h-5 w-5 text-blue-400" />,
                 title: 'Source-mapped',
-                desc: 'Every card links back to the exact WWDC session timestamp or documentation page.',
+                desc: 'Linked back to the WWDC session or developer doc behind each feature — follow the trail to first principles.',
               },
             ].map(item => (
               <div key={item.title} className="bg-background/80 p-8 sm:p-10 space-y-3">
