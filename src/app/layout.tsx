@@ -5,6 +5,8 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { ThemeProvider } from '@/components/layout/ThemeProvider'
 import { Navbar } from '@/components/layout/Navbar'
 import { Toaster } from '@/components/ui/sonner'
+import { FeedbackButton } from '@/components/layout/FeedbackButton'
+import Script from 'next/script'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
@@ -20,15 +22,30 @@ export const metadata: Metadata = {
 }
 
 const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const inner = (
     <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-screen antialiased">
+        {/* Google Analytics */}
+        {GA_ID && <>
+          <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+          <Script id="ga-init" strategy="afterInteractive">{`
+            window.dataLayer=window.dataLayer||[];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js',new Date());
+            gtag('config','${GA_ID}',{page_path:window.location.pathname});
+          `}</Script>
+        </>}
+        {/* Tally feedback widget */}
+        <Script src="https://tally.so/widgets/embed.js" strategy="lazyOnload" />
+
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <Navbar />
           <main className="pt-16">{children}</main>
           <Toaster richColors position="bottom-right" />
+          <FeedbackButton />
         </ThemeProvider>
       </body>
     </html>

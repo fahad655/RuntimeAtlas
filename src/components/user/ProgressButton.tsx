@@ -4,6 +4,7 @@ import { useUser } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, Circle, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { trackEvent } from '@/lib/analytics'
 
 const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 
@@ -32,11 +33,13 @@ function ProgressButtonInner({ capabilityId }: Props) {
 
   async function toggle() {
     setLoading(true)
+    const marking = !done
     await fetch('/api/user/progress', {
-      method: done ? 'DELETE' : 'POST',
+      method: marking ? 'POST' : 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ capabilityId }),
     })
+    if (marking) trackEvent('progress_mark', { capability_id: capabilityId })
     setDone(d => !d)
     setHovered(false)
     setLoading(false)

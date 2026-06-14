@@ -69,6 +69,21 @@ export const ingestionEvents = pgTable('ingestion_events', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
+// ── User ingestion requests ──────────────────────────────────────────────────
+
+export const requestStatusEnum = pgEnum('request_status', ['pending', 'approved', 'rejected', 'ingested'])
+
+export const userRequests = pgTable('user_requests', {
+  id: serial('id').primaryKey(),
+  clerkId: varchar('clerk_id', { length: 255 }).notNull(),
+  topicInput: varchar('topic_input', { length: 500 }).notNull(),
+  sourceUrl: varchar('source_url', { length: 1000 }),
+  status: requestStatusEnum('status').default('pending').notNull(),
+  notes: text('notes'),
+  voteCount: integer('vote_count').default(1).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
 // ── User auth / progress tables ─────────────────────────────────────────────
 
 export const userProfiles = pgTable('user_profiles', {

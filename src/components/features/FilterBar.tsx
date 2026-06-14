@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input'
 import { Search, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { trackEvent } from '@/lib/analytics'
 
 const CATEGORIES = ['All', 'AI', 'UI', 'Performance', 'Safety', 'Store', 'System']
 const SORT_OPTIONS = [
@@ -31,12 +32,15 @@ export function FilterBar() {
     const next = new URLSearchParams(params.toString())
     if (!value || value === 'All') next.delete(key)
     else next.set(key, value)
+    trackEvent('filter_apply', { filter: key, value })
     router.push(`/features?${next.toString()}`)
   }
 
   function submitSearch(e: React.FormEvent) {
     e.preventDefault()
-    set('q', searchDraft.trim())
+    const q = searchDraft.trim()
+    if (q) trackEvent('capability_search', { query: q })
+    set('q', q)
   }
 
   function clearSearch() {

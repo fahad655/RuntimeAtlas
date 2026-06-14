@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 import { ViewTracker } from '@/components/features/ViewTracker'
 import { DemoSection } from '@/components/features/DemoSection'
 import { ProgressButton } from '@/components/user/ProgressButton'
+import { ReportIssueLink } from '@/components/layout/FeedbackButton'
 import { highlightSwift } from '@/lib/highlighter'
 import type { Metadata } from 'next'
 
@@ -294,11 +295,23 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
 
       {/* ── Requirements ── */}
       {cap.hardwareConstraints && (
-        <section>
+        <section className="mb-12">
           <h2 className="text-lg font-semibold mb-3">Requirements</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">{cap.hardwareConstraints}</p>
         </section>
       )}
+
+      {/* Footer actions */}
+      <div className="pt-4 border-t border-white/[0.05] flex items-center justify-between">
+        <Link
+          href="/features"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+        >
+          <ChevronLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
+          All capabilities
+        </Link>
+        <ReportIssueLink capabilityName={cap.name} />
+      </div>
     </div>
   )
 }

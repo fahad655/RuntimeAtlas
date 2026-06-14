@@ -2,14 +2,16 @@
 import { useState } from 'react'
 import { Copy, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { trackEvent } from '@/lib/analytics'
 
-export function CopyButton({ code }: { code: string }) {
+export function CopyButton({ code, label }: { code: string; label?: string }) {
   const [copied, setCopied] = useState(false)
 
   async function copy() {
     await navigator.clipboard.writeText(code)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+    trackEvent('code_copy', { label: label ?? 'unknown', length: code.length })
   }
 
   return (

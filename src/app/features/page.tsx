@@ -3,6 +3,7 @@ import { capabilities } from '@/db/schema'
 import { eq, desc, and } from 'drizzle-orm'
 import { CapabilityCard } from '@/components/features/CapabilityCard'
 import { FilterBar } from '@/components/features/FilterBar'
+import { RequestForm } from '@/components/features/RequestForm'
 import { Suspense } from 'react'
 import type { Category } from '@/types'
 
@@ -41,12 +42,17 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
   return (
     <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 animate-page-enter">
       {/* Header */}
-      <div className="mb-10">
-        <h1 className="text-4xl font-bold tracking-tight">iOS 27 Capabilities</h1>
-        <p className="text-muted-foreground text-sm mt-2">
-          <span className="text-foreground font-semibold tabular-nums">{caps.length}</span>{' '}
-          {caps.length === 1 ? 'capability' : 'capabilities'} tracked
-        </p>
+      <div className="flex items-start justify-between gap-4 mb-10 flex-wrap">
+        <div>
+          <h1 className="text-4xl font-bold tracking-tight">iOS 27 Capabilities</h1>
+          <p className="text-muted-foreground text-sm mt-2">
+            <span className="text-foreground font-semibold tabular-nums">{caps.length}</span>{' '}
+            {caps.length === 1 ? 'capability' : 'capabilities'} tracked
+          </p>
+        </div>
+        <div className="mt-1">
+          <RequestForm />
+        </div>
       </div>
 
       <Suspense>
