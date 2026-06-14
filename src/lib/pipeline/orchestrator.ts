@@ -2,7 +2,7 @@ import { db } from '@/db'
 import { capabilities, sources, demos, ingestionEvents } from '@/db/schema'
 import { scrapeForTopic } from '@/lib/ingestion/scraper'
 import { classifyAndBrief } from '@/lib/ingestion/classifier'
-import { eq, desc } from 'drizzle-orm'
+import { eq, desc, sql } from 'drizzle-orm'
 
 const STOP_WORDS = new Set(['the', 'and', 'for', 'with', 'api', 'ios', 'apple', 'new', 'using', 'via'])
 
@@ -90,7 +90,7 @@ export async function runIngestionPipeline(
       hardwareConstraints: classified.hardwareConstraints ?? null,
       gotchas: classified.gotchas ?? null,
       impactScore: classified.impactScore,
-      rankScore: classified.impactScore * 10,
+      rankScore: classified.impactScore * 100,
       changeType: classified.changeType,
       changesSince: classified.changesSince ?? null,
       status: 'needs_review',
@@ -171,6 +171,7 @@ export async function refreshCapability(capabilityId: number): Promise<void> {
   )
 
   // Update capability fields (preserve status, verifiedOnBeta)
+  const newImpact = classified.impactScore
   await db.update(capabilities).set({
     name: classified.name,
     summary: classified.summary,
@@ -180,8 +181,8 @@ export async function refreshCapability(capabilityId: number): Promise<void> {
     availability: classified.availability,
     hardwareConstraints: classified.hardwareConstraints ?? null,
     gotchas: classified.gotchas ?? null,
-    impactScore: classified.impactScore,
-    rankScore: classified.impactScore * 10,
+    impactScore: newImpact,
+    rankScore: sql`${newImpact} * 100 + ${capabilities.viewCount} * 0.5`,
     changeType: classified.changeType,
     changesSince: classified.changesSince ?? null,
     status: 'needs_review',

@@ -11,9 +11,15 @@ export async function GET() {
   const [profile] = await db.select().from(userProfiles).where(eq(userProfiles.clerkId, userId)).limit(1)
   const [streak] = await db.select().from(userStreaks).where(eq(userStreaks.clerkId, userId)).limit(1)
 
+  const STREAK_BREAK_MS = 72 * 60 * 60 * 1000
+  const streakExpired = streak?.lastActivityAt
+    ? Date.now() - streak.lastActivityAt.getTime() >= STREAK_BREAK_MS
+    : true
+  const currentStreak = streakExpired ? 0 : (streak?.currentStreak ?? 0)
+
   return NextResponse.json({
     subscribedFrameworks: profile?.subscribedFrameworks ?? [],
-    currentStreak: streak?.currentStreak ?? 0,
+    currentStreak,
     longestStreak: streak?.longestStreak ?? 0,
     lastActivityDate: streak?.lastActivityDate ?? null,
   })

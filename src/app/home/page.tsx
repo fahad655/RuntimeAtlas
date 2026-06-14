@@ -28,7 +28,12 @@ export default async function HomePage() {
   const streak = streakRow[0]
   const profile = profileRow[0]
   const subscribedFrameworks = profile?.subscribedFrameworks ?? []
-  const currentStreak = streak?.currentStreak ?? 0
+
+  const STREAK_BREAK_MS = 72 * 60 * 60 * 1000
+  const streakExpired = streak?.lastActivityAt
+    ? Date.now() - streak.lastActivityAt.getTime() >= STREAK_BREAK_MS
+    : true
+  const currentStreak = streakExpired ? 0 : (streak?.currentStreak ?? 0)
   const longestStreak = streak?.longestStreak ?? 0
 
   const allCaps = await db.select({
