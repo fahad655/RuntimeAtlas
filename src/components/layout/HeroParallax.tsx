@@ -18,10 +18,10 @@ export function ParallaxContent({ children }: { children: React.ReactNode }) {
       id = requestAnimationFrame(() => {
         if (!el) return
         const y = window.scrollY
-        // text drifts up 8% of scroll speed (subtle depth)
-        el.style.transform = `translateY(${-y * 0.08}px)`
-        // fades out as you scroll past the hero
-        el.style.opacity = String(Math.max(0, 1 - y / 500))
+        // text drifts up 28% of scroll speed — noticeable depth
+        el.style.transform = `translateY(${-y * 0.28}px)`
+        // fades out over 700px of scroll
+        el.style.opacity = String(Math.max(0, 1 - y / 700))
       })
     }
 

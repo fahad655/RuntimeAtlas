@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
-import { FlaskConical, Clock } from 'lucide-react'
+import { FlaskConical, Clock, ArrowUpRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { InferSelectModel } from 'drizzle-orm'
 import type { capabilities } from '@/db/schema'
@@ -26,14 +26,20 @@ export function CapabilityCard({ capability }: { capability: Capability }) {
   return (
     <Link href={`/features/${capability.slug}`} className="block h-full group">
       <div className={cn(
-        'relative h-full p-5 rounded-2xl flex flex-col',
-        'border border-white/[0.07] bg-white/[0.03]',
-        'transition-all duration-200 ease-out',
-        'hover:border-violet-500/25 hover:bg-white/[0.06]',
-        'hover:shadow-[0_8px_32px_-8px_rgba(124,58,237,0.18)]',
-        'hover:-translate-y-0.5',
-        'active:scale-[0.96] active:brightness-110',
+        'relative h-full p-5 rounded-2xl flex flex-col overflow-hidden',
+        'border border-white/[0.07] bg-white/[0.025]',
+        'transition-all duration-300 ease-out',
+        'hover:border-violet-500/40 hover:bg-white/[0.07]',
+        'hover:shadow-[0_20px_60px_-10px_rgba(124,58,237,0.35),0_0_0_1px_rgba(124,58,237,0.15)]',
+        'hover:-translate-y-1.5',
+        'active:scale-[0.97] active:brightness-90 active:shadow-none active:translate-y-0',
       )}>
+        {/* Hover glow overlay */}
+        <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.12) 0%, transparent 70%)' }}
+          aria-hidden
+        />
+
         {/* Header */}
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex items-center gap-1.5 flex-wrap">
@@ -43,12 +49,14 @@ export function CapabilityCard({ capability }: { capability: Capability }) {
             >
               {capability.category}
             </Badge>
-            {capability.changeType !== 'new' && capability.changeType !== 'deprecated' ? null : (
-              <Badge
-                variant="outline"
-                className={cn('text-[11px] font-medium shrink-0 border', CHANGE_COLORS[capability.changeType])}
-              >
-                {capability.changeType === 'new' ? 'New' : 'Deprecated'}
+            {capability.changeType === 'new' && (
+              <Badge variant="outline" className={cn('text-[11px] font-medium shrink-0 border', CHANGE_COLORS['new'])}>
+                New
+              </Badge>
+            )}
+            {capability.changeType === 'deprecated' && (
+              <Badge variant="outline" className={cn('text-[11px] font-medium shrink-0 border', CHANGE_COLORS['deprecated'])}>
+                Deprecated
               </Badge>
             )}
             {capability.changeType === 'updated' && (
@@ -58,7 +66,7 @@ export function CapabilityCard({ capability }: { capability: Capability }) {
             )}
           </div>
 
-          {/* Impact bar */}
+          {/* Impact dots */}
           <div className="flex items-center gap-[3px] pt-0.5 shrink-0">
             {Array.from({ length: 5 }).map((_, i) => (
               <div
@@ -73,16 +81,19 @@ export function CapabilityCard({ capability }: { capability: Capability }) {
         </div>
 
         {/* Name */}
-        <h3 className="font-semibold text-[13px] leading-snug mb-2 text-foreground group-hover:text-violet-300 transition-colors duration-150 line-clamp-2">
-          {capability.name}
-        </h3>
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <h3 className="font-semibold text-[13px] leading-snug text-foreground group-hover:text-violet-200 transition-colors duration-200 line-clamp-2">
+            {capability.name}
+          </h3>
+          <ArrowUpRight className="h-3.5 w-3.5 text-violet-400 shrink-0 opacity-0 -translate-y-0.5 translate-x-0.5 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-200" />
+        </div>
 
         {/* Summary */}
         <p className="text-[12px] text-muted-foreground line-clamp-2 mb-4 flex-1 leading-relaxed">
           {capability.summary}
         </p>
 
-        {/* Beta */}
+        {/* Beta verified */}
         {capability.verifiedOnBeta && (
           <p className="text-[10px] text-muted-foreground/50 mb-3 font-mono">
             ✓ {capability.verifiedOnBeta}

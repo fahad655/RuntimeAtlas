@@ -4,6 +4,7 @@ import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
 import { ThemeProvider } from '@/components/layout/ThemeProvider'
 import { Navbar } from '@/components/layout/Navbar'
+import { PageWrapper } from '@/components/layout/PageWrapper'
 import { Toaster } from '@/components/ui/sonner'
 import { FeedbackButton } from '@/components/layout/FeedbackButton'
 import Script from 'next/script'
@@ -47,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <Navbar />
-          <main className="pt-16">{children}</main>
+          <main className="pt-16"><PageWrapper>{children}</PageWrapper></main>
           <Toaster richColors position="bottom-right" />
           <FeedbackButton />
         </ThemeProvider>

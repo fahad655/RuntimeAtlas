@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import { SignInButton, SignUpButton, UserButton, useUser } from '@clerk/nextjs'
 import { StreakWidget } from '@/components/user/StreakWidget'
 import { Button } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/layout/ThemeToggle'
 import { Menu, X } from 'lucide-react'
 
 const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
@@ -145,6 +146,10 @@ export function Navbar() {
 
         {/* Right side */}
         <div className="flex items-center gap-2">
+          {/* Theme toggle — always visible */}
+          <div className="hidden md:flex">
+            <ThemeToggle />
+          </div>
           {/* Desktop auth */}
           <div className="hidden md:flex">
             {hasClerk && <AuthSection />}
@@ -185,6 +190,10 @@ export function Navbar() {
             )
           })}
           {hasClerk && <MobileAuth onClose={() => setMobileOpen(false)} />}
+          <div className="flex items-center gap-2 pt-4 border-t border-white/[0.06]">
+            <span className="text-xs text-muted-foreground">Theme</span>
+            <ThemeToggle />
+          </div>
         </div>
       )}
     </nav>
