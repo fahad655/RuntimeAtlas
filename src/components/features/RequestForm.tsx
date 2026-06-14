@@ -88,14 +88,15 @@ export function RequestForm() {
       </Button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 z-50 overflow-y-auto">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm"
             onClick={close}
             aria-hidden
           />
 
+          <div className="flex min-h-full items-end sm:items-center justify-center p-4 sm:p-6">
           {/* Modal */}
           <div className="relative z-10 w-full max-w-md rounded-2xl border border-white/[0.1] bg-[#0a0a0f]/95 backdrop-blur-2xl shadow-2xl shadow-black/50 overflow-hidden">
 
@@ -231,6 +232,7 @@ export function RequestForm() {
                 </form>
               )}
             </div>
+          </div>
           </div>
         </div>
       )}
