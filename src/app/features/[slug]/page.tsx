@@ -81,7 +81,7 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
   ])
 
   return (
-    <div className="max-w-2xl mx-auto px-5 sm:px-6 py-12">
+    <div className="max-w-2xl mx-auto px-5 sm:px-6 py-12 animate-page-enter">
       <ViewTracker slug={slug} />
 
       {/* Back */}

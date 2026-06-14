@@ -46,6 +46,8 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  /* Page-enter animation — used as className="animate-page-enter" on every page root */
+  --animate-page-enter: page-enter 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 :root {
@@ -119,22 +121,10 @@
   --sidebar-ring: oklch(0.55 0.25 265);
 }
 
-/* ── Blob float animations ── */
-/* Movements must be >> blur radius to be perceptible.  */
-/* Blob 1 has blur-[140px], so ≥180px movement needed.   */
-@keyframes blob-drift-1 {
-  0%, 100% { transform: translate(0, 0)       scale(1);    opacity: 0.13; }
-  33%       { transform: translate(-180px, -120px) scale(1.18); opacity: 0.22; }
-  66%       { transform: translate( 100px, -160px) scale(0.88); opacity: 0.08; }
-}
-@keyframes blob-drift-2 {
-  0%, 100% { transform: translate(0, 0)       scale(1);    opacity: 0.09; }
-  40%       { transform: translate( 160px, -80px)  scale(1.2);  opacity: 0.15; }
-  75%       { transform: translate(-120px,  140px) scale(0.85); opacity: 0.06; }
-}
-@keyframes blob-drift-3 {
-  0%, 100% { transform: translate(-50%, -50%) scale(1);    opacity: 0.05; }
-  50%       { transform: translate(-50%, -50%) scale(1.35); opacity: 0.10; }
+/* Page-enter keyframe — fired by animate-page-enter utility on every page component mount */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(16px) scale(0.982); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);     }
 }
 
 @layer base {

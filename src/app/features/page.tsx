@@ -39,7 +39,7 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
   const caps = await getCapabilities(sp)
 
   return (
-    <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14">
+    <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 animate-page-enter">
       {/* Header */}
       <div className="mb-10">
         <h1 className="text-4xl font-bold tracking-tight">iOS 27 Capabilities</h1>

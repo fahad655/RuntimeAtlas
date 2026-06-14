@@ -76,7 +76,7 @@ export default async function HomePage() {
   const firstName = user?.firstName ?? 'there'
 
   return (
-    <div className="max-w-4xl mx-auto px-5 sm:px-8 py-12 space-y-10">
+    <div className="max-w-4xl mx-auto px-5 sm:px-8 py-12 space-y-10 animate-page-enter">
       {/* Greeting */}
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Hey, {firstName}</h1>

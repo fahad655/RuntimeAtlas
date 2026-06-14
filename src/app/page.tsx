@@ -3,6 +3,8 @@ import { capabilities } from '@/db/schema'
 import { eq, desc, sql } from 'drizzle-orm'
 import { CapabilityCard } from '@/components/features/CapabilityCard'
 import { LiveFeed } from '@/components/features/LiveFeed'
+import { AnimatedBlobs } from '@/components/layout/AnimatedBlobs'
+import { ParallaxContent } from '@/components/layout/HeroParallax'
 import Link from 'next/link'
 import { ArrowRight, Zap, BookOpen, FlaskConical } from 'lucide-react'
 
@@ -23,93 +25,74 @@ export default async function LandingPage() {
   const { featured, total } = await getData()
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen animate-page-enter">
       {/* ── Hero ── */}
-      <section className="relative min-h-[calc(100vh-4rem)] flex items-center overflow-hidden">
-        {/* Animated ambient light blobs */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div
-            className="absolute top-[10%] right-[5%] w-[800px] h-[800px] rounded-full blur-[140px]"
-            style={{
-              background: 'radial-gradient(circle, #7C3AED, transparent 65%)',
-              animation: 'blob-drift-1 20s ease-in-out infinite',
-            }}
-          />
-          <div
-            className="absolute bottom-[5%] left-[0%] w-[600px] h-[600px] rounded-full blur-[120px]"
-            style={{
-              background: 'radial-gradient(circle, #4338CA, transparent 65%)',
-              animation: 'blob-drift-2 26s ease-in-out infinite',
-            }}
-          />
-          <div
-            className="absolute top-1/2 left-1/2 w-[1100px] h-[700px] rounded-full blur-[160px]"
-            style={{
-              background: 'radial-gradient(ellipse, #6D28D9, transparent 55%)',
-              animation: 'blob-drift-3 16s ease-in-out infinite',
-            }}
-          />
-        </div>
+      <section className="relative min-h-[calc(100vh-4rem)] flex items-center">
+        {/* JS-animated ambient blobs (RAF, no CSS keyframes) */}
+        <AnimatedBlobs />
 
+        {/* Hero text with parallax scroll */}
         <div className="relative w-full max-w-7xl mx-auto px-5 sm:px-8 py-24 sm:py-32">
-          {/* Live badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/25 bg-violet-500/[0.08] px-3.5 py-1.5 text-sm text-violet-400 mb-10">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-violet-500" />
-            </span>
-            iOS 27 Beta — tracking live
-          </div>
+          <ParallaxContent>
+            {/* Live badge */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/25 bg-violet-500/[0.08] px-3.5 py-1.5 text-sm text-violet-400 mb-10">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-violet-500" />
+              </span>
+              iOS 27 Beta — tracking live
+            </div>
 
-          {/* Headline */}
-          <h1 className="text-5xl sm:text-6xl lg:text-[80px] font-bold tracking-tight leading-[1.0] max-w-5xl text-foreground">
-            Every iOS 27 API,{' '}
-            <span
-              className="bg-clip-text text-transparent"
-              style={{ backgroundImage: 'linear-gradient(135deg, #a78bfa 0%, #818cf8 50%, #c084fc 100%)' }}
-            >
-              explained and
-              <br className="hidden sm:block" />
-              ready to ship.
-            </span>
-          </h1>
+            {/* Headline */}
+            <h1 className="text-5xl sm:text-6xl lg:text-[80px] font-bold tracking-tight leading-[1.0] max-w-5xl text-foreground">
+              Every iOS 27 API,{' '}
+              <span
+                className="bg-clip-text text-transparent"
+                style={{ backgroundImage: 'linear-gradient(135deg, #a78bfa 0%, #818cf8 50%, #c084fc 100%)' }}
+              >
+                explained and
+                <br className="hidden sm:block" />
+                ready to ship.
+              </span>
+            </h1>
 
-          {/* Subtitle */}
-          <p className="mt-7 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-            RuntimeAtlas ingests Apple&apos;s WWDC sessions and developer docs, then distills each iOS 27 capability into a scannable card with plain-English context and runnable Swift code.
-          </p>
+            {/* Subtitle */}
+            <p className="mt-7 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed">
+              RuntimeAtlas ingests Apple&apos;s WWDC sessions and developer docs, then distills each iOS 27 capability into a scannable card with plain-English context and runnable Swift code.
+            </p>
 
-          {/* Stats row */}
-          <div className="flex flex-wrap items-center gap-6 sm:gap-10 mt-8 text-sm">
-            {[
-              { value: total > 0 ? `${total}+` : '200+', label: 'capabilities tracked' },
-              { value: '12', label: 'frameworks covered' },
-              { value: 'Live', label: 'beta updates' },
-            ].map(stat => (
-              <div key={stat.label} className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-foreground tabular-nums">{stat.value}</span>
-                <span className="text-muted-foreground">{stat.label}</span>
-              </div>
-            ))}
-          </div>
+            {/* Stats */}
+            <div className="flex flex-wrap items-center gap-6 sm:gap-10 mt-8 text-sm">
+              {[
+                { value: total > 0 ? `${total}+` : '200+', label: 'capabilities tracked' },
+                { value: '12', label: 'frameworks covered' },
+                { value: 'Live', label: 'beta updates' },
+              ].map(stat => (
+                <div key={stat.label} className="flex items-baseline gap-2">
+                  <span className="text-2xl font-bold text-foreground tabular-nums">{stat.value}</span>
+                  <span className="text-muted-foreground">{stat.label}</span>
+                </div>
+              ))}
+            </div>
 
-          {/* CTAs */}
-          <div className="flex flex-wrap gap-3 mt-10">
-            <Link
-              href="/features"
-              className="inline-flex items-center gap-2 rounded-full bg-violet-600 hover:bg-violet-500 text-white font-medium px-6 py-2.5 text-sm transition-all duration-150 shadow-lg shadow-violet-900/30 active:scale-[0.97]"
-            >
-              Browse capabilities
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/demos"
-              className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.04] hover:bg-white/[0.08] text-foreground font-medium px-6 py-2.5 text-sm transition-all duration-150 backdrop-blur-sm active:scale-[0.97]"
-            >
-              <FlaskConical className="h-4 w-4 text-muted-foreground" />
-              See demos
-            </Link>
-          </div>
+            {/* CTAs */}
+            <div className="flex flex-wrap gap-3 mt-10">
+              <Link
+                href="/features"
+                className="inline-flex items-center gap-2 rounded-full bg-violet-600 hover:bg-violet-500 text-white font-medium px-6 py-2.5 text-sm transition-all duration-150 shadow-lg shadow-violet-900/30 active:scale-[0.97]"
+              >
+                Browse capabilities
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/demos"
+                className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.04] hover:bg-white/[0.08] text-foreground font-medium px-6 py-2.5 text-sm transition-all duration-150 backdrop-blur-sm active:scale-[0.97]"
+              >
+                <FlaskConical className="h-4 w-4 text-muted-foreground" />
+                See demos
+              </Link>
+            </div>
+          </ParallaxContent>
         </div>
       </section>
 
