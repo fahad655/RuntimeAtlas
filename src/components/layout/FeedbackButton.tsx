@@ -13,7 +13,7 @@ export function FeedbackButton() {
       data-tally-emoji-text="👋"
       data-tally-emoji-animation="wave"
       aria-label="Give feedback"
-      className="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full border border-white/[0.1] bg-background/90 backdrop-blur-xl px-3.5 py-2 text-xs font-medium text-muted-foreground shadow-lg hover:text-foreground hover:border-white/[0.2] transition-all duration-150 active:scale-[0.97]"
+      className="fixed bottom-5 left-5 z-50 flex items-center gap-2 rounded-full border border-white/[0.1] bg-background/90 backdrop-blur-xl px-3.5 py-2 text-xs font-medium text-muted-foreground shadow-lg hover:text-foreground hover:border-white/[0.2] transition-all duration-150 active:scale-[0.97]"
     >
       <MessageSquarePlus className="h-3.5 w-3.5 shrink-0" />
       Feedback
