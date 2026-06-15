@@ -1,9 +1,18 @@
 import { generateText, Output } from 'ai'
-import { anthropic } from '@ai-sdk/anthropic'
 import { z } from 'zod'
 import type { ScrapedDoc } from './scraper'
 
 const CapabilitySchema = z.object({
+  // Gate field — checked before writing to DB
+  isNewOrChangedInIOS27: z.boolean().describe(
+    'TRUE if and only if this capability was introduced, significantly updated, or deprecated specifically in iOS 27 / WWDC 2026. ' +
+    'FALSE if this is a pre-existing API with no meaningful changes in iOS 27 (e.g. UIKit basics, Core Data, old SwiftUI APIs). ' +
+    'When FALSE, set rejectionReason to a short explanation.'
+  ),
+  rejectionReason: z.string().optional().describe(
+    'Required when isNewOrChangedInIOS27 is FALSE. Short sentence explaining why this topic is not iOS 27-specific (e.g. "UITableView has existed since iOS 2 and has no new iOS 27 APIs").'
+  ),
+
   name: z.string().describe('Clear capability name (e.g., "Foundation Models Framework")'),
   slug: z.string().describe('URL-friendly kebab-case slug, all lowercase, no special chars'),
   summary: z.string().describe('1-2 sentence plain-English summary of what this is'),
@@ -14,7 +23,7 @@ const CapabilitySchema = z.object({
   hardwareConstraints: z.string().optional().describe('Hardware, region, or device model limitations if any'),
   gotchas: z.string().optional().describe('Common pitfalls, API quirks, beta limitations, private vs public status'),
   impactScore: z.number().int().min(1).max(5).describe('1=niche edge case, 3=solid addition, 5=every app developer must know this'),
-  changeType: z.enum(['new', 'updated', 'deprecated']).describe('"new" if this API/feature did not exist before iOS 27; "updated" if it existed before but has significant changes; "deprecated" if it was removed or deprecated'),
+  changeType: z.enum(['new', 'updated', 'deprecated']).describe('"new" if this API/feature did not exist before iOS 27; "updated" if it existed before but has significant changes in iOS 27; "deprecated" if it was removed or deprecated in iOS 27'),
   changesSince: z.string().optional().describe('Only if changeType is "updated" or "deprecated": 2-4 bullet points (starting with "•") describing what concretely changed vs the previous iOS version'),
   demo: z.object({
     title: z.string().describe('Demo project name, e.g. "On-Device Text Summarizer"'),
@@ -43,9 +52,13 @@ export async function classifyAndBrief(
     : ''
 
   const { output } = await generateText({
-    model: anthropic('claude-sonnet-4-6'),
+    model: 'anthropic/claude-sonnet-4.6',
     output: Output.object({ schema: CapabilitySchema }),
     prompt: `You are an expert iOS engineer and technical writer creating content for RuntimeAtlas — a reference site that makes new iOS SDK capabilities immediately scannable and usable.
+
+CRITICAL GATE: This site ONLY covers APIs and features introduced, significantly updated, or deprecated in iOS 27 / WWDC 2026. Before filling in any other field, you MUST decide whether this topic qualifies:
+- Set isNewOrChangedInIOS27 = true ONLY if this capability is genuinely new, meaningfully changed, or deprecated in iOS 27.
+- Set isNewOrChangedInIOS27 = false if this is a pre-existing API with no meaningful iOS 27 changes (e.g. UITableView, Core Data basics, old UIKit patterns). In that case set rejectionReason to a short sentence and you can leave all other fields as minimal placeholders — they will be discarded.
 
 Topic: "${topicInput}"
 

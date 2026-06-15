@@ -64,6 +64,14 @@ export async function runIngestionPipeline(
       scraped.wwdcSession?.title,
     )
 
+    // iOS 27 relevance gate — reject topics the LLM flagged as not iOS 27-specific
+    if (!classified.isNewOrChangedInIOS27) {
+      throw Object.assign(
+        new Error(classified.rejectionReason ?? `"${topicInput}" does not appear to be new or changed in iOS 27 / WWDC 2026`),
+        { code: 'NOT_IOS27', rejectionReason: classified.rejectionReason },
+      )
+    }
+
     // Post-LLM slug dedup (catches cases where LLM normalises to an existing slug)
     const [slugConflict] = await db
       .select({ id: capabilities.id, name: capabilities.name })

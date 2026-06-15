@@ -22,13 +22,24 @@ export async function POST(req: NextRequest) {
     const result = await runIngestionPipeline(topic, url || undefined)
     return NextResponse.json({ success: true, ...result })
   } catch (err) {
-    if (err instanceof Error && (err as NodeJS.ErrnoException & { code?: string }).code === 'DUPLICATE') {
+    const code = err instanceof Error ? (err as Error & { code?: string }).code : undefined
+
+    if (code === 'DUPLICATE') {
       const e = err as Error & { existingSlug: string; existingName: string }
       return NextResponse.json(
-        { error: err.message, existingSlug: e.existingSlug, existingName: e.existingName },
+        { error: (err as Error).message, existingSlug: e.existingSlug, existingName: e.existingName },
         { status: 409 },
       )
     }
+
+    if (code === 'NOT_IOS27') {
+      const e = err as Error & { rejectionReason?: string }
+      return NextResponse.json(
+        { error: 'Topic rejected: not iOS 27 / WWDC 2026 specific', reason: e.rejectionReason ?? (err as Error).message },
+        { status: 422 },
+      )
+    }
+
     throw err
   }
 }
