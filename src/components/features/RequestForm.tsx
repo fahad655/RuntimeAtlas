@@ -88,22 +88,31 @@ export function RequestForm() {
       </Button>
 
       {open && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center sm:items-center sm:p-6">
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={close}
             aria-hidden
           />
 
-          <div className="flex min-h-full items-end sm:items-center justify-center p-4 sm:p-6">
-          {/* Modal */}
-          <div className="relative z-10 w-full max-w-md rounded-2xl border border-white/[0.1] bg-[#0a0a0f]/95 backdrop-blur-2xl shadow-2xl shadow-black/50 overflow-hidden">
+          {/* Modal — bottom sheet on mobile, centered card on sm+ */}
+          <div className="relative z-10 w-full sm:max-w-md
+                          rounded-t-3xl sm:rounded-2xl
+                          border border-white/[0.1] border-b-0 sm:border-b
+                          bg-[#0a0a0f]/98 backdrop-blur-2xl
+                          shadow-[0_-8px_40px_rgba(0,0,0,0.6)] sm:shadow-2xl
+                          max-h-[92dvh] overflow-y-auto">
+
+            {/* Drag handle — mobile only */}
+            <div className="flex justify-center pt-3 pb-1 sm:hidden" aria-hidden>
+              <div className="w-9 h-1 rounded-full bg-white/25" />
+            </div>
 
             {/* Top accent line */}
             <div className="h-px w-full bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
 
-            <div className="p-6">
+            <div className="p-6 pb-8 sm:pb-6">
               {/* Header */}
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center gap-3">
@@ -232,7 +241,6 @@ export function RequestForm() {
                 </form>
               )}
             </div>
-          </div>
           </div>
         </div>
       )}
