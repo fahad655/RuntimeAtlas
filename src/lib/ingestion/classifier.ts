@@ -31,7 +31,7 @@ const CapabilitySchema = z.object({
     description: z.string().describe('1-2 sentence description of what the demo app shows'),
     complexity: z.enum(['Simple', 'Medium', 'Advanced']),
     codeSnippet: z.string().describe('Real, compilable Swift/SwiftUI code demonstrating the core iOS 27 API. Include imports. ~30-60 lines. No pseudocode.'),
-    previousCodeSnippet: z.string().optional().describe('Only when changeType is "updated": the equivalent compilable Swift code using the OLD pre-iOS-27 approach, covering the same use-case as codeSnippet. Must be real code with imports — not pseudocode. This is the "before" side of the diff shown to developers.'),
+    previousCodeSnippet: z.string().optional().describe('REQUIRED when changeType is "updated": the equivalent compilable Swift code using the OLD pre-iOS-27 approach, covering the same use-case as codeSnippet. Must be real code with imports — not pseudocode or placeholder comments. This is the "before" side of the diff shown to developers. DO NOT omit this for updated APIs.'),
     keyApis: z.array(z.string()).describe('Key Apple API names used in the demo'),
   }),
 })

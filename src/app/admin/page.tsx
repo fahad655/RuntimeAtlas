@@ -6,6 +6,7 @@ import { IngestTrigger } from '@/components/admin/IngestTrigger'
 import { BatchIngest } from '@/components/admin/BatchIngest'
 import { ReviewCard } from '@/components/admin/ReviewCard'
 import { SuggestionsPanel } from '@/components/admin/SuggestionsPanel'
+import { MissingDiffPanel } from '@/components/admin/MissingDiffPanel'
 import { Lock } from 'lucide-react'
 import type { InferSelectModel } from 'drizzle-orm'
 import type { capabilities } from '@/db/schema'
@@ -92,6 +93,8 @@ export default function AdminPage() {
 
           <BatchIngest secret={secret} onSuccess={fetchPending} />
 
+          <MissingDiffPanel secret={secret} />
+
           <div className="rounded-xl border border-border/50 p-5">
             <SuggestionsPanel secret={secret} onIngestStarted={fetchPending} />
           </div>
@@ -115,7 +118,7 @@ export default function AdminPage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {pending.map(cap => (
-                <ReviewCard key={cap.id} capability={cap} secret={secret} onUpdate={fetchPending} />
+                <ReviewCard key={cap.id} capability={cap} secret={secret} onUpdate={fetchPending} showRefresh />
               ))}
             </div>
           )}
