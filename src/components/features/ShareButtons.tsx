@@ -8,7 +8,7 @@ interface Props {
   slug: string
 }
 
-const BASE_URL = 'https://runtimeatlas.com'
+const BASE_URL = 'https://runtimeatlas.tech'
 
 export function ShareButtons({ name, summary, slug }: Props) {
   const [copied, setCopied] = useState(false)

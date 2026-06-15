@@ -23,7 +23,7 @@ export default function TermsPage() {
 
       <Section title="1. Acceptance">
         <p>
-          By accessing or using RuntimeAtlas ("the Service") at runtimeatlas.com, you agree to be
+          By accessing or using RuntimeAtlas ("the Service") at runtimeatlas.tech, you agree to be
           bound by these Terms of Service. If you do not agree, please do not use the Service.
         </p>
       </Section>

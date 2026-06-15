@@ -1,12 +1,12 @@
 import { Resend } from 'resend'
 
-const FROM = 'RuntimeAtlas <hello@runtimeatlas.com>'
+const FROM = 'RuntimeAtlas <hello@runtimeatlas.tech>'
 
 function getResend() {
   if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY not set')
   return new Resend(process.env.RESEND_API_KEY)
 }
-const BASE_URL = 'https://runtimeatlas.com'
+const BASE_URL = 'https://runtimeatlas.tech'
 
 export async function sendStreakReminder({
   to,
