@@ -183,11 +183,11 @@ export default async function LandingPage() {
                 glow: 'group-hover:text-pink-300',
               },
             ].map(item => (
-              <div key={item.step} className="group relative bg-background/80 p-8 sm:p-10 space-y-4 transition-colors duration-200 hover:bg-white/[0.04] overflow-hidden">
-                <span className="absolute top-4 right-5 text-[64px] font-black text-white/[0.025] leading-none select-none pointer-events-none">
+              <div key={item.step} className="group relative bg-background/80 p-8 sm:p-10 space-y-4 transition-colors duration-200 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] overflow-hidden">
+                <span className="absolute top-4 right-5 text-[64px] font-black text-black/[0.06] dark:text-white/[0.025] leading-none select-none pointer-events-none">
                   {item.step}
                 </span>
-                <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
+                <div className="w-10 h-10 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.08] flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
                   {item.icon}
                 </div>
                 <h3 className={`font-semibold text-foreground transition-colors duration-200 ${item.glow}`}>{item.title}</h3>
