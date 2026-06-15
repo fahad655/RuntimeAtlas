@@ -117,26 +117,30 @@ export function FilterBar() {
       </div>
 
       {/* Category + change type + has demo */}
-      <div className="flex flex-wrap gap-1.5 items-center">
-        <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mr-1 shrink-0">Category</span>
-        {CATEGORIES.map(c => (
-          <Pill key={c} active={category === c} onClick={() => toggle('category', c)}>{c}</Pill>
-        ))}
-        <span className="text-border/40 mx-1">·</span>
-        {CHANGE_TYPES.map(ct => (
-          <Pill key={ct.value} active={changeType === ct.value} onClick={() => toggle('changeType', ct.value)}>{ct.label}</Pill>
-        ))}
-        <span className="text-border/40 mx-1">·</span>
-        <Pill active={hasDemo} onClick={() => set('hasDemo', hasDemo ? '' : 'true')}>Has demo</Pill>
+      <div className="space-y-1.5">
+        <p className="text-[10px] font-semibold text-muted-foreground/50 uppercase tracking-widest">Category &amp; type</p>
+        <div className="flex flex-wrap gap-1.5 items-center">
+          {CATEGORIES.map(c => (
+            <Pill key={c} active={category === c} onClick={() => toggle('category', c)}>{c}</Pill>
+          ))}
+          <span className="w-px h-4 bg-border/40 mx-0.5" />
+          {CHANGE_TYPES.map(ct => (
+            <Pill key={ct.value} active={changeType === ct.value} onClick={() => toggle('changeType', ct.value)}>{ct.label}</Pill>
+          ))}
+          <span className="w-px h-4 bg-border/40 mx-0.5" />
+          <Pill active={hasDemo} onClick={() => set('hasDemo', hasDemo ? '' : 'true')}>Has demo</Pill>
+        </div>
       </div>
 
       {/* Framework groups */}
       {groups.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 items-center">
-          <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mr-1 shrink-0">Framework</span>
-          {groups.map(g => (
-            <Pill key={g} active={framework === g} onClick={() => toggle('framework', g)}>{g}</Pill>
-          ))}
+        <div className="space-y-1.5">
+          <p className="text-[10px] font-semibold text-muted-foreground/50 uppercase tracking-widest">Framework</p>
+          <div className="flex flex-wrap gap-1.5">
+            {groups.map(g => (
+              <Pill key={g} active={framework === g} onClick={() => toggle('framework', g)}>{g}</Pill>
+            ))}
+          </div>
         </div>
       )}
 

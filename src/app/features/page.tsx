@@ -119,8 +119,8 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-60" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500" />
                   </span>
-                  <h2 className="text-lg font-bold tracking-tight">{release}</h2>
-                  <span className="text-xs text-muted-foreground font-mono">· {wwdcYear(release)}</span>
+                  <h2 className="text-lg font-bold tracking-tight">{wwdcYear(release)}</h2>
+                  <span className="text-xs text-muted-foreground font-mono">· {release}</span>
                 </div>
                 <div className="flex-1 h-px bg-white/[0.06]" />
                 <span className="text-xs text-muted-foreground tabular-nums shrink-0">
