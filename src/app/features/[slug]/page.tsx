@@ -83,8 +83,22 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
       : null,
   ])
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    headline: cap.name,
+    description: cap.summary,
+    keywords: [...cap.frameworks, 'iOS 27', 'WWDC 2026', 'Swift', cap.category].join(', '),
+    datePublished: cap.createdAt.toISOString(),
+    dateModified: cap.updatedAt.toISOString(),
+    author: { '@type': 'Organization', name: 'RuntimeAtlas', url: 'https://runtimeatlas.com' },
+    publisher: { '@type': 'Organization', name: 'RuntimeAtlas', url: 'https://runtimeatlas.com' },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://runtimeatlas.com/features/${cap.slug}` },
+  }
+
   return (
     <div className="max-w-2xl mx-auto px-5 sm:px-6 py-12 animate-page-enter">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ViewTracker slug={slug} />
 
       {/* Back */}

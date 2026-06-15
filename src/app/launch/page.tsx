@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Zap, Code2, TrendingUp, CheckCircle, ExternalLink } from 'lucide-react'
+import { SubscribeForm } from '@/components/layout/SubscribeForm'
 
 export const metadata: Metadata = {
   title: 'Launching on Product Hunt',
@@ -120,6 +121,13 @@ export default function LaunchPage() {
           </p>
           <p className="text-foreground font-medium">— Fahad</p>
         </div>
+      </section>
+
+      {/* Email capture */}
+      <section className="mb-12 rounded-2xl border border-violet-500/15 bg-violet-500/[0.03] p-6">
+        <p className="text-sm font-semibold mb-1">Miss the launch day? Get notified of new APIs.</p>
+        <p className="text-xs text-muted-foreground mb-4">We add new iOS 27 capabilities throughout the beta cycle — get an email when something worth your time lands.</p>
+        <SubscribeForm source="launch" compact />
       </section>
 
       {/* CTAs */}

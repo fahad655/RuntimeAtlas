@@ -101,6 +101,13 @@ export const userProgress = pgTable('user_progress', {
   completedAt: timestamp('completed_at').defaultNow().notNull(),
 })
 
+export const emailSignups = pgTable('email_signups', {
+  id: serial('id').primaryKey(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  source: varchar('source', { length: 50 }).default('landing').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
 export const userStreaks = pgTable('user_streaks', {
   id: serial('id').primaryKey(),
   clerkId: varchar('clerk_id', { length: 255 }).notNull().unique(),

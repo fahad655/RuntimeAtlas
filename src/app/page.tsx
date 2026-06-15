@@ -7,6 +7,7 @@ import { AnimatedBlobs } from '@/components/layout/AnimatedBlobs'
 import { ParallaxContent } from '@/components/layout/HeroParallax'
 import Link from 'next/link'
 import { ArrowRight, Bell, TrendingUp, Code2, CheckCircle, ChevronRight, Calendar, Users, Layers, Zap } from 'lucide-react'
+import { SubscribeForm } from '@/components/layout/SubscribeForm'
 
 export const revalidate = 60
 
@@ -254,6 +255,21 @@ export default async function LandingPage() {
             {featured.map(cap => <CapabilityCard key={cap.id} capability={cap} />)}
           </div>
         )}
+      </section>
+
+      {/* ── Email capture ── */}
+      <section className="py-16 max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="relative rounded-2xl border border-violet-500/15 bg-violet-500/[0.03] overflow-hidden p-8 sm:p-12">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet-500/[0.05] via-transparent to-pink-500/[0.03]" aria-hidden />
+          <div className="relative max-w-lg">
+            <p className="text-xs font-semibold text-violet-400 uppercase tracking-widest mb-2">Stay current</p>
+            <h2 className="text-xl sm:text-2xl font-bold mb-2">New APIs drop throughout the beta cycle.</h2>
+            <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+              Get notified when we add new iOS 27 capabilities — no noise, just signal when something worth your attention lands.
+            </p>
+            <SubscribeForm source="landing" />
+          </div>
+        </div>
       </section>
 
       {/* ── Live feed — below the capability grid ── */}

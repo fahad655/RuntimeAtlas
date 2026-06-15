@@ -15,6 +15,7 @@ export function Footer() {
           <Link href="/about"     className="text-xs text-muted-foreground hover:text-foreground transition-colors">About</Link>
           <Link href="/launch"    className="text-xs text-muted-foreground hover:text-foreground transition-colors">Launch</Link>
           <Link href="/privacy"   className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy</Link>
+          <Link href="/terms"    className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms</Link>
           <a
             href="https://developer.apple.com/videos/wwdc2026/"
             target="_blank"
