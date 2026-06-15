@@ -91,7 +91,7 @@ export default async function HomePage() {
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {/* Overall */}
-        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5 flex items-center gap-4 sm:col-span-1">
+        <div className="rounded-2xl border border-border/60 dark:border-white/[0.07] bg-muted/30 dark:bg-white/[0.03] p-5 flex items-center gap-4 sm:col-span-1">
           <CircularRing
             value={completedCount}
             max={totalCount}
@@ -113,12 +113,12 @@ export default async function HomePage() {
         </div>
 
         {/* Streak */}
-        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5 flex items-center gap-4">
+        <div className="rounded-2xl border border-border/60 dark:border-white/[0.07] bg-muted/30 dark:bg-white/[0.03] p-5 flex items-center gap-4">
           <div className={cn(
             'h-20 w-20 rounded-2xl flex items-center justify-center shrink-0',
             currentStreak > 0
               ? 'bg-orange-500/[0.08] border border-orange-500/20'
-              : 'bg-white/[0.03] border border-white/[0.07]',
+              : 'bg-muted/30 dark:bg-white/[0.03] border border-border/60 dark:border-white/[0.07]',
           )}>
             <div className="flex flex-col items-center gap-0.5">
               <Flame className={cn('h-6 w-6', currentStreak > 0 ? 'text-orange-400' : 'text-muted-foreground')} />
@@ -138,7 +138,7 @@ export default async function HomePage() {
         </div>
 
         {/* Queue */}
-        <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5 flex items-center gap-4">
+        <div className="rounded-2xl border border-border/60 dark:border-white/[0.07] bg-muted/30 dark:bg-white/[0.03] p-5 flex items-center gap-4">
           <CircularRing
             value={totalCount - queue.length}
             max={totalCount}
@@ -158,7 +158,7 @@ export default async function HomePage() {
       </div>
 
       {/* Framework focus */}
-      <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5 space-y-3">
+      <div className="rounded-2xl border border-border/60 dark:border-white/[0.07] bg-muted/30 dark:bg-white/[0.03] p-5 space-y-3">
         <div>
           <h2 className="font-semibold text-sm">Framework focus</h2>
           <p className="text-xs text-muted-foreground mt-0.5">Pin frameworks — they appear first in the grid below</p>

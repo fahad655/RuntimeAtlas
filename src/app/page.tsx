@@ -49,7 +49,7 @@ export default async function LandingPage() {
 
         <div className="pointer-events-none absolute bottom-0 inset-x-0 h-56 bg-gradient-to-t from-background to-transparent" aria-hidden />
 
-        <div className="relative w-full max-w-7xl mx-auto px-5 sm:px-8 py-24 sm:py-32">
+        <div className="relative w-full max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
           <ParallaxContent>
 
             {/* Current release badge */}
@@ -101,7 +101,7 @@ export default async function LandingPage() {
       </section>
 
       {/* ── Apple by the numbers ── */}
-      <section className="border-y border-white/[0.05] bg-white/[0.01]">
+      <section className="border-y border-border/50 dark:border-white/[0.05] bg-muted/20 dark:bg-white/[0.01]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-8">
             Why keeping up is hard
@@ -147,7 +147,7 @@ export default async function LandingPage() {
       </section>
 
       {/* ── How it works ── */}
-      <section className="py-20 border-b border-white/[0.05]">
+      <section className="py-20 border-b border-border/50 dark:border-white/[0.05]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
 
           <div className="mb-12 max-w-xl">
@@ -159,7 +159,7 @@ export default async function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-white/[0.05] rounded-2xl overflow-hidden">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-border/40 dark:bg-white/[0.05] rounded-2xl overflow-hidden">
             {[
               {
                 icon: <Bell className="h-5 w-5 text-violet-400" />,

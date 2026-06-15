@@ -13,6 +13,7 @@ export function PageWrapper({ children }: { children: React.ReactNode }) {
       isFirstRender.current = false
       return
     }
+    window.scrollTo(0, 0)
     const el = ref.current
     if (!el) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return

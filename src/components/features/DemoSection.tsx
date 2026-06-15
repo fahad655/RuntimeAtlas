@@ -72,7 +72,7 @@ export function DemoSection({
 
         {/* Filename + copy */}
         <div className="flex items-center gap-3 px-4 shrink-0">
-          <span className="text-[11px] text-[#666] font-mono hidden sm:block">
+          <span className="text-[11px] text-[#666] font-mono hidden lg:block">
             {title.replace(/\s+/g, '') || 'Demo'}.swift
           </span>
           <span className="text-[11px] text-[#666] border border-[#3a3a3c] rounded px-1.5 py-0.5">
