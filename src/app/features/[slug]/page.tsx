@@ -13,6 +13,8 @@ import { ReportIssueLink } from '@/components/layout/FeedbackButton'
 import { ShareButtons } from '@/components/features/ShareButtons'
 import { AdminEditButton } from '@/components/admin/AdminEditButton'
 import { highlightSwift } from '@/lib/highlighter'
+import { SubscribeForm } from '@/components/layout/SubscribeForm'
+import { auth } from '@clerk/nextjs/server'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -68,6 +70,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function FeatureDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
+  const { userId } = await auth()
   const data = await getData(slug)
   if (!data) notFound()
 
@@ -314,6 +317,15 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
         <section className="mb-12">
           <h2 className="text-lg font-semibold mb-3">Requirements</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">{cap.hardwareConstraints}</p>
+        </section>
+      )}
+
+      {/* ── Email nudge for logged-out users ── */}
+      {!userId && (
+        <section className="mb-8 rounded-2xl border border-violet-500/15 bg-violet-500/[0.03] p-5">
+          <p className="text-sm font-semibold mb-0.5">More iOS 27 APIs land every week.</p>
+          <p className="text-xs text-muted-foreground mb-4">Get notified when new capabilities are published — no noise, just signal.</p>
+          <SubscribeForm source="capability-detail" compact />
         </section>
       )}
 
