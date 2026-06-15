@@ -200,38 +200,6 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* ── About + Launch ── */}
-      <section className="py-12 max-w-7xl mx-auto px-5 sm:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Link
-            href="/about"
-            className="group relative rounded-2xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.12] p-6 transition-all duration-200"
-          >
-            <div className="text-2xl mb-3">📖</div>
-            <h3 className="font-semibold text-sm mb-1.5 group-hover:text-violet-400 transition-colors">About SwiftChronicle</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              How the ingestion pipeline works, what the team built it with, and why it exists — for developers who want to understand what&apos;s under the hood.
-            </p>
-            <span className="inline-flex items-center gap-1 text-xs text-violet-400 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
-              Learn more <ArrowRight className="h-3 w-3" />
-            </span>
-          </Link>
-          <Link
-            href="/launch"
-            className="group relative rounded-2xl border border-orange-500/20 bg-orange-500/[0.03] hover:bg-orange-500/[0.06] hover:border-orange-500/30 p-6 transition-all duration-200"
-          >
-            <div className="text-2xl mb-3">🚀</div>
-            <h3 className="font-semibold text-sm mb-1.5 group-hover:text-orange-400 transition-colors">Launching on Product Hunt</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              SwiftChronicle is live on Product Hunt. If this saves you time every WWDC, an upvote helps more developers find it.
-            </p>
-            <span className="inline-flex items-center gap-1 text-xs text-orange-400 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
-              See the launch <ArrowRight className="h-3 w-3" />
-            </span>
-          </Link>
-        </div>
-      </section>
-
       {/* ── Progress CTA ── */}
       <section className="py-16 max-w-7xl mx-auto px-5 sm:px-8">
         <div className="relative rounded-2xl border border-violet-500/20 bg-violet-500/[0.04] overflow-hidden p-8 sm:p-12">
@@ -302,6 +270,38 @@ export default async function LandingPage() {
             </p>
             <SubscribeForm source="landing" />
           </div>
+        </div>
+      </section>
+
+      {/* ── About + Launch ── */}
+      <section className="py-12 max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Link
+            href="/about"
+            className="group relative rounded-2xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.12] p-6 transition-all duration-200"
+          >
+            <div className="text-2xl mb-3">📖</div>
+            <h3 className="font-semibold text-sm mb-1.5 group-hover:text-violet-400 transition-colors">About SwiftChronicle</h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              How the ingestion pipeline works, what the team built it with, and why it exists — for developers who want to understand what&apos;s under the hood.
+            </p>
+            <span className="inline-flex items-center gap-1 text-xs text-violet-400 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
+              Learn more <ArrowRight className="h-3 w-3" />
+            </span>
+          </Link>
+          <Link
+            href="/launch"
+            className="group relative rounded-2xl border border-orange-500/20 bg-orange-500/[0.03] hover:bg-orange-500/[0.06] hover:border-orange-500/30 p-6 transition-all duration-200"
+          >
+            <div className="text-2xl mb-3">🚀</div>
+            <h3 className="font-semibold text-sm mb-1.5 group-hover:text-orange-400 transition-colors">Launching on Product Hunt</h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              SwiftChronicle is live on Product Hunt. If this saves you time every WWDC, an upvote helps more developers find it.
+            </p>
+            <span className="inline-flex items-center gap-1 text-xs text-orange-400 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
+              See the launch <ArrowRight className="h-3 w-3" />
+            </span>
+          </Link>
         </div>
       </section>
 
