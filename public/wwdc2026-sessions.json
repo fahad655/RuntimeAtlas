@@ -1,0 +1,235 @@
+{
+  "meta": {
+    "source": "https://developer.apple.com/videos/wwdc2026/",
+    "generatedAt": "2026-06-15",
+    "totalSessions": 114,
+    "note": "Excludes keynotes, ASL variants, daily recaps, and group labs. Each session URL: https://developer.apple.com{path}"
+  },
+  "countByFramework": {
+    "Foundation Models": 5,
+    "visionOS": 14,
+    "App Intents / Siri": 5,
+    "SwiftUI": 5,
+    "Xcode / Xcode Cloud": 6,
+    "Core AI": 3,
+    "MLX": 3,
+    "Evaluations": 3,
+    "Metal": 3,
+    "Swift": 3,
+    "Camera": 3,
+    "Security": 3,
+    "Games": 3,
+    "StoreKit": 3,
+    "Web / Safari / WebKit": 5,
+    "Accessibility": 4,
+    "Design": 3,
+    "Reality Composer Pro": 4,
+    "RealityKit": 2,
+    "AVFoundation / Media": 2,
+    "SwiftData": 2,
+    "Vision": 2,
+    "WidgetKit / Live Activities": 2,
+    "MusicKit": 2,
+    "Virtualization": 2,
+    "Instruments": 2,
+    "UIKit": 1,
+    "AppKit": 1,
+    "HealthKit": 1,
+    "PencilKit": 1,
+    "PaperKit": 1,
+    "TextKit": 1,
+    "Core Image": 1,
+    "MetricKit": 1,
+    "Core Spotlight": 1,
+    "CarPlay": 1,
+    "Shortcuts": 1,
+    "Bluetooth": 1,
+    "Device Management": 1,
+    "Wallet": 1,
+    "App Store Connect": 2
+  },
+  "sessionsByFramework": {
+    "Foundation Models": [
+      { "title": "What's new in the Foundation Models framework", "url": "/videos/play/wwdc2026/241/", "id": "241" },
+      { "title": "Build agentic app experiences with the Foundation Models framework", "url": "/videos/play/wwdc2026/242/", "id": "242" },
+      { "title": "Bring an LLM provider to the Foundation Models framework", "url": "/videos/play/wwdc2026/339/", "id": "339" },
+      { "title": "Build with the new Apple Foundation Model on Private Cloud Compute", "url": "/videos/play/wwdc2026/319/", "id": "319" },
+      { "title": "Build AI-powered scripts with the fm CLI and Python SDK", "url": "/videos/play/wwdc2026/334/", "id": "334" }
+    ],
+    "Evaluations": [
+      { "title": "Meet the Evaluations framework", "url": "/videos/play/wwdc2026/298/", "id": "298" },
+      { "title": "Create robust evaluations for agentic apps", "url": "/videos/play/wwdc2026/299/", "id": "299" },
+      { "title": "Improve your prompts by hill-climbing with Evaluations", "url": "/videos/play/wwdc2026/335/", "id": "335" }
+    ],
+    "Core AI": [
+      { "title": "Meet Core AI", "url": "/videos/play/wwdc2026/324/", "id": "324" },
+      { "title": "Dive into Core AI model authoring and optimization", "url": "/videos/play/wwdc2026/325/", "id": "325" },
+      { "title": "Integrate on-device AI models into your app using Core AI", "url": "/videos/play/wwdc2026/326/", "id": "326" }
+    ],
+    "MLX": [
+      { "title": "Run local agentic AI on the Mac using MLX", "url": "/videos/play/wwdc2026/232/", "id": "232" },
+      { "title": "Explore distributed inference and training with MLX", "url": "/videos/play/wwdc2026/233/", "id": "233" },
+      { "title": "Explore numerical computing in Swift with MLX", "url": "/videos/play/wwdc2026/328/", "id": "328" }
+    ],
+    "App Intents / Siri": [
+      { "title": "Build intelligent Siri experiences with App Schemas", "url": "/videos/play/wwdc2026/240/", "id": "240" },
+      { "title": "Debug and profile agentic app experiences with Instruments", "url": "/videos/play/wwdc2026/243/", "id": "243" },
+      { "title": "Explore advanced App Intents features for Siri and Apple Intelligence", "url": "/videos/play/wwdc2026/343/", "id": "343" },
+      { "title": "Code-along: Make your app available to Siri", "url": "/videos/play/wwdc2026/344/", "id": "344" },
+      { "title": "Discover new capabilities in the App Intents framework", "url": "/videos/play/wwdc2026/345/", "id": "345" },
+      { "title": "Validate your App Intents adoption with AppIntentsTesting", "url": "/videos/play/wwdc2026/295/", "id": "295" }
+    ],
+    "SwiftUI": [
+      { "title": "What's new in SwiftUI", "url": "/videos/play/wwdc2026/269/", "id": "269" },
+      { "title": "Code-along: Build powerful drag and drop in SwiftUI", "url": "/videos/play/wwdc2026/271/", "id": "271" },
+      { "title": "Use SwiftUI with AppKit and UIKit", "url": "/videos/play/wwdc2026/272/", "id": "272" },
+      { "title": "Dive into lazy stacks and scrolling with SwiftUI", "url": "/videos/play/wwdc2026/321/", "id": "321" },
+      { "title": "Compose advanced graphics effects with SwiftUI", "url": "/videos/play/wwdc2026/322/", "id": "322" }
+    ],
+    "Swift": [
+      { "title": "What's new in Swift", "url": "/videos/play/wwdc2026/262/", "id": "262" },
+      { "title": "Build real-time apps and services with gRPC and Swift", "url": "/videos/play/wwdc2026/265/", "id": "265" },
+      { "title": "Migrate to Swift Testing", "url": "/videos/play/wwdc2026/267/", "id": "267" }
+    ],
+    "SwiftData": [
+      { "title": "What's new in SwiftData", "url": "/videos/play/wwdc2026/274/", "id": "274" },
+      { "title": "Code-along: Add persistence with SwiftData", "url": "/videos/play/wwdc2026/275/", "id": "275" }
+    ],
+    "visionOS": [
+      { "title": "Build next-generation experiences with visionOS 27", "url": "/videos/play/wwdc2026/287/", "id": "287" },
+      { "title": "Explore advances in RealityKit", "url": "/videos/play/wwdc2026/279/", "id": "279" },
+      { "title": "Iterate your spatial scenes faster with Reality Composer Pro 3", "url": "/videos/play/wwdc2026/280/", "id": "280" },
+      { "title": "Extend Reality Composer Pro 3 functionality with Xcode", "url": "/videos/play/wwdc2026/281/", "id": "281" },
+      { "title": "Discover the Spatial Preview framework", "url": "/videos/play/wwdc2026/282/", "id": "282" },
+      { "title": "Explore enhancements to visionOS object tracking", "url": "/videos/play/wwdc2026/283/", "id": "283" },
+      { "title": "Collaborate on structured 3D models in visionOS", "url": "/videos/play/wwdc2026/284/", "id": "284" },
+      { "title": "Discover USDKit and what's new in OpenUSD", "url": "/videos/play/wwdc2026/285/", "id": "285" },
+      { "title": "Use foveated streaming to bring immersive content to visionOS", "url": "/videos/play/wwdc2026/286/", "id": "286" },
+      { "title": "Design immersive environments for visionOS apps and the spatial web", "url": "/videos/play/wwdc2026/234/", "id": "234" },
+      { "title": "Explore immersive website environments in visionOS", "url": "/videos/play/wwdc2026/320/", "id": "320" },
+      { "title": "Design no-code games with Reality Composer Pro 3", "url": "/videos/play/wwdc2026/252/", "id": "252" },
+      { "title": "Supercharge your spatial workflows with Reality Composer Pro 3", "url": "/videos/play/wwdc2026/393/", "id": "393" },
+      { "title": "Build live production tools for Apple Immersive Video", "url": "/videos/play/wwdc2026/338/", "id": "338" }
+    ],
+    "Metal": [
+      { "title": "Build real-time neural rendering pipelines with Metal", "url": "/videos/play/wwdc2026/359/", "id": "359" },
+      { "title": "Optimize custom machine learning operations with Metal tensors", "url": "/videos/play/wwdc2026/330/", "id": "330" },
+      { "title": "Find and fix performance issues in your Metal games", "url": "/videos/play/wwdc2026/388/", "id": "388" }
+    ],
+    "Xcode / Xcode Cloud": [
+      { "title": "What's new in Xcode 27", "url": "/videos/play/wwdc2026/258/", "id": "258" },
+      { "title": "Xcode, agents, and you", "url": "/videos/play/wwdc2026/259/", "id": "259" },
+      { "title": "Build, deliver, and automate with Xcode Cloud", "url": "/videos/play/wwdc2026/261/", "id": "261" },
+      { "title": "Create UI prototypes using agents in Xcode", "url": "/videos/play/wwdc2026/227/", "id": "227" },
+      { "title": "Get the most out of Device Hub", "url": "/videos/play/wwdc2026/260/", "id": "260" },
+      { "title": "Translate your app using agents in Xcode", "url": "/videos/play/wwdc2026/213/", "id": "213" }
+    ],
+    "Camera": [
+      { "title": "Build a responsive camera app that launches quickly", "url": "/videos/play/wwdc2026/303/", "id": "303" },
+      { "title": "Implement high resolution photo capture", "url": "/videos/play/wwdc2026/304/", "id": "304" },
+      { "title": "Support the Center Stage front camera in your iOS app", "url": "/videos/play/wwdc2026/341/", "id": "341" }
+    ],
+    "Security": [
+      { "title": "Secure your apps with App Attest", "url": "/videos/play/wwdc2026/201/", "id": "201" },
+      { "title": "Meet Trust Insights", "url": "/videos/play/wwdc2026/379/", "id": "379" },
+      { "title": "Secure your app: mitigate risks to agentic features", "url": "/videos/play/wwdc2026/347/", "id": "347" }
+    ],
+    "Accessibility": [
+      { "title": "Craft clear names for features and labels in your app", "url": "/videos/play/wwdc2026/290/", "id": "290" },
+      { "title": "Enhance the accessibility of your reading app", "url": "/videos/play/wwdc2026/219/", "id": "219" },
+      { "title": "Prepare your tvOS apps for Dynamic Type", "url": "/videos/play/wwdc2026/221/", "id": "221" },
+      { "title": "Refine accessibility for custom controls", "url": "/videos/play/wwdc2026/220/", "id": "220" }
+    ],
+    "Vision": [
+      { "title": "Best practices for integrating visual intelligence in your app", "url": "/videos/play/wwdc2026/297/", "id": "297" },
+      { "title": "What's new in image understanding", "url": "/videos/play/wwdc2026/237/", "id": "237" }
+    ],
+    "StoreKit": [
+      { "title": "What's new in Apple In-App Purchase", "url": "/videos/play/wwdc2026/210/", "id": "210" },
+      { "title": "Offer subscriptions to groups and organizations", "url": "/videos/play/wwdc2026/391/", "id": "391" },
+      { "title": "Unlock in-game content with StoreKit and Background Assets", "url": "/videos/play/wwdc2026/378/", "id": "378" }
+    ],
+    "WidgetKit / Live Activities": [
+      { "title": "Live Activities essentials", "url": "/videos/play/wwdc2026/223/", "id": "223" },
+      { "title": "WidgetKit foundations", "url": "/videos/play/wwdc2026/277/", "id": "277" }
+    ],
+    "UIKit": [
+      { "title": "Modernize your UIKit app", "url": "/videos/play/wwdc2026/278/", "id": "278" }
+    ],
+    "AppKit": [
+      { "title": "Modernize your AppKit app", "url": "/videos/play/wwdc2026/289/", "id": "289" }
+    ],
+    "AVFoundation / Media": [
+      { "title": "Discover generated subtitles and subtitle styles", "url": "/videos/play/wwdc2026/256/", "id": "256" },
+      { "title": "Meet the Now Playing framework", "url": "/videos/play/wwdc2026/312/", "id": "312" }
+    ],
+    "MusicKit": [
+      { "title": "Meet the Music Understanding framework", "url": "/videos/play/wwdc2026/253/", "id": "253" },
+      { "title": "Integrate MusicKit into your app", "url": "/videos/play/wwdc2026/254/", "id": "254" }
+    ],
+    "HealthKit": [
+      { "title": "Deliver workout insights with HealthKit workout zones", "url": "/videos/play/wwdc2026/207/", "id": "207" }
+    ],
+    "PencilKit": [
+      { "title": "Read between the strokes with PencilKit", "url": "/videos/play/wwdc2026/203/", "id": "203" }
+    ],
+    "PaperKit": [
+      { "title": "Unwrap PaperKit", "url": "/videos/play/wwdc2026/372/", "id": "372" }
+    ],
+    "TextKit": [
+      { "title": "Elevate your app's text experience with TextKit", "url": "/videos/play/wwdc2026/370/", "id": "370" }
+    ],
+    "Core Image": [
+      { "title": "Enhance RAW image processing with Core Image", "url": "/videos/play/wwdc2026/305/", "id": "305" }
+    ],
+    "Core Spotlight": [
+      { "title": "LLM search using Core Spotlight", "url": "/videos/play/wwdc2026/246/", "id": "246" }
+    ],
+    "MetricKit": [
+      { "title": "Meet the new MetricKit", "url": "/videos/play/wwdc2026/222/", "id": "222" }
+    ],
+    "Instruments": [
+      { "title": "Profile, fix, and verify: Improve app responsiveness with Instruments", "url": "/videos/play/wwdc2026/268/", "id": "268" }
+    ],
+    "Virtualization": [
+      { "title": "Discover container machines", "url": "/videos/play/wwdc2026/389/", "id": "389" },
+      { "title": "Expand the capabilities of your Virtualization app", "url": "/videos/play/wwdc2026/224/", "id": "224" }
+    ],
+    "Games": [
+      { "title": "Bringing Cyberpunk 2077 to Mac", "url": "/videos/play/wwdc2026/356/", "id": "356" },
+      { "title": "Make your game great with touch", "url": "/videos/play/wwdc2026/358/", "id": "358" },
+      { "title": "Speedrun your game port with agentic coding", "url": "/videos/play/wwdc2026/357/", "id": "357" }
+    ],
+    "Web / Safari / WebKit": [
+      { "title": "What's new in WebKit for Safari 27", "url": "/videos/play/wwdc2026/204/", "id": "204" },
+      { "title": "Create web extensions for Safari", "url": "/videos/play/wwdc2026/216/", "id": "216" },
+      { "title": "Get started with the HTML Model Element", "url": "/videos/play/wwdc2026/215/", "id": "215" },
+      { "title": "Learn CSS Grid Lanes", "url": "/videos/play/wwdc2026/314/", "id": "314" },
+      { "title": "Rediscover the HTML select element", "url": "/videos/play/wwdc2026/315/", "id": "315" }
+    ],
+    "Design": [
+      { "title": "Principles of great design", "url": "/videos/play/wwdc2026/250/", "id": "250" },
+      { "title": "Communicate your brand identity on iOS", "url": "/videos/play/wwdc2026/251/", "id": "251" },
+      { "title": "Design intuitive search experiences", "url": "/videos/play/wwdc2026/292/", "id": "292" }
+    ],
+    "CarPlay": [
+      { "title": "Rev up your CarPlay app", "url": "/videos/play/wwdc2026/212/", "id": "212" }
+    ],
+    "Shortcuts": [
+      { "title": "What's new in Shortcuts", "url": "/videos/play/wwdc2026/310/", "id": "310" }
+    ],
+    "Bluetooth": [
+      { "title": "Find your accessory with Bluetooth Channel Sounding", "url": "/videos/play/wwdc2026/369/", "id": "369" }
+    ],
+    "Device Management": [
+      { "title": "What's new in managing Apple devices", "url": "/videos/play/wwdc2026/206/", "id": "206" }
+    ],
+    "Wallet": [
+      { "title": "What's new in Wallet", "url": "/videos/play/wwdc2026/209/", "id": "209" }
+    ],
+    "App Store Connect": [
+      { "title": "Enhance your presence on the App Store", "url": "/videos/play/wwdc2026/205/", "id": "205" },
+      { "title": "Explore Retention Messaging in App Store Connect", "url": "/videos/play/wwdc2026/309/", "id": "309" }
+    ]
+  }
+}
