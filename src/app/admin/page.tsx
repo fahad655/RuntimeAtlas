@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { IngestTrigger } from '@/components/admin/IngestTrigger'
+import { BatchIngest } from '@/components/admin/BatchIngest'
 import { ReviewCard } from '@/components/admin/ReviewCard'
 import { SuggestionsPanel } from '@/components/admin/SuggestionsPanel'
 import { Lock } from 'lucide-react'
@@ -88,6 +89,8 @@ export default function AdminPage() {
               <IngestTrigger secret={secret} onSuccess={fetchPending} />
             </div>
           </div>
+
+          <BatchIngest secret={secret} onSuccess={fetchPending} />
 
           <div className="rounded-xl border border-border/50 p-5">
             <SuggestionsPanel secret={secret} onIngestStarted={fetchPending} />
