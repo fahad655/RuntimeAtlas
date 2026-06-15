@@ -126,44 +126,46 @@ async function fetchWWDCTranscript(sessionUrl: string): Promise<string> {
 export async function scrapeForTopic(topicInput: string, providedUrl?: string): Promise<ScrapedContent> {
   const docsContent: ScrapedDoc[] = []
 
+  let explicitWWDCUrl: string | null = null
+
   // If user gave a specific URL, determine what it is
   if (providedUrl) {
     const isWWDC = providedUrl.includes('/videos/play/')
     if (isWWDC) {
-      const transcript = await fetchWWDCTranscript(providedUrl)
-      const html = await fetchHtml(providedUrl)
-      const $ = cheerio.load(html)
-      const title = $('h1').first().text().trim() || topicInput
-      const description = $('meta[name="description"]').attr('content') ?? ''
-      const sessionId = providedUrl.split('/').filter(Boolean).pop() ?? ''
-      return {
-        docsContent: [],
-        wwdcSession: { title, url: providedUrl, sessionId, description, transcript },
-      }
-    }
-    // It's a doc page
-    try {
-      docsContent.push(await scrapeDocPage(providedUrl))
-    } catch { /* continue to search fallback */ }
-  }
-
-  // Search Apple docs for the topic (always run if no URL or URL was a doc page)
-  if (!providedUrl || docsContent.length > 0) {
-    const searchResults = await searchAppleDocs(topicInput)
-    for (const result of searchResults.slice(0, 2)) {
-      if (docsContent.some(d => d.url === result.url)) continue
+      explicitWWDCUrl = providedUrl
+    } else {
+      // It's a doc page
       try {
-        docsContent.push(await scrapeDocPage(result.url))
-      } catch { /* skip failed pages */ }
+        docsContent.push(await scrapeDocPage(providedUrl))
+      } catch { /* continue to search fallback */ }
     }
   }
 
-  // Always try to find a WWDC session
-  const sessionMeta = await findWWDCSession(topicInput)
+  // Always search Apple docs for supplementary context
+  const searchResults = await searchAppleDocs(topicInput)
+  for (const result of searchResults.slice(0, 2)) {
+    if (docsContent.some(d => d.url === result.url)) continue
+    try {
+      docsContent.push(await scrapeDocPage(result.url))
+    } catch { /* skip failed pages */ }
+  }
+
+  // WWDC session: use the explicit URL if provided, otherwise search
   let wwdcSession: WWDCSession | null = null
-  if (sessionMeta) {
-    const transcript = await fetchWWDCTranscript(sessionMeta.url)
-    wwdcSession = { ...sessionMeta, transcript }
+  if (explicitWWDCUrl) {
+    const transcript = await fetchWWDCTranscript(explicitWWDCUrl)
+    const html = await fetchHtml(explicitWWDCUrl)
+    const $ = cheerio.load(html)
+    const title = $('h1').first().text().trim() || topicInput
+    const description = $('meta[name="description"]').attr('content') ?? ''
+    const sessionId = explicitWWDCUrl.split('/').filter(Boolean).pop() ?? ''
+    wwdcSession = { title, url: explicitWWDCUrl, sessionId, description, transcript }
+  } else {
+    const sessionMeta = await findWWDCSession(topicInput)
+    if (sessionMeta) {
+      const transcript = await fetchWWDCTranscript(sessionMeta.url)
+      wwdcSession = { ...sessionMeta, transcript }
+    }
   }
 
   return { docsContent, wwdcSession }

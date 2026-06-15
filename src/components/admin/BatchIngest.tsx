@@ -9,13 +9,14 @@ interface Props {
   onSuccess: () => void
 }
 
-type JobStatus = 'pending' | 'running' | 'done' | 'error' | 'duplicate'
+type JobStatus = 'pending' | 'running' | 'done' | 'error' | 'duplicate' | 'rejected'
 
 interface Job {
   topic: string
   url?: string
   status: JobStatus
   capabilityId?: number
+  rejectionReason?: string
 }
 
 export function BatchIngest({ secret, onSuccess }: Props) {
@@ -49,8 +50,10 @@ export function BatchIngest({ secret, onSuccess }: Props) {
           headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret },
           body: JSON.stringify({ topic: parsed[i].topic, url: parsed[i].url }),
         })
-        const data = await res.json() as { error?: string; capabilityId?: number; existingSlug?: string }
-        if (data.existingSlug) {
+        const data = await res.json() as { error?: string; reason?: string; capabilityId?: number; existingSlug?: string }
+        if (res.status === 422) {
+          setJobs(prev => prev.map((j, idx) => idx === i ? { ...j, status: 'rejected', rejectionReason: data.reason } : j))
+        } else if (data.existingSlug) {
           setJobs(prev => prev.map((j, idx) => idx === i ? { ...j, status: 'duplicate' } : j))
         } else if (data.error) {
           setJobs(prev => prev.map((j, idx) => idx === i ? { ...j, status: 'error' } : j))
@@ -69,6 +72,7 @@ export function BatchIngest({ secret, onSuccess }: Props) {
   const done = jobs.filter(j => j.status === 'done').length
   const errors = jobs.filter(j => j.status === 'error').length
   const dupes = jobs.filter(j => j.status === 'duplicate').length
+  const rejected = jobs.filter(j => j.status === 'rejected').length
 
   return (
     <div className="border border-border/50 rounded-xl overflow-hidden">
@@ -110,29 +114,36 @@ export function BatchIngest({ secret, onSuccess }: Props) {
           {/* Progress list */}
           {jobs.length > 0 && (
             <div className="space-y-1.5 pt-1">
-              {done > 0 || errors > 0 || dupes > 0 ? (
+              {done > 0 || errors > 0 || dupes > 0 || rejected > 0 ? (
                 <p className="text-xs text-muted-foreground pb-1">
-                  {done} queued · {dupes} already exist · {errors} failed
+                  {done} queued · {dupes} already exist · {rejected} not iOS 27 · {errors} failed
                 </p>
               ) : null}
               {jobs.map((job, i) => (
-                <div key={i} className="flex items-center gap-2 text-xs">
-                  {job.status === 'pending'   && <div className="w-3.5 h-3.5 rounded-full border border-white/20 shrink-0" />}
-                  {job.status === 'running'   && <Loader2 className="w-3.5 h-3.5 animate-spin text-violet-400 shrink-0" />}
-                  {job.status === 'done'      && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />}
-                  {job.status === 'duplicate' && <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />}
-                  {job.status === 'error'     && <XCircle className="w-3.5 h-3.5 text-red-400 shrink-0" />}
-                  <span className={
-                    job.status === 'done'      ? 'text-emerald-400' :
-                    job.status === 'duplicate' ? 'text-amber-400' :
-                    job.status === 'error'     ? 'text-red-400' :
-                    job.status === 'running'   ? 'text-foreground' :
-                    'text-muted-foreground'
-                  }>
-                    {job.topic}
-                    {job.status === 'duplicate' && ' (already exists)'}
-                    {job.status === 'done' && job.capabilityId && ` → #${job.capabilityId}`}
-                  </span>
+                <div key={i} className="flex flex-col gap-0.5">
+                  <div className="flex items-center gap-2 text-xs">
+                    {job.status === 'pending'   && <div className="w-3.5 h-3.5 rounded-full border border-white/20 shrink-0" />}
+                    {job.status === 'running'   && <Loader2 className="w-3.5 h-3.5 animate-spin text-violet-400 shrink-0" />}
+                    {job.status === 'done'      && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />}
+                    {job.status === 'duplicate' && <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />}
+                    {job.status === 'rejected'  && <XCircle className="w-3.5 h-3.5 text-orange-400 shrink-0" />}
+                    {job.status === 'error'     && <XCircle className="w-3.5 h-3.5 text-red-400 shrink-0" />}
+                    <span className={
+                      job.status === 'done'      ? 'text-emerald-400' :
+                      job.status === 'duplicate' ? 'text-amber-400' :
+                      job.status === 'rejected'  ? 'text-orange-400' :
+                      job.status === 'error'     ? 'text-red-400' :
+                      job.status === 'running'   ? 'text-foreground' :
+                      'text-muted-foreground'
+                    }>
+                      {job.topic}
+                      {job.status === 'duplicate' && ' (already exists)'}
+                      {job.status === 'done' && job.capabilityId && ` → #${job.capabilityId}`}
+                    </span>
+                  </div>
+                  {job.status === 'rejected' && job.rejectionReason && (
+                    <p className="text-[11px] text-orange-400/70 pl-5">{job.rejectionReason}</p>
+                  )}
                 </div>
               ))}
             </div>
