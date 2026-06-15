@@ -89,6 +89,7 @@ export const userRequests = pgTable('user_requests', {
 export const userProfiles = pgTable('user_profiles', {
   id: serial('id').primaryKey(),
   clerkId: varchar('clerk_id', { length: 255 }).notNull().unique(),
+  email: varchar('email', { length: 255 }),
   subscribedFrameworks: text('subscribed_frameworks').array().notNull().default([]),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),

@@ -3,7 +3,7 @@ import { getGroupName } from '@/lib/frameworkGroups'
 import { redirect } from 'next/navigation'
 import { db } from '@/db'
 import { capabilities, userProgress, userStreaks, userProfiles } from '@/db/schema'
-import { eq, inArray } from 'drizzle-orm'
+import { eq, inArray, sql } from 'drizzle-orm'
 import { Flame } from 'lucide-react'
 import { CircularRing } from '@/components/user/CircularRing'
 import { FrameworkPicker } from '@/components/user/FrameworkPicker'
@@ -29,6 +29,14 @@ export default async function HomePage() {
   const streak = streakRow[0]
   const profile = profileRow[0]
   const subscribedFrameworks = profile?.subscribedFrameworks ?? []
+
+  // Sync Clerk email into our DB so we can send streak reminders
+  const clerkEmail = user?.emailAddresses[0]?.emailAddress
+  if (clerkEmail && clerkEmail !== profile?.email) {
+    await db.insert(userProfiles)
+      .values({ clerkId: userId, email: clerkEmail })
+      .onConflictDoUpdate({ target: userProfiles.clerkId, set: { email: clerkEmail, updatedAt: sql`now()` } })
+  }
 
   const STREAK_BREAK_MS = 72 * 60 * 60 * 1000
   const streakExpired = streak?.lastActivityAt
