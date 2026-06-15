@@ -1,17 +1,12 @@
 'use client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Search, X } from 'lucide-react'
+import { Search, X, Sparkles, RefreshCw, AlertTriangle, FlaskConical } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { trackEvent } from '@/lib/analytics'
 
 const CATEGORIES = ['AI', 'UI', 'Performance', 'Safety', 'Store', 'System']
-const CHANGE_TYPES = [
-  { value: 'new',        label: 'New' },
-  { value: 'updated',    label: 'Updated' },
-  { value: 'deprecated', label: 'Deprecated' },
-]
 const SORT_OPTIONS = [
   { value: 'rank',     label: 'Most relevant' },
   { value: 'trending', label: 'Trending' },
@@ -19,23 +14,64 @@ const SORT_OPTIONS = [
   { value: 'newest',   label: 'Newest first' },
 ]
 
+const CHANGE_TYPES = [
+  {
+    value: 'new',
+    label: 'New',
+    icon: <Sparkles className="h-3.5 w-3.5" />,
+    active: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+  },
+  {
+    value: 'updated',
+    label: 'Updated',
+    icon: <RefreshCw className="h-3.5 w-3.5" />,
+    active: 'bg-amber-500/10 border-amber-500/30 text-amber-400',
+  },
+  {
+    value: 'deprecated',
+    label: 'Deprecated',
+    icon: <AlertTriangle className="h-3.5 w-3.5" />,
+    active: 'bg-red-500/10 border-red-500/30 text-red-400',
+  },
+]
+
 function Pill({
-  active, onClick, children, mono = false,
+  active, onClick, children,
 }: {
-  active: boolean; onClick: () => void; children: React.ReactNode; mono?: boolean
+  active: boolean; onClick: () => void; children: React.ReactNode
 }) {
   return (
     <button
       onClick={onClick}
       className={cn(
         'text-xs px-2.5 py-1 rounded-full border transition-colors whitespace-nowrap',
-        mono && 'font-mono',
         active
           ? 'bg-violet-600 border-violet-600 text-white'
           : 'border-border/50 text-muted-foreground hover:border-border hover:text-foreground',
       )}
     >
       {children}
+    </button>
+  )
+}
+
+function TypeToggle({
+  ct, active, onClick,
+}: {
+  ct: typeof CHANGE_TYPES[0]; active: boolean; onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        'inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-xl border transition-all',
+        active
+          ? ct.active
+          : 'border-border/40 text-muted-foreground hover:border-border hover:text-foreground',
+      )}
+    >
+      {ct.icon}
+      {ct.label}
     </button>
   )
 }
@@ -116,19 +152,35 @@ export function FilterBar() {
         </select>
       </div>
 
-      {/* Category + change type + has demo */}
+      {/* Category */}
       <div className="space-y-1.5">
-        <p className="text-[10px] font-semibold text-muted-foreground/50 uppercase tracking-widest">Category &amp; type</p>
-        <div className="flex flex-wrap gap-1.5 items-center">
+        <p className="text-[10px] font-semibold text-muted-foreground/50 uppercase tracking-widest">Category</p>
+        <div className="flex flex-wrap gap-1.5">
           {CATEGORIES.map(c => (
             <Pill key={c} active={category === c} onClick={() => toggle('category', c)}>{c}</Pill>
           ))}
-          <span className="w-px h-4 bg-border/40 mx-0.5" />
+        </div>
+      </div>
+
+      {/* Change type + has demo */}
+      <div className="space-y-1.5">
+        <p className="text-[10px] font-semibold text-muted-foreground/50 uppercase tracking-widest">Type</p>
+        <div className="flex flex-wrap gap-2">
           {CHANGE_TYPES.map(ct => (
-            <Pill key={ct.value} active={changeType === ct.value} onClick={() => toggle('changeType', ct.value)}>{ct.label}</Pill>
+            <TypeToggle key={ct.value} ct={ct} active={changeType === ct.value} onClick={() => toggle('changeType', ct.value)} />
           ))}
-          <span className="w-px h-4 bg-border/40 mx-0.5" />
-          <Pill active={hasDemo} onClick={() => set('hasDemo', hasDemo ? '' : 'true')}>Has demo</Pill>
+          <button
+            onClick={() => set('hasDemo', hasDemo ? '' : 'true')}
+            className={cn(
+              'inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-xl border transition-all',
+              hasDemo
+                ? 'bg-violet-500/10 border-violet-500/30 text-violet-400'
+                : 'border-border/40 text-muted-foreground hover:border-border hover:text-foreground',
+            )}
+          >
+            <FlaskConical className="h-3.5 w-3.5" />
+            Has demo
+          </button>
         </div>
       </div>
 

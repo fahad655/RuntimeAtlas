@@ -6,6 +6,7 @@ import { FilterBar } from '@/components/features/FilterBar'
 import { RequestForm } from '@/components/features/RequestForm'
 import { Suspense } from 'react'
 import { getGroupFrameworks } from '@/lib/frameworkGroups'
+import { Sparkles, RefreshCw, AlertTriangle, FlaskConical } from 'lucide-react'
 import type { Category } from '@/types'
 
 export const revalidate = 60
@@ -56,11 +57,43 @@ function wwdcLabel(availability: string): string {
 }
 
 const CHANGE_ORDER = ['new', 'updated', 'deprecated'] as const
-const CHANGE_LABEL: Record<string, string> = { new: 'New', updated: 'Updated', deprecated: 'Deprecated' }
-const CHANGE_STYLE: Record<string, string> = {
-  new:        'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
-  updated:    'text-amber-400 bg-amber-500/10 border-amber-500/20',
-  deprecated: 'text-red-400 bg-red-500/10 border-red-500/20',
+
+const SECTION_CONFIG: Record<string, {
+  icon: React.ReactNode
+  label: string
+  desc: string
+  border: string
+  gradient: string
+  iconBox: string
+  color: string
+}> = {
+  new: {
+    icon: <Sparkles className="h-4 w-4" />,
+    label: 'New in iOS 27',
+    desc: 'APIs and frameworks introduced at WWDC 2026',
+    border: 'border-emerald-500/20',
+    gradient: 'from-emerald-500/[0.08] via-emerald-500/[0.03] to-transparent',
+    iconBox: 'bg-emerald-500/10 border border-emerald-500/25 text-emerald-400',
+    color: 'text-emerald-400',
+  },
+  updated: {
+    icon: <RefreshCw className="h-4 w-4" />,
+    label: 'Updated from iOS 26',
+    desc: 'Existing APIs that changed at WWDC 2026',
+    border: 'border-amber-500/20',
+    gradient: 'from-amber-500/[0.08] via-amber-500/[0.03] to-transparent',
+    iconBox: 'bg-amber-500/10 border border-amber-500/25 text-amber-400',
+    color: 'text-amber-400',
+  },
+  deprecated: {
+    icon: <AlertTriangle className="h-4 w-4" />,
+    label: 'Deprecated',
+    desc: 'APIs removed or replaced in iOS 27',
+    border: 'border-red-500/20',
+    gradient: 'from-red-500/[0.08] via-red-500/[0.03] to-transparent',
+    iconBox: 'bg-red-500/10 border border-red-500/25 text-red-400',
+    color: 'text-red-400',
+  },
 }
 
 type Cap = Awaited<ReturnType<typeof getCapabilities>>[0]
@@ -151,21 +184,42 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
               </div>
 
               {/* Sub-groups by change type */}
-              <div className="space-y-10">
-                {subGroups.map(({ ct, caps: subCaps }) => (
-                  <div key={ct}>
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full border ${CHANGE_STYLE[ct]}`}>
-                        {CHANGE_LABEL[ct]}
-                      </span>
-                      <div className="flex-1 h-px bg-border/30 dark:bg-white/[0.04]" />
-                      <span className="text-xs text-muted-foreground tabular-nums">{subCaps.length}</span>
+              <div className="space-y-12">
+                {subGroups.map(({ ct, caps: subCaps }) => {
+                  const cfg = SECTION_CONFIG[ct]
+                  const demoCount = subCaps.filter(c => c.demoId != null).length
+                  return (
+                    <div key={ct}>
+                      {/* Banner header */}
+                      <div className={`relative rounded-2xl border ${cfg.border} overflow-hidden mb-5`}>
+                        <div className={`absolute inset-0 bg-gradient-to-r ${cfg.gradient}`} />
+                        <div className="relative flex items-center justify-between px-5 py-4">
+                          <div className="flex items-center gap-3.5">
+                            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${cfg.iconBox}`}>
+                              {cfg.icon}
+                            </div>
+                            <div>
+                              <p className={`font-bold text-sm leading-tight ${cfg.color}`}>{cfg.label}</p>
+                              <p className="text-[11px] text-muted-foreground mt-0.5">{cfg.desc}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3 shrink-0">
+                            {demoCount > 0 && (
+                              <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-muted-foreground border border-white/[0.07] rounded-full px-2.5 py-1">
+                                <FlaskConical className="h-3 w-3" />
+                                {demoCount} with demo
+                              </div>
+                            )}
+                            <span className={`text-3xl font-bold tabular-nums ${cfg.color}`}>{subCaps.length}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                        {subCaps.map(cap => <CapabilityCard key={cap.id} capability={cap} />)}
+                      </div>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                      {subCaps.map(cap => <CapabilityCard key={cap.id} capability={cap} />)}
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </section>
           ))}
