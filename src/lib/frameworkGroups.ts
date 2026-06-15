@@ -33,3 +33,12 @@ const MAP: Record<string, string> = {
 export function getGroupName(fw: string): string {
   return MAP[fw] ?? fw
 }
+
+/** All individual framework strings that belong to a given group name */
+export function getGroupFrameworks(groupName: string): string[] {
+  const result = Object.entries(MAP)
+    .filter(([, g]) => g === groupName)
+    .map(([fw]) => fw)
+  // If nothing mapped, the group IS the raw framework name
+  return result.length > 0 ? result : [groupName]
+}

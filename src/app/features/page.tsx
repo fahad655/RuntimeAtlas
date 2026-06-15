@@ -5,12 +5,13 @@ import { CapabilityCard } from '@/components/features/CapabilityCard'
 import { FilterBar } from '@/components/features/FilterBar'
 import { RequestForm } from '@/components/features/RequestForm'
 import { Suspense } from 'react'
+import { getGroupFrameworks } from '@/lib/frameworkGroups'
 import type { Category } from '@/types'
 
 export const revalidate = 60
 
 interface PageProps {
-  searchParams: Promise<{ category?: string; framework?: string; sort?: string; hasDemo?: string }>
+  searchParams: Promise<{ category?: string; framework?: string; changeType?: string; sort?: string; hasDemo?: string; q?: string }>
 }
 
 async function getCapabilities(sp: Awaited<PageProps['searchParams']>) {
@@ -30,8 +31,21 @@ async function getCapabilities(sp: Awaited<PageProps['searchParams']>) {
     .orderBy(orderCol)
     .limit(200)
 
-  if (sp.framework) rows = rows.filter(c => c.frameworks.includes(sp.framework!))
+  // Framework filter: sp.framework is a group name — expand to individual framework strings
+  if (sp.framework) {
+    const groupFws = getGroupFrameworks(sp.framework)
+    rows = rows.filter(c => c.frameworks.some(fw => groupFws.includes(fw)))
+  }
+  if (sp.changeType) rows = rows.filter(c => c.changeType === sp.changeType)
   if (sp.hasDemo === 'true') rows = rows.filter(c => c.demoId != null)
+  if (sp.q) {
+    const q = sp.q.toLowerCase()
+    rows = rows.filter(c =>
+      c.name.toLowerCase().includes(q) ||
+      c.summary.toLowerCase().includes(q) ||
+      c.frameworks.some(fw => fw.toLowerCase().includes(q))
+    )
+  }
   return rows
 }
 
@@ -62,7 +76,7 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
   const sp = await searchParams
   const caps = await getCapabilities(sp)
   const groups = groupByRelease(caps)
-  const isFiltered = !!(sp.category && sp.category !== 'All') || !!sp.framework || sp.hasDemo === 'true'
+  const isFiltered = !!(sp.category && sp.category !== 'All') || !!sp.framework || !!sp.changeType || sp.hasDemo === 'true' || !!sp.q
 
   return (
     <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 animate-page-enter">
