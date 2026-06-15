@@ -27,16 +27,16 @@ export function CapabilityCard({ capability }: { capability: Capability }) {
     <Link href={`/features/${capability.slug}`} className="block h-full group">
       <div className={cn(
         'relative h-full p-5 rounded-2xl flex flex-col overflow-hidden',
-        'border border-white/[0.07] bg-white/[0.025]',
+        'border border-black/[0.07] bg-black/[0.02] dark:border-white/[0.07] dark:bg-white/[0.025]',
         'transition-all duration-300 ease-out',
-        'hover:border-violet-500/40 hover:bg-white/[0.07]',
-        'hover:shadow-[0_20px_60px_-10px_rgba(124,58,237,0.35),0_0_0_1px_rgba(124,58,237,0.15)]',
+        'hover:border-violet-400/50 hover:bg-violet-50/60 dark:hover:border-violet-500/40 dark:hover:bg-white/[0.07]',
+        'hover:shadow-[0_20px_60px_-10px_rgba(124,58,237,0.2)] dark:hover:shadow-[0_20px_60px_-10px_rgba(124,58,237,0.35),0_0_0_1px_rgba(124,58,237,0.15)]',
         'hover:-translate-y-1.5',
-        'active:scale-[0.97] active:brightness-90 active:shadow-none active:translate-y-0',
+        'active:scale-[0.97] active:brightness-95 active:shadow-none active:translate-y-0',
       )}>
         {/* Hover glow overlay */}
         <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.12) 0%, transparent 70%)' }}
+          style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.08) 0%, transparent 70%)' }}
           aria-hidden
         />
 
@@ -101,12 +101,12 @@ export function CapabilityCard({ capability }: { capability: Capability }) {
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/[0.06]">
+        <div className="flex items-center justify-between mt-auto pt-3 border-t border-black/[0.06] dark:border-white/[0.06]">
           <div className="flex flex-wrap gap-1">
             {capability.frameworks.slice(0, 2).map(fw => (
               <span
                 key={fw}
-                className="text-[10px] bg-white/[0.05] text-muted-foreground/80 rounded-md px-1.5 py-0.5 font-mono border border-white/[0.06]"
+                className="text-[10px] bg-black/[0.04] dark:bg-white/[0.05] text-muted-foreground/80 rounded-md px-1.5 py-0.5 font-mono border border-black/[0.08] dark:border-white/[0.06]"
               >
                 {fw}
               </span>

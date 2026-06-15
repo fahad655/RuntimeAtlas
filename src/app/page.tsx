@@ -223,11 +223,8 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* ── Live feed ── */}
-      <LiveFeed />
-
       {/* ── Latest capabilities ── */}
-      <section className="pb-32 pt-4 max-w-7xl mx-auto px-5 sm:px-8">
+      <section className="pb-16 pt-4 max-w-7xl mx-auto px-5 sm:px-8">
         <div className="flex items-end justify-between mb-8">
           <div>
             <p className="text-xs font-semibold text-violet-400 uppercase tracking-widest mb-1">iOS 27 · WWDC 2026</p>
@@ -258,6 +255,9 @@ export default async function LandingPage() {
           </div>
         )}
       </section>
+
+      {/* ── Live feed — below the capability grid ── */}
+      <LiveFeed />
     </div>
   )
 }
