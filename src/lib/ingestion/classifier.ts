@@ -1,4 +1,5 @@
 import { generateText, Output } from 'ai'
+import { anthropic } from '@ai-sdk/anthropic'
 import { z } from 'zod'
 import type { ScrapedDoc } from './scraper'
 
@@ -52,7 +53,7 @@ export async function classifyAndBrief(
     : ''
 
   const { output } = await generateText({
-    model: 'anthropic/claude-sonnet-4.6',
+    model: anthropic('claude-sonnet-4-6'),
     output: Output.object({ schema: CapabilitySchema }),
     prompt: `You are an expert iOS engineer and technical writer creating content for RuntimeAtlas — a reference site that makes new iOS SDK capabilities immediately scannable and usable.
 
