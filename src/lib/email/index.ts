@@ -1,7 +1,11 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM = 'RuntimeAtlas <hello@runtimeatlas.com>'
+
+function getResend() {
+  if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY not set')
+  return new Resend(process.env.RESEND_API_KEY)
+}
 const BASE_URL = 'https://runtimeatlas.com'
 
 export async function sendStreakReminder({
@@ -13,7 +17,7 @@ export async function sendStreakReminder({
   firstName: string
   streak: number
 }) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to,
     subject: `Your ${streak}-day streak is about to break 🔥`,
@@ -30,7 +34,7 @@ export async function sendNewCapabilitiesBroadcast({
   count: number
   capabilities: { name: string; slug: string; summary: string }[]
 }) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to,
     subject: `${count} new iOS 27 ${count === 1 ? 'capability' : 'capabilities'} just dropped`,
