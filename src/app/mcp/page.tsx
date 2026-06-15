@@ -3,16 +3,16 @@ import { CopyButton } from '@/components/features/CopyButton'
 
 export const metadata: Metadata = {
   title: 'MCP Server',
-  description: 'Connect your AI coding assistant to RuntimeAtlas — query iOS 27 capabilities, get Swift code, and estimate migration effort directly from your editor.',
+  description: 'Connect your AI coding assistant to SwiftChronicle — query iOS 27 capabilities, get Swift code, and estimate migration effort directly from your editor.',
 }
 
-const MCP_URL = 'https://runtimeatlas.vercel.app/api/mcp'
+const MCP_URL = 'https://swiftchronicle.com/api/mcp'
 
 const MCP_JSON = `{
   "mcpServers": {
-    "runtimeatlas": {
+    "swiftchronicle": {
       "type": "http",
-      "url": "https://runtimeatlas.vercel.app/api/mcp"
+      "url": "https://swiftchronicle.com/api/mcp"
     }
   }
 }`
@@ -84,7 +84,7 @@ const INTEGRATIONS = [
     name: 'Zed',
     description: 'Add to your Zed settings under assistant.context_servers.',
     code: `{
-  "runtimeatlas": {
+  "swiftchronicle": {
     "command": {
       "path": "npx",
       "args": ["-y", "mcp-remote", "${MCP_URL}"]
@@ -103,9 +103,9 @@ export default function McpPage() {
         <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/25 bg-violet-500/[0.08] px-3 py-1 text-xs font-medium text-violet-400 mb-6">
           MCP Server · Streamable HTTP
         </div>
-        <h1 className="text-4xl font-bold tracking-tight mb-4">RuntimeAtlas MCP</h1>
+        <h1 className="text-4xl font-bold tracking-tight mb-4">SwiftChronicle MCP</h1>
         <p className="text-muted-foreground text-lg leading-relaxed max-w-2xl">
-          Connect your AI coding assistant directly to RuntimeAtlas. Query iOS 27 capabilities, pull real Swift code demos, and get migration estimates — without leaving your editor.
+          Connect your AI coding assistant directly to SwiftChronicle. Query iOS 27 capabilities, pull real Swift code demos, and get migration estimates — without leaving your editor.
         </p>
 
         {/* Connection URL */}

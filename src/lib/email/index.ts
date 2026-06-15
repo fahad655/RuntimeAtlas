@@ -1,12 +1,12 @@
 import { Resend } from 'resend'
 
-const FROM = 'RuntimeAtlas <hello@runtimeatlas.tech>'
+const FROM = 'SwiftChronicle <hello@swiftchronicle.com>'
 
 function getResend() {
   if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY not set')
   return new Resend(process.env.RESEND_API_KEY)
 }
-const BASE_URL = 'https://runtimeatlas.tech'
+const BASE_URL = 'https://swiftchronicle.com'
 
 export async function sendStreakReminder({
   to,
@@ -63,7 +63,7 @@ function streakReminderHtml({ firstName, streak }: { firstName: string; streak: 
           Keep my streak →
         </a>
         <p style="margin:24px 0 0;color:#52525b;font-size:12px">
-          You're getting this because you have an active streak on RuntimeAtlas.
+          You're getting this because you have an active streak on SwiftChronicle.
           <a href="${BASE_URL}/home" style="color:#7c3aed">Manage notifications</a>
         </p>
       </div>
@@ -96,7 +96,7 @@ function broadcastHtml({ count, capabilities }: { count: number; capabilities: {
           ${count} new ${count === 1 ? 'capability' : 'capabilities'} added
         </h1>
         <p style="margin:0 0 24px;color:#a1a1aa;font-size:15px;line-height:1.6">
-          New iOS 27 APIs just landed in RuntimeAtlas with Swift code and implementation notes.
+          New iOS 27 APIs just landed in SwiftChronicle with Swift code and implementation notes.
         </p>
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:4px">
           ${capRows}
@@ -108,7 +108,7 @@ function broadcastHtml({ count, capabilities }: { count: number; capabilities: {
           </a>
         </div>
         <p style="margin:24px 0 0;color:#52525b;font-size:12px">
-          You subscribed to RuntimeAtlas new API notifications.
+          You subscribed to SwiftChronicle new API notifications.
           Reply to this email to unsubscribe.
         </p>
       </div>

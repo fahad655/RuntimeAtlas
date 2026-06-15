@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
-  description: 'Terms of Service for RuntimeAtlas.',
+  description: 'Terms of Service for SwiftChronicle.',
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -23,14 +23,14 @@ export default function TermsPage() {
 
       <Section title="1. Acceptance">
         <p>
-          By accessing or using RuntimeAtlas ("the Service") at runtimeatlas.tech, you agree to be
+          By accessing or using SwiftChronicle ("the Service") at swiftchronicle.com, you agree to be
           bound by these Terms of Service. If you do not agree, please do not use the Service.
         </p>
       </Section>
 
-      <Section title="2. What RuntimeAtlas is">
+      <Section title="2. What SwiftChronicle is">
         <p>
-          RuntimeAtlas is an independent iOS SDK reference tool that aggregates and summarises
+          SwiftChronicle is an independent Apple SDK reference tool that aggregates and summarises
           capability information from publicly available Apple developer documentation and WWDC
           sessions. It is not affiliated with, endorsed by, or sponsored by Apple Inc.
         </p>
@@ -67,7 +67,7 @@ export default function TermsPage() {
 
       <Section title="5. Content accuracy">
         <p>
-          Capability summaries and Swift code snippets on RuntimeAtlas are generated with the
+          Capability summaries and Swift code snippets on SwiftChronicle are generated with the
           assistance of AI and reviewed before publication. We make reasonable efforts to ensure
           accuracy but cannot guarantee that all content is error-free, complete, or up to date.
         </p>
@@ -87,12 +87,12 @@ export default function TermsPage() {
 
       <Section title="6. Intellectual property">
         <p>
-          The RuntimeAtlas name, logo, design, and original written content are owned by the
+          The SwiftChronicle name, logo, design, and original written content are owned by the
           creator. Summaries derived from Apple documentation are produced under fair use for
           educational and informational purposes.
         </p>
         <p>
-          Swift code examples published on RuntimeAtlas are provided for educational use. You may
+          Swift code examples published on SwiftChronicle are provided for educational use. You may
           use them freely in your own projects.
         </p>
       </Section>
@@ -107,7 +107,7 @@ export default function TermsPage() {
 
       <Section title="8. Limitation of liability">
         <p>
-          To the fullest extent permitted by law, RuntimeAtlas and its creator shall not be liable
+          To the fullest extent permitted by law, SwiftChronicle and its creator shall not be liable
           for any indirect, incidental, special, or consequential damages arising from your use of
           the Service, even if advised of the possibility of such damages.
         </p>

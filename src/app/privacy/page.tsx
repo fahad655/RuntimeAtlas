@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'RuntimeAtlas privacy policy — what data we collect, how we use it, and how to delete it.',
+  description: 'SwiftChronicle privacy policy — what data we collect, how we use it, and how to delete it.',
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -27,7 +27,7 @@ export default function PrivacyPage() {
 
       <Section title="Overview">
         <p>
-          RuntimeAtlas (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is a reference tool for iOS developers. This policy explains what personal data we collect, why we collect it, and what your rights are. We do not sell your data. We do not run ads.
+          SwiftChronicle (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is a reference tool for Apple platform developers. This policy explains what personal data we collect, why we collect it, and what your rights are. We do not sell your data. We do not run ads.
         </p>
       </Section>
 
@@ -49,13 +49,14 @@ export default function PrivacyPage() {
       </Section>
 
       <Section title="Third-party services">
-        <p>RuntimeAtlas relies on the following third-party services, each with their own privacy policies:</p>
+        <p>SwiftChronicle relies on the following third-party services, each with their own privacy policies:</p>
         <ul className="list-disc pl-4 space-y-1">
           <li><strong className="text-foreground">Clerk</strong> — Authentication (clerk.com)</li>
           <li><strong className="text-foreground">Neon</strong> — Database hosting (neon.tech)</li>
           <li><strong className="text-foreground">Vercel</strong> — Application hosting (vercel.com)</li>
           <li><strong className="text-foreground">Google Analytics</strong> — Anonymous usage analytics (google.com/analytics)</li>
           <li><strong className="text-foreground">Anthropic</strong> — AI classification of capability content (anthropic.com). No user-identifiable data is sent to Anthropic — only Apple documentation text.</li>
+          <li><strong className="text-foreground">Resend</strong> — Transactional email delivery for streak reminders and new capability notifications (resend.com). Only your email address is shared.</li>
         </ul>
       </Section>
 
@@ -75,7 +76,7 @@ export default function PrivacyPage() {
       </Section>
 
       <Section title="Changes to this policy">
-        <p>We may update this policy occasionally. When we do, we will update the &quot;Last updated&quot; date at the top of the page. Continued use of RuntimeAtlas after changes are posted constitutes acceptance of the revised policy.</p>
+        <p>We may update this policy occasionally. When we do, we will update the &quot;Last updated&quot; date at the top of the page. Continued use of SwiftChronicle after changes are posted constitutes acceptance of the revised policy.</p>
       </Section>
 
       <Section title="Contact">

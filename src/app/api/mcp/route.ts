@@ -9,7 +9,7 @@ import type { Category } from '@/types'
 
 function buildServer() {
   const server = new McpServer({
-    name: 'RuntimeAtlas',
+    name: 'SwiftChronicle',
     version: '1.0.0',
   })
 

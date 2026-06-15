@@ -55,7 +55,7 @@ export async function classifyAndBrief(
   const { output } = await generateText({
     model: anthropic('claude-sonnet-4-6'),
     output: Output.object({ schema: CapabilitySchema }),
-    prompt: `You are an expert iOS engineer and technical writer creating content for RuntimeAtlas — a reference site that makes new iOS SDK capabilities immediately scannable and usable.
+    prompt: `You are an expert iOS engineer and technical writer creating content for SwiftChronicle — a reference site that makes new iOS SDK capabilities immediately scannable and usable.
 
 CRITICAL GATE: This site ONLY covers APIs and features introduced, significantly updated, or deprecated in iOS 27 / WWDC 2026. Before filling in any other field, you MUST decide whether this topic qualifies:
 - Set isNewOrChangedInIOS27 = true ONLY if this capability is genuinely new, meaningfully changed, or deprecated in iOS 27.

@@ -5,9 +5,9 @@ import { SubscribeForm } from '@/components/layout/SubscribeForm'
 
 export const metadata: Metadata = {
   title: 'Launching on Product Hunt',
-  description: 'RuntimeAtlas — the fastest way for iOS developers to track and implement every new API from WWDC 2026.',
+  description: 'SwiftChronicle — the fastest way for iOS developers to track and implement every new API from WWDC 2026.',
   openGraph: {
-    title: 'RuntimeAtlas is launching on Product Hunt',
+    title: 'SwiftChronicle is launching on Product Hunt',
     description: 'Every iOS 27 API. Real Swift code. Before/after diffs. Track your progress.',
   },
 }
@@ -21,7 +21,7 @@ export default function LaunchPage() {
         <div>
           <p className="text-xs font-semibold text-orange-400 uppercase tracking-widest mb-2">🚀 We&apos;re launching</p>
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-tight">
-            RuntimeAtlas<br />
+            SwiftChronicle<br />
             <span className="text-muted-foreground font-normal text-3xl">on Product Hunt</span>
           </h1>
         </div>
@@ -43,7 +43,7 @@ export default function LaunchPage() {
           Most developers miss 80% of them.
         </p>
         <p className="text-muted-foreground leading-relaxed">
-          RuntimeAtlas ingests every WWDC session and Apple doc the moment they drop — turning them into scannable capability cards with real Swift code, before/after diffs for updated APIs, and a progress tracker so you know exactly what you&apos;ve shipped.
+          SwiftChronicle ingests every WWDC session and Apple doc the moment they drop — turning them into scannable capability cards with real Swift code, before/after diffs for updated APIs, and a progress tracker so you know exactly what you&apos;ve shipped.
         </p>
       </div>
 
@@ -111,10 +111,10 @@ export default function LaunchPage() {
         <h2 className="text-xl font-bold mb-4">Hey, I&apos;m the maker 👋</h2>
         <div className="p-5 rounded-xl border border-white/[0.07] bg-white/[0.02] space-y-3 text-sm text-muted-foreground leading-relaxed">
           <p>
-            I built RuntimeAtlas because I kept missing new iOS APIs until I stumbled on them six months after WWDC. The keynote covers maybe 10% of what actually shipped. The rest is buried across 100+ session videos and thousands of doc pages.
+            I built SwiftChronicle because I kept missing new iOS APIs until I stumbled on them six months after WWDC. The keynote covers maybe 10% of what actually shipped. The rest is buried across 100+ session videos and thousands of doc pages.
           </p>
           <p>
-            RuntimeAtlas fixes that by auto-ingesting every session and turning it into something you can actually scan in 60 seconds per card. If a session introduces a new API, you get the summary, the Swift code, and a before/after diff — without watching the whole video.
+            SwiftChronicle fixes that by auto-ingesting every session and turning it into something you can actually scan in 60 seconds per card. If a session introduces a new API, you get the summary, the Swift code, and a before/after diff — without watching the whole video.
           </p>
           <p>
             It&apos;s free, it&apos;s live today with WWDC 2026 content, and it will keep updating as Apple drops documentation through the beta cycle.

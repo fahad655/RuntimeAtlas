@@ -14,12 +14,14 @@ const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: { default: 'RuntimeAtlas', template: '%s — RuntimeAtlas' },
-  description: 'Every new iOS SDK capability, turned into a tiny demo you can actually use.',
+  metadataBase: new URL('https://swiftchronicle.com'),
+  title: { default: 'SwiftChronicle', template: '%s — SwiftChronicle' },
+  description: 'Every new Swift & Apple platform capability from WWDC — real code, before/after diffs, and progress tracking.',
   openGraph: {
-    title: 'RuntimeAtlas',
-    description: 'Every new iOS SDK capability, turned into a tiny demo you can actually use.',
+    title: 'SwiftChronicle',
+    description: 'Every new Swift & Apple platform capability from WWDC — real code, before/after diffs, and progress tracking.',
     type: 'website',
+    url: 'https://swiftchronicle.com',
   },
 }
 

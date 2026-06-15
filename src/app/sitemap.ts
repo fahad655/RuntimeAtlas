@@ -3,7 +3,7 @@ import { db } from '@/db'
 import { capabilities } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 
-const BASE = 'https://runtimeatlas.tech'
+const BASE = 'https://swiftchronicle.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const caps = await db

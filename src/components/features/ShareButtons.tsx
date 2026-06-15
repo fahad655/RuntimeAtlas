@@ -8,13 +8,13 @@ interface Props {
   slug: string
 }
 
-const BASE_URL = 'https://runtimeatlas.tech'
+const BASE_URL = 'https://swiftchronicle.com'
 
 export function ShareButtons({ name, summary, slug }: Props) {
   const [copied, setCopied] = useState(false)
 
   const url = `${BASE_URL}/features/${slug}`
-  const tweetText = `${name} just landed in iOS 27 — ${summary.slice(0, 100)}${summary.length > 100 ? '…' : ''}\n\n${url}\n\nvia @RuntimeAtlas #WWDC26 #iOS27 #iOSDev`
+  const tweetText = `${name} just landed in iOS 27 — ${summary.slice(0, 100)}${summary.length > 100 ? '…' : ''}\n\n${url}\n\nvia @SwiftChronicle #WWDC26 #iOS27 #iOSDev`
 
   function shareOnX() {
     window.open(

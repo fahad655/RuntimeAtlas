@@ -4,7 +4,7 @@ import { ArrowRight, Zap, BookOpen, CheckCircle, Code2, RefreshCw } from 'lucide
 
 export const metadata: Metadata = {
   title: 'About',
-  description: 'RuntimeAtlas turns Apple\'s annual SDK release into a structured, searchable reference — with real Swift code for every capability.',
+  description: 'SwiftChronicle turns Apple\'s annual SDK release into a structured, searchable reference — with real Swift code for every capability.',
 }
 
 export default function AboutPage() {
@@ -13,12 +13,12 @@ export default function AboutPage() {
 
       {/* Hero */}
       <div className="mb-14">
-        <p className="text-xs font-semibold text-violet-400 uppercase tracking-widest mb-4">About RuntimeAtlas</p>
+        <p className="text-xs font-semibold text-violet-400 uppercase tracking-widest mb-4">About SwiftChronicle</p>
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-tight mb-6">
           Built for developers who can&apos;t afford to miss a release.
         </h1>
         <p className="text-lg text-muted-foreground leading-relaxed">
-          Every WWDC, Apple ships 250+ new APIs across dozens of frameworks. Most developers catch 20% of it in the keynote and spend the rest of the year discovering things they missed. RuntimeAtlas exists to fix that.
+          Every WWDC, Apple ships 250+ new APIs across dozens of frameworks. Most developers catch 20% of it in the keynote and spend the rest of the year discovering things they missed. SwiftChronicle exists to fix that.
         </p>
       </div>
 
@@ -28,7 +28,7 @@ export default function AboutPage() {
       <section className="mb-14">
         <h2 className="text-xl font-bold mb-4">What we do</h2>
         <p className="text-muted-foreground leading-relaxed mb-4">
-          RuntimeAtlas ingests Apple&apos;s WWDC sessions and developer documentation the moment they go live, then uses Claude to classify every new and updated API into a scannable capability card — complete with a real, compilable Swift code snippet, an impact score, and for updated APIs, a before/after diff showing exactly what changed.
+          SwiftChronicle ingests Apple&apos;s WWDC sessions and developer documentation the moment they go live, then uses Claude to classify every new and updated API into a scannable capability card — complete with a real, compilable Swift code snippet, an impact score, and for updated APIs, a before/after diff showing exactly what changed.
         </p>
         <p className="text-muted-foreground leading-relaxed">
           You can browse by framework, filter by category, and mark capabilities as done to track your own implementation progress. Think of it as the index Apple forgot to ship.
@@ -115,7 +115,7 @@ export default function AboutPage() {
           <a href="https://developer.apple.com" target="_blank" rel="noopener noreferrer" className="text-violet-400 hover:text-violet-300 transition-colors">
             developer.apple.com
           </a>
-          . RuntimeAtlas is an independent project and is not affiliated with or endorsed by Apple Inc.
+          . SwiftChronicle is an independent project and is not affiliated with or endorsed by Apple Inc.
         </p>
       </section>
 

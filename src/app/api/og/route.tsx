@@ -20,7 +20,7 @@ const CHANGE_LABELS: Record<string, string> = {
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
-  const name       = searchParams.get('name') ?? 'RuntimeAtlas'
+  const name       = searchParams.get('name') ?? 'SwiftChronicle'
   const summary    = searchParams.get('summary') ?? ''
   const category   = searchParams.get('category') ?? 'AI'
   const impact     = parseInt(searchParams.get('impact') ?? '3')
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '48px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ color: '#ffffff', fontSize: '22px', fontWeight: '700', letterSpacing: '-0.5px' }}>
-              RuntimeAtlas
+              SwiftChronicle
             </span>
             <span style={{ background: '#1a1a2e', border: '1px solid #7c3aed44', color: '#a78bfa', fontSize: '12px', fontWeight: '600', padding: '3px 10px', borderRadius: '999px' }}>
               iOS 27
@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
 
         {/* Bottom */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '32px' }}>
-          <span style={{ color: '#374151', fontSize: '14px' }}>runtimeatlas.dev</span>
+          <span style={{ color: '#374151', fontSize: '14px' }}>swiftchronicle.com</span>
         </div>
       </div>
     ),

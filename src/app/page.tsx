@@ -76,7 +76,7 @@ export default async function LandingPage() {
 
             {/* Sub-headline */}
             <p className="mt-7 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-              Every WWDC, Apple ships hundreds of new APIs across dozens of frameworks. RuntimeAtlas ingests them the moment they drop — distilled into scannable cards with runnable Swift code — and lets you track exactly which ones you&apos;ve implemented.
+              Every WWDC, Apple ships hundreds of new APIs across dozens of frameworks. SwiftChronicle ingests them the moment they drop — distilled into scannable cards with runnable Swift code — and lets you track exactly which ones you&apos;ve implemented.
             </p>
 
             {/* CTAs */}
@@ -156,7 +156,7 @@ export default async function LandingPage() {
               From WWDC firehose to your personal progress tracker.
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              RuntimeAtlas turns Apple&apos;s annual SDK release into a structured, trackable feed. Know what dropped, learn what matters, ship what sticks.
+              SwiftChronicle turns Apple&apos;s annual SDK release into a structured, trackable feed. Know what dropped, learn what matters, ship what sticks.
             </p>
           </div>
 

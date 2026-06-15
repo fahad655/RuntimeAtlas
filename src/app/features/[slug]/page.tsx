@@ -94,9 +94,9 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
     keywords: [...cap.frameworks, 'iOS 27', 'WWDC 2026', 'Swift', cap.category].join(', '),
     datePublished: cap.createdAt.toISOString(),
     dateModified: cap.updatedAt.toISOString(),
-    author: { '@type': 'Organization', name: 'RuntimeAtlas', url: 'https://runtimeatlas.tech' },
-    publisher: { '@type': 'Organization', name: 'RuntimeAtlas', url: 'https://runtimeatlas.tech' },
-    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://runtimeatlas.tech/features/${cap.slug}` },
+    author: { '@type': 'Organization', name: 'SwiftChronicle', url: 'https://swiftchronicle.com' },
+    publisher: { '@type': 'Organization', name: 'SwiftChronicle', url: 'https://swiftchronicle.com' },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://swiftchronicle.com/features/${cap.slug}` },
   }
 
   return (

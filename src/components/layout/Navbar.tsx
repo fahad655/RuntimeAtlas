@@ -113,7 +113,7 @@ export function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0" onClick={() => setMobileOpen(false)}>
-          <span className="font-bold text-[15px] tracking-tight text-foreground">RuntimeAtlas</span>
+          <span className="font-bold text-[15px] tracking-tight text-foreground">SwiftChronicle</span>
           <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-violet-500/25 bg-violet-500/10 px-2 py-0.5 text-[10px] font-semibold text-violet-400 tracking-wide uppercase">
             <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-60" />

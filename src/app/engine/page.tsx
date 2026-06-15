@@ -57,7 +57,7 @@ export default function EnginePage() {
       <div className="mb-12">
         <h1 className="text-4xl font-bold mb-3">The Engine</h1>
         <p className="text-muted-foreground text-lg">
-          How RuntimeAtlas turns scattered Apple docs and WWDC sessions into scannable capability cards with working Swift demos.
+          How SwiftChronicle turns scattered Apple docs and WWDC sessions into scannable capability cards with working Swift demos.
         </p>
       </div>
 
