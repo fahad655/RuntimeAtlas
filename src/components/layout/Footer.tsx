@@ -9,21 +9,9 @@ export function Footer() {
           <span className="text-muted-foreground/40 text-sm">·</span>
           <span className="text-xs text-muted-foreground">Independent iOS SDK reference. Not affiliated with Apple.</span>
         </div>
-        <nav className="flex items-center gap-5 flex-wrap justify-center">
-          <Link href="/features"  className="text-xs text-muted-foreground hover:text-foreground transition-colors">Capabilities</Link>
-          <Link href="/demos"     className="text-xs text-muted-foreground hover:text-foreground transition-colors">Demos</Link>
-          <Link href="/about"     className="text-xs text-muted-foreground hover:text-foreground transition-colors">About</Link>
-          <Link href="/launch"    className="text-xs text-muted-foreground hover:text-foreground transition-colors">Launch</Link>
-          <Link href="/privacy"   className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy</Link>
-          <Link href="/terms"    className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms</Link>
-          <a
-            href="https://developer.apple.com/videos/wwdc2026/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            WWDC 2026 ↗
-          </a>
+        <nav className="flex items-center gap-5">
+          <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy</Link>
+          <Link href="/terms"   className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms</Link>
         </nav>
       </div>
     </footer>

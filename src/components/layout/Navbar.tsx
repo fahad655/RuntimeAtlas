@@ -14,6 +14,8 @@ const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 const PUBLIC_NAV = [
   { href: '/features', label: 'Capabilities' },
   { href: '/demos', label: 'Demos' },
+  { href: '/about', label: 'About' },
+  { href: '/launch', label: 'Launch' },
   { href: '/mcp', label: 'MCP' },
 ]
 
