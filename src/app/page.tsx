@@ -97,6 +97,17 @@ export default async function LandingPage() {
               </Link>
             </div>
 
+            {/* Secondary links */}
+            <div className="flex items-center gap-4 mt-5">
+              <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                About SwiftChronicle
+              </Link>
+              <span className="text-muted-foreground/30">·</span>
+              <Link href="/launch" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                🚀 Launching on Product Hunt
+              </Link>
+            </div>
+
           </ParallaxContent>
         </div>
       </section>
