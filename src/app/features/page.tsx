@@ -44,7 +44,7 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-10 flex-wrap">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight">iOS 27 Capabilities</h1>
+          <h1 className="text-4xl font-bold tracking-tight">Apple SDK Capabilities</h1>
           <p className="text-muted-foreground text-sm mt-2">
             <span className="text-foreground font-semibold tabular-nums">{caps.length}</span>{' '}
             {caps.length === 1 ? 'capability' : 'capabilities'} tracked

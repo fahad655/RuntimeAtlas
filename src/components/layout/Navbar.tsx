@@ -119,7 +119,7 @@ export function Navbar() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-60" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-violet-500" />
             </span>
-            iOS 27
+            iOS 27 Live
           </span>
         </Link>
 

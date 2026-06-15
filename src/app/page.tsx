@@ -6,7 +6,7 @@ import { LiveFeed } from '@/components/features/LiveFeed'
 import { AnimatedBlobs } from '@/components/layout/AnimatedBlobs'
 import { ParallaxContent } from '@/components/layout/HeroParallax'
 import Link from 'next/link'
-import { ArrowRight, Bell, TrendingUp, Code2, CheckCircle, ChevronRight } from 'lucide-react'
+import { ArrowRight, Bell, TrendingUp, Code2, CheckCircle, ChevronRight, Calendar, Users, Layers, Zap } from 'lucide-react'
 
 export const revalidate = 60
 
@@ -32,7 +32,7 @@ export default async function LandingPage() {
 
         {/* Mesh grid */}
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.30] dark:opacity-[0.15]"
+          className="pointer-events-none absolute inset-0 opacity-[0.28] dark:opacity-[0.13]"
           aria-hidden
           style={{
             backgroundImage: `
@@ -47,51 +47,36 @@ export default async function LandingPage() {
 
         <AnimatedBlobs />
 
-        {/* Bottom vignette */}
         <div className="pointer-events-none absolute bottom-0 inset-x-0 h-56 bg-gradient-to-t from-background to-transparent" aria-hidden />
 
         <div className="relative w-full max-w-7xl mx-auto px-5 sm:px-8 py-24 sm:py-32">
           <ParallaxContent>
 
-            {/* Live badge */}
+            {/* Current release badge */}
             <div className="inline-flex items-center gap-2.5 rounded-full border border-violet-500/30 bg-violet-500/[0.1] px-4 py-1.5 text-sm text-violet-300 mb-10 backdrop-blur-sm">
               <span className="relative flex h-2 w-2 shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500" />
               </span>
-              iOS 27 Beta — live as Apple releases it
+              Now tracking: iOS 27 · WWDC 2026
             </div>
 
             {/* Headline */}
             <h1 className="text-5xl sm:text-7xl lg:text-[82px] font-bold tracking-tight leading-[1.05] max-w-4xl">
-              <span className="text-foreground">The iOS 27 dashboard</span>
+              <span className="text-foreground">Apple never stops shipping.</span>
               <br />
               <span
                 className="bg-clip-text text-transparent"
-                style={{ backgroundImage: 'linear-gradient(90deg, #c084fc 0%, #f472b6 55%, #fb923c 100%)' }}
+                style={{ backgroundImage: 'linear-gradient(90deg, #c084fc 0%, #f472b6 50%, #fb923c 100%)' }}
               >
-                for developers who ship.
+                Stay ahead of it.
               </span>
             </h1>
 
             {/* Sub-headline */}
             <p className="mt-7 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-              Apple released hundreds of new APIs at WWDC. RuntimeAtlas tracks every one the moment it drops — distilled into scannable cards with runnable Swift code. Mark what you&apos;ve implemented, build a streak, and always know exactly where you stand.
+              Every WWDC, Apple ships hundreds of new APIs across dozens of frameworks. RuntimeAtlas ingests them the moment they drop — distilled into scannable cards with runnable Swift code — and lets you track exactly which ones you&apos;ve implemented.
             </p>
-
-            {/* Stats */}
-            <div className="flex flex-wrap items-center gap-6 sm:gap-10 mt-9">
-              {[
-                { value: total > 0 ? `${total}+` : '200+', label: 'capabilities tracked' },
-                { value: 'Live',  label: 'updates as Apple ships' },
-                { value: '12',    label: 'frameworks covered' },
-              ].map(s => (
-                <div key={s.label} className="flex items-baseline gap-2">
-                  <span className="text-2xl sm:text-3xl font-bold text-foreground tabular-nums">{s.value}</span>
-                  <span className="text-sm text-muted-foreground">{s.label}</span>
-                </div>
-              ))}
-            </div>
 
             {/* CTAs */}
             <div className="flex flex-wrap gap-3 mt-10">
@@ -99,7 +84,7 @@ export default async function LandingPage() {
                 href="/features"
                 className="group inline-flex items-center gap-2 rounded-full bg-violet-600 hover:bg-violet-500 text-white font-semibold px-7 py-3 text-sm transition-all duration-200 shadow-[0_0_28px_rgba(124,58,237,0.55)] hover:shadow-[0_0_40px_rgba(124,58,237,0.75)] active:scale-[0.97]"
               >
-                Browse what dropped
+                Browse what&apos;s new
                 <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Link>
               <Link
@@ -115,16 +100,62 @@ export default async function LandingPage() {
         </div>
       </section>
 
+      {/* ── Apple by the numbers ── */}
+      <section className="border-y border-white/[0.05] bg-white/[0.01]">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-8">
+            Why keeping up is hard
+          </p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {[
+              {
+                icon: <Zap className="h-4 w-4 text-violet-400" />,
+                stat: '250+',
+                label: 'new APIs per WWDC',
+                note: 'Across frameworks, Swift packages, and platform updates',
+              },
+              {
+                icon: <Layers className="h-4 w-4 text-blue-400" />,
+                stat: '40+',
+                label: 'frameworks updated',
+                note: 'UIKit, SwiftUI, Foundation, ARKit, Core ML, and more',
+              },
+              {
+                icon: <Calendar className="h-4 w-4 text-emerald-400" />,
+                stat: '16 yrs',
+                label: 'of annual releases',
+                note: 'Apple has shipped a major SDK update every June since 2008',
+              },
+              {
+                icon: <Users className="h-4 w-4 text-orange-400" />,
+                stat: '34M+',
+                label: 'Apple developers',
+                note: 'All competing to learn and implement the same new APIs first',
+              },
+            ].map(item => (
+              <div key={item.stat} className="space-y-2">
+                <div className="flex items-center gap-2 mb-1">
+                  {item.icon}
+                </div>
+                <div className="text-3xl sm:text-4xl font-bold text-foreground tabular-nums">{item.stat}</div>
+                <div className="text-sm font-medium text-foreground/80">{item.label}</div>
+                <div className="text-xs text-muted-foreground leading-relaxed hidden sm:block">{item.note}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── How it works ── */}
-      <section className="py-20 border-y border-white/[0.05]">
+      <section className="py-20 border-b border-white/[0.05]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
 
           <div className="mb-12 max-w-xl">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">
-              WWDC drops hundreds of APIs. We track all of them.
+              From WWDC firehose to your personal progress tracker.
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              RuntimeAtlas turns the WWDC firehose into a structured, trackable feed — so you know what's new, what matters, and what you've actually implemented.
+              RuntimeAtlas turns Apple&apos;s annual SDK release into a structured, trackable feed. Know what dropped, learn what matters, ship what sticks.
             </p>
           </div>
 
@@ -134,30 +165,26 @@ export default async function LandingPage() {
                 icon: <Bell className="h-5 w-5 text-violet-400" />,
                 step: '01',
                 title: 'Live capability feed',
-                desc: 'Every new API, framework change, and deprecation is ingested automatically from WWDC sessions and Apple developer docs as they go live.',
-                accent: 'text-violet-400',
+                desc: 'Every new API, framework change, and deprecation ingested automatically from WWDC sessions and Apple developer docs as they go live.',
                 glow: 'group-hover:text-violet-300',
               },
               {
-                icon: <TrendingUp className="h-5 w-5 text-pink-400" />,
+                icon: <Code2 className="h-5 w-5 text-emerald-400" />,
                 step: '02',
-                title: 'Track your learning',
-                desc: 'Mark capabilities as done. Build a daily streak. See how much of iOS 27 you\'ve actually covered — not just browsed.',
-                accent: 'text-pink-400',
-                glow: 'group-hover:text-pink-300',
+                title: 'Ship-ready Swift code',
+                desc: 'Every card ships with a real, compilable Swift snippet — not pseudocode. Copy directly into Xcode with a link back to the WWDC source.',
+                glow: 'group-hover:text-emerald-300',
               },
               {
-                icon: <Code2 className="h-5 w-5 text-emerald-400" />,
+                icon: <TrendingUp className="h-5 w-5 text-pink-400" />,
                 step: '03',
-                title: 'Ship-ready Swift code',
-                desc: 'Every card ships with a real, compilable Swift snippet — not pseudocode. Copy it directly into Xcode, with a link back to the WWDC source.',
-                accent: 'text-emerald-400',
-                glow: 'group-hover:text-emerald-300',
+                title: 'Track your implementation',
+                desc: 'Mark capabilities as done, build a daily streak, and see your real coverage across each release — not just what you vaguely watched at WWDC.',
+                glow: 'group-hover:text-pink-300',
               },
             ].map(item => (
               <div key={item.step} className="group relative bg-background/80 p-8 sm:p-10 space-y-4 transition-colors duration-200 hover:bg-white/[0.04] overflow-hidden">
-                {/* Step number watermark */}
-                <span className="absolute top-4 right-5 text-[64px] font-black text-white/[0.03] leading-none select-none pointer-events-none">
+                <span className="absolute top-4 right-5 text-[64px] font-black text-white/[0.025] leading-none select-none pointer-events-none">
                   {item.step}
                 </span>
                 <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
@@ -171,20 +198,18 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* ── Progress teaser ── */}
+      {/* ── Progress CTA ── */}
       <section className="py-16 max-w-7xl mx-auto px-5 sm:px-8">
         <div className="relative rounded-2xl border border-violet-500/20 bg-violet-500/[0.04] overflow-hidden p-8 sm:p-12">
-          {/* Background glow */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet-500/[0.06] via-transparent to-pink-500/[0.04]" aria-hidden />
-
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet-500/[0.07] via-transparent to-pink-500/[0.04]" aria-hidden />
           <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="max-w-lg">
               <p className="text-xs font-semibold text-violet-400 uppercase tracking-widest mb-2">Progress tracking</p>
               <h2 className="text-xl sm:text-2xl font-bold mb-2">
-                How much of iOS 27 have you actually shipped?
+                How much of this release have you actually shipped?
               </h2>
               <p className="text-muted-foreground text-sm leading-relaxed">
-                Sign in to mark capabilities as done, build a learning streak, and see your real coverage across all {total > 0 ? total : ''} iOS&nbsp;27 APIs — not just the ones you vaguely remember watching at WWDC.
+                Sign in to mark capabilities as done, build a learning streak, and see your real coverage across{total > 0 ? ` all ${total}` : ''} tracked APIs — not just the ones you vaguely remember watching at WWDC.
               </p>
             </div>
             <Link
@@ -202,11 +227,12 @@ export default async function LandingPage() {
       <LiveFeed />
 
       {/* ── Latest capabilities ── */}
-      <section className="pb-32 pt-8 max-w-7xl mx-auto px-5 sm:px-8">
+      <section className="pb-32 pt-4 max-w-7xl mx-auto px-5 sm:px-8">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Latest in iOS 27</h2>
-            <p className="text-sm text-muted-foreground mt-1">Highest-impact capabilities added most recently</p>
+            <p className="text-xs font-semibold text-violet-400 uppercase tracking-widest mb-1">iOS 27 · WWDC 2026</p>
+            <h2 className="text-2xl font-bold tracking-tight">Latest capabilities</h2>
+            <p className="text-sm text-muted-foreground mt-1">Highest-impact APIs added most recently</p>
           </div>
           <Link
             href="/features"
