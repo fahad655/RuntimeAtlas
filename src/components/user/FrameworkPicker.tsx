@@ -11,7 +11,7 @@ export function FrameworkPicker() {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    fetch('/api/frameworks').then(r => r.json()).then(d => setFrameworks(d.frameworks ?? []))
+    fetch('/api/frameworks').then(r => r.json()).then(d => setFrameworks(d.groups ?? []))
   }, [])
 
   useEffect(() => {

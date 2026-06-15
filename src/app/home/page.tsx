@@ -75,7 +75,7 @@ export default async function HomePage() {
       }
       groupCapIds.get(group)!.add(cap.id)
       groupFws.get(group)!.add(fw)
-      if (subscribedFrameworks.includes(fw)) groupSubscribed.set(group, true)
+      if (subscribedFrameworks.includes(group) || subscribedFrameworks.includes(fw)) groupSubscribed.set(group, true)
     }
   }
 
