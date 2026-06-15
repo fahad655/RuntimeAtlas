@@ -49,33 +49,55 @@ async function getCapabilities(sp: Awaited<PageProps['searchParams']>) {
   return rows
 }
 
-// Group capabilities by their availability field (e.g. "iOS 27+", "iOS 28+")
-// Preserves the sort order within each group.
-function groupByRelease(caps: Awaited<ReturnType<typeof getCapabilities>>) {
-  const map = new Map<string, typeof caps>()
-  for (const cap of caps) {
-    const key = cap.availability ?? 'iOS 27+'
-    if (!map.has(key)) map.set(key, [])
-    map.get(key)!.push(cap)
-  }
-  // Sort groups newest-release-first (iOS 28 before iOS 27, etc.)
-  return Array.from(map.entries()).sort(([a], [b]) => b.localeCompare(a, undefined, { numeric: true }))
+function wwdcLabel(availability: string): string {
+  const match = availability.match(/iOS\s*(\d+)/)
+  if (!match) return 'WWDC'
+  return `WWDC ${1999 + parseInt(match[1], 10)}`
 }
 
-// Map "iOS 27+" → "WWDC 2026", "iOS 26+" → "WWDC 2025", etc.
-function wwdcYear(availability: string): string {
-  const match = availability.match(/iOS\s*(\d+)/)
-  if (!match) return ''
-  const version = parseInt(match[1], 10)
-  // iOS 27 shipped at WWDC 2026 (iOS version = year - 1999)
-  const year = 1999 + version
-  return `WWDC ${year}`
+const CHANGE_ORDER = ['new', 'updated', 'deprecated'] as const
+const CHANGE_LABEL: Record<string, string> = { new: 'New', updated: 'Updated', deprecated: 'Deprecated' }
+const CHANGE_STYLE: Record<string, string> = {
+  new:        'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+  updated:    'text-amber-400 bg-amber-500/10 border-amber-500/20',
+  deprecated: 'text-red-400 bg-red-500/10 border-red-500/20',
+}
+
+type Cap = Awaited<ReturnType<typeof getCapabilities>>[0]
+
+function groupByWWDC(caps: Cap[]) {
+  // Top level: by availability (iOS version → WWDC year)
+  const byAvail = new Map<string, Cap[]>()
+  for (const cap of caps) {
+    const avail = cap.availability ?? 'iOS 27+'
+    if (!byAvail.has(avail)) byAvail.set(avail, [])
+    byAvail.get(avail)!.push(cap)
+  }
+
+  return Array.from(byAvail.entries())
+    .sort(([a], [b]) => b.localeCompare(a, undefined, { numeric: true }))
+    .map(([avail, group]) => {
+      const byCT = new Map<string, Cap[]>()
+      for (const cap of group) {
+        const ct = cap.changeType ?? 'new'
+        if (!byCT.has(ct)) byCT.set(ct, [])
+        byCT.get(ct)!.push(cap)
+      }
+      return {
+        avail,
+        wwdc: wwdcLabel(avail),
+        total: group.length,
+        subGroups: CHANGE_ORDER
+          .filter(ct => byCT.has(ct))
+          .map(ct => ({ ct, caps: byCT.get(ct)! })),
+      }
+    })
 }
 
 export default async function FeaturesPage({ searchParams }: PageProps) {
   const sp = await searchParams
   const caps = await getCapabilities(sp)
-  const groups = groupByRelease(caps)
+  const wwdcGroups = groupByWWDC(caps)
   const isFiltered = !!(sp.category && sp.category !== 'All') || !!sp.framework || !!sp.changeType || sp.hasDemo === 'true' || !!sp.q
 
   return (
@@ -108,28 +130,42 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
           {caps.map(cap => <CapabilityCard key={cap.id} capability={cap} />)}
         </div>
       ) : (
-        // Grouped by release
-        <div className="space-y-12 mt-8">
-          {groups.map(([release, group]) => (
-            <section key={release}>
-              {/* Release header */}
-              <div className="flex items-center gap-3 mb-5">
-                <div className="flex items-center gap-2">
-                  <span className="relative flex h-2 w-2">
+        // WWDC → change type two-level grouping
+        <div className="space-y-16 mt-8">
+          {wwdcGroups.map(({ avail, wwdc, total, subGroups }) => (
+            <section key={avail}>
+              {/* WWDC top-level header */}
+              <div className="flex items-center gap-3 mb-8">
+                <div className="flex items-center gap-2.5">
+                  <span className="relative flex h-2 w-2 shrink-0">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-60" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500" />
                   </span>
-                  <h2 className="text-lg font-bold tracking-tight">{wwdcYear(release)}</h2>
-                  <span className="text-xs text-muted-foreground font-mono">· {release}</span>
+                  <h2 className="text-2xl font-bold tracking-tight">{wwdc}</h2>
+                  <span className="text-sm text-muted-foreground font-mono">{avail}</span>
                 </div>
-                <div className="flex-1 h-px bg-white/[0.06]" />
+                <div className="flex-1 h-px bg-border/40 dark:bg-white/[0.06]" />
                 <span className="text-xs text-muted-foreground tabular-nums shrink-0">
-                  {group.length} {group.length === 1 ? 'capability' : 'capabilities'}
+                  {total} {total === 1 ? 'capability' : 'capabilities'}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                {group.map(cap => <CapabilityCard key={cap.id} capability={cap} />)}
+              {/* Sub-groups by change type */}
+              <div className="space-y-10">
+                {subGroups.map(({ ct, caps: subCaps }) => (
+                  <div key={ct}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full border ${CHANGE_STYLE[ct]}`}>
+                        {CHANGE_LABEL[ct]}
+                      </span>
+                      <div className="flex-1 h-px bg-border/30 dark:bg-white/[0.04]" />
+                      <span className="text-xs text-muted-foreground tabular-nums">{subCaps.length}</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                      {subCaps.map(cap => <CapabilityCard key={cap.id} capability={cap} />)}
+                    </div>
+                  </div>
+                ))}
               </div>
             </section>
           ))}
