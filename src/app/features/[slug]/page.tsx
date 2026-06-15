@@ -11,6 +11,7 @@ import { DemoSection } from '@/components/features/DemoSection'
 import { ProgressButton } from '@/components/user/ProgressButton'
 import { ReportIssueLink } from '@/components/layout/FeedbackButton'
 import { ShareButtons } from '@/components/features/ShareButtons'
+import { AdminEditButton } from '@/components/admin/AdminEditButton'
 import { highlightSwift } from '@/lib/highlighter'
 import type { Metadata } from 'next'
 
@@ -304,6 +305,9 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
 
       {/* Footer actions */}
       <div className="pt-4 border-t border-white/[0.05] space-y-4">
+        {/* Mark as completed — bottom CTA */}
+        <ProgressButton capabilityId={cap.id} placement="bottom" />
+
         <ShareButtons name={cap.name} summary={cap.summary} slug={cap.slug} />
         <div className="flex items-center justify-between">
           <Link
@@ -313,7 +317,31 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
             <ChevronLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
             All capabilities
           </Link>
-          <ReportIssueLink capabilityName={cap.name} />
+          <div className="flex items-center gap-3">
+            <AdminEditButton
+              capabilityId={cap.id}
+              demoId={cap.demoId}
+              initial={{
+                name: cap.name,
+                summary: cap.summary,
+                whyItMatters: cap.whyItMatters ?? null,
+                changesSince: cap.changesSince ?? null,
+                gotchas: cap.gotchas ?? null,
+                hardwareConstraints: cap.hardwareConstraints ?? null,
+                impactScore: cap.impactScore,
+                status: cap.status,
+                verifiedOnBeta: cap.verifiedOnBeta ?? null,
+              }}
+              initialDemo={demo ? {
+                title: demo.title,
+                description: demo.description,
+                codeSnippet: demo.codeSnippet ?? null,
+                previousCodeSnippet: demo.previousCodeSnippet ?? null,
+                repoUrl: demo.repoUrl ?? null,
+              } : null}
+            />
+            <ReportIssueLink capabilityName={cap.name} />
+          </div>
         </div>
       </div>
     </div>

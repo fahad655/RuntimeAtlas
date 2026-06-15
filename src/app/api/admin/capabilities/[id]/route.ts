@@ -20,10 +20,13 @@ export async function PATCH(
     impactScore?: number
     name?: string
     summary?: string
+    whyItMatters?: string
+    changesSince?: string
     category?: Category
     frameworks?: string[]
     gotchas?: string
     hardwareConstraints?: string
+    verifiedOnBeta?: string | null
   }
 
   const updates: Record<string, unknown> = { updatedAt: new Date() }
@@ -34,6 +37,8 @@ export async function PATCH(
   }
   if (body.name !== undefined) updates.name = body.name
   if (body.summary !== undefined) updates.summary = body.summary
+  if (body.whyItMatters !== undefined) updates.whyItMatters = body.whyItMatters
+  if (body.changesSince !== undefined) updates.changesSince = body.changesSince
   if (body.category !== undefined) updates.category = body.category
   if (body.frameworks !== undefined) updates.frameworks = body.frameworks
   if (body.gotchas !== undefined) updates.gotchas = body.gotchas

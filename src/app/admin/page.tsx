@@ -48,6 +48,7 @@ export default function AdminPage() {
           onSubmit={e => {
             e.preventDefault()
             localStorage.setItem('ra-admin', '1')
+            localStorage.setItem('ra-admin-secret', secret)
             setAuthed(true)
           }}
         >
@@ -72,7 +73,7 @@ export default function AdminPage() {
         <h1 className="text-3xl font-bold">Admin</h1>
         <Button
           variant="ghost" size="sm"
-          onClick={() => { localStorage.removeItem('ra-admin'); setAuthed(false) }}
+          onClick={() => { localStorage.removeItem('ra-admin'); localStorage.removeItem('ra-admin-secret'); setAuthed(false) }}
           className="text-muted-foreground"
         >
           Lock

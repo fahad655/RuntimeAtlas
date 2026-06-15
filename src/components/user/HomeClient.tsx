@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 
 export interface FrameworkStat {
   name: string
+  frameworks: string[]  // individual framework names in this group
   total: number
   completed: number
   pct: number
@@ -50,11 +51,11 @@ export function HomeClient({ frameworks, queue, completed }: Props) {
     setSelected(s => s === name ? null : name)
   }
 
-  const filteredQueue = selected
-    ? queue.filter(c => c.frameworks.includes(selected))
-    : queue
-
   const activeFramework = selected ? frameworks.find(f => f.name === selected) : null
+
+  const filteredQueue = selected && activeFramework
+    ? queue.filter(c => c.frameworks.some(fw => activeFramework.frameworks.includes(fw)))
+    : queue
 
   return (
     <div className="space-y-10">

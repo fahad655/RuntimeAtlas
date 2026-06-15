@@ -1,4 +1,5 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
+import { getGroupName } from '@/lib/frameworkGroups'
 import { redirect } from 'next/navigation'
 import { db } from '@/db'
 import { capabilities, userProgress, userStreaks, userProfiles } from '@/db/schema'
@@ -51,23 +52,41 @@ export default async function HomePage() {
   const completedCount = completedIds.length
   const completionPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
 
-  const allFrameworks = [...new Set(allCaps.flatMap(c => c.frameworks))].sort()
-  const frameworkStats = allFrameworks
-    .map(fw => {
-      const fwCaps = allCaps.filter(c => c.frameworks.includes(fw))
-      const fwDone = fwCaps.filter(c => completedIds.includes(c.id)).length
-      return {
-        name: fw,
-        total: fwCaps.length,
-        completed: fwDone,
-        pct: fwCaps.length > 0 ? Math.round((fwDone / fwCaps.length) * 100) : 0,
-        isSubscribed: subscribedFrameworks.includes(fw),
+  // Group individual framework strings into broader categories
+  const groupCapIds = new Map<string, Set<number>>()
+  const groupFws = new Map<string, Set<string>>()
+  const groupSubscribed = new Map<string, boolean>()
+
+  for (const cap of allCaps) {
+    for (const fw of cap.frameworks) {
+      const group = getGroupName(fw)
+      if (!groupCapIds.has(group)) {
+        groupCapIds.set(group, new Set())
+        groupFws.set(group, new Set())
+        groupSubscribed.set(group, false)
       }
-    })
-    .sort((a, b) => {
-      if (a.isSubscribed !== b.isSubscribed) return a.isSubscribed ? -1 : 1
-      return b.total - a.total
-    })
+      groupCapIds.get(group)!.add(cap.id)
+      groupFws.get(group)!.add(fw)
+      if (subscribedFrameworks.includes(fw)) groupSubscribed.set(group, true)
+    }
+  }
+
+  const frameworkStats = [...groupCapIds.entries()].map(([name, capIdSet]) => {
+    const groupCaps = allCaps.filter(c => capIdSet.has(c.id))
+    const done = groupCaps.filter(c => completedIds.includes(c.id)).length
+    const total = groupCaps.length
+    return {
+      name,
+      frameworks: [...(groupFws.get(name) ?? [])],
+      total,
+      completed: done,
+      pct: total > 0 ? Math.round((done / total) * 100) : 0,
+      isSubscribed: groupSubscribed.get(name) ?? false,
+    }
+  }).sort((a, b) => {
+    if (a.isSubscribed !== b.isSubscribed) return a.isSubscribed ? -1 : 1
+    return b.total - a.total
+  })
 
   const queue = allCaps
     .filter(c => !completedIds.includes(c.id))
