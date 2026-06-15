@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Twitter, Link2, Check } from 'lucide-react'
+import { XIcon, Link2, Check } from 'lucide-react'
 
 interface Props {
   name: string
@@ -37,7 +37,7 @@ export function ShareButtons({ name, summary, slug }: Props) {
         className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground border border-white/[0.1] hover:border-white/[0.2] rounded-lg px-3 py-1.5 transition-all"
         aria-label="Share on X"
       >
-        <Twitter className="h-3.5 w-3.5" />
+        <XIcon className="h-3.5 w-3.5" />
         Share
       </button>
       <button
