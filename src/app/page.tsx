@@ -63,12 +63,12 @@ export default async function LandingPage() {
             </div>
 
             {/* Headline */}
-            <h1 className="text-5xl sm:text-7xl lg:text-[82px] font-bold tracking-tight leading-[1.05] max-w-4xl">
-              <span className="text-foreground">Know what dropped.</span>
+            <h1 className="text-5xl sm:text-7xl lg:text-[86px] font-black tracking-tight leading-[1.05] max-w-4xl">
+              <span className="text-white">Know what dropped.</span>
               <br />
               <span
                 className="bg-clip-text text-transparent"
-                style={{ backgroundImage: 'linear-gradient(90deg, #c084fc 0%, #f472b6 55%, #fb923c 100%)' }}
+                style={{ backgroundImage: 'linear-gradient(90deg, #e879f9 0%, #fb923c 100%)' }}
               >
                 Track what you&apos;ve shipped.
               </span>
