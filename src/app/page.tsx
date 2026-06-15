@@ -59,24 +59,24 @@ export default async function LandingPage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500" />
               </span>
-              iOS 27 — updated as Apple releases
+              iOS 27 Beta — live as Apple releases it
             </div>
 
             {/* Headline */}
-            <h1 className="text-5xl sm:text-7xl lg:text-[86px] font-black tracking-tight leading-[1.05] max-w-4xl">
-              <span className="text-white">Know what dropped.</span>
+            <h1 className="text-5xl sm:text-7xl lg:text-[82px] font-bold tracking-tight leading-[1.05] max-w-4xl">
+              <span className="text-foreground">The iOS 27 dashboard</span>
               <br />
               <span
                 className="bg-clip-text text-transparent"
-                style={{ backgroundImage: 'linear-gradient(90deg, #e879f9 0%, #fb923c 100%)' }}
+                style={{ backgroundImage: 'linear-gradient(90deg, #c084fc 0%, #f472b6 55%, #fb923c 100%)' }}
               >
-                Track what you&apos;ve shipped.
+                for developers who ship.
               </span>
             </h1>
 
             {/* Sub-headline */}
             <p className="mt-7 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-              RuntimeAtlas monitors every iOS&nbsp;27 API and SDK change the moment Apple releases it — distilled into scannable cards with runnable Swift code. Mark what you&apos;ve explored, build a streak, and always know exactly where you stand.
+              Apple released hundreds of new APIs at WWDC. RuntimeAtlas tracks every one the moment it drops — distilled into scannable cards with runnable Swift code. Mark what you&apos;ve implemented, build a streak, and always know exactly where you stand.
             </p>
 
             {/* Stats */}
@@ -99,7 +99,7 @@ export default async function LandingPage() {
                 href="/features"
                 className="group inline-flex items-center gap-2 rounded-full bg-violet-600 hover:bg-violet-500 text-white font-semibold px-7 py-3 text-sm transition-all duration-200 shadow-[0_0_28px_rgba(124,58,237,0.55)] hover:shadow-[0_0_40px_rgba(124,58,237,0.75)] active:scale-[0.97]"
               >
-                See what&apos;s new
+                Browse what dropped
                 <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Link>
               <Link
@@ -121,10 +121,10 @@ export default async function LandingPage() {
 
           <div className="mb-12 max-w-xl">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">
-              Never fall behind on a release again.
+              WWDC drops hundreds of APIs. We track all of them.
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              WWDC drops hundreds of changes. RuntimeAtlas turns that firehose into a structured, trackable feed you can work through at your own pace.
+              RuntimeAtlas turns the WWDC firehose into a structured, trackable feed — so you know what's new, what matters, and what you've actually implemented.
             </p>
           </div>
 
