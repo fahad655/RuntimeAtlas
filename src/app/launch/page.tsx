@@ -26,7 +26,7 @@ export default function LaunchPage() {
           </h1>
         </div>
         <a
-          href="https://www.producthunt.com"
+          href="https://www.producthunt.com/products/swift-chronicle?launch=swift-chronicle"
           target="_blank"
           rel="noopener noreferrer"
           className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-[#FF6154] hover:bg-[#ff4f3f] text-white font-semibold px-5 py-3 text-sm transition-all active:scale-[0.97]"
@@ -140,7 +140,7 @@ export default function LaunchPage() {
           <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
         </Link>
         <a
-          href="https://www.producthunt.com"
+          href="https://www.producthunt.com/products/swift-chronicle?launch=swift-chronicle"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 rounded-full bg-[#FF6154] hover:bg-[#ff4f3f] text-white font-semibold px-7 py-3 text-sm transition-all active:scale-[0.97]"
