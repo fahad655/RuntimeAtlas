@@ -13,5 +13,13 @@ export async function GET() {
   const rawFws = [...new Set(rows.flatMap(r => r.frameworks))]
   const groups = [...new Set(rawFws.map(getGroupName))].sort()
 
-  return NextResponse.json({ frameworks: rawFws.sort(), groups })
+  const groupCounts: Record<string, number> = {}
+  for (const row of rows) {
+    for (const fw of row.frameworks) {
+      const g = getGroupName(fw)
+      groupCounts[g] = (groupCounts[g] ?? 0) + 1
+    }
+  }
+
+  return NextResponse.json({ frameworks: rawFws.sort(), groups, groupCounts })
 }

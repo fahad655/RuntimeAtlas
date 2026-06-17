@@ -76,16 +76,25 @@ function TypeToggle({
   )
 }
 
+const TOP_N = 5
+
 export function FilterBar() {
   const router = useRouter()
   const params = useSearchParams()
   const [groups, setGroups] = useState<string[]>([])
+  const [groupCounts, setGroupCounts] = useState<Record<string, number>>({})
+  const [showAllFrameworks, setShowAllFrameworks] = useState(false)
   const [searchDraft, setSearchDraft] = useState(params.get('q') ?? '')
 
   useEffect(() => {
     fetch('/api/frameworks')
       .then(r => r.json())
-      .then((d: { groups?: string[] }) => setGroups(d.groups ?? []))
+      .then((d: { groups?: string[]; groupCounts?: Record<string, number> }) => {
+        const counts = d.groupCounts ?? {}
+        const sorted = (d.groups ?? []).slice().sort((a, b) => (counts[b] ?? 0) - (counts[a] ?? 0))
+        setGroups(sorted)
+        setGroupCounts(counts)
+      })
       .catch(() => {})
   }, [])
 
@@ -189,9 +198,44 @@ export function FilterBar() {
         <div className="space-y-1.5">
           <p className="text-[10px] font-semibold text-muted-foreground/50 uppercase tracking-widest">Framework</p>
           <div className="flex flex-wrap gap-1.5">
-            {groups.map(g => (
-              <Pill key={g} active={framework === g} onClick={() => toggle('framework', g)}>{g}</Pill>
-            ))}
+            {(() => {
+              // Always include the active selection even if outside top N
+              const topGroups = groups.slice(0, TOP_N)
+              const visible = showAllFrameworks
+                ? groups
+                : framework && !topGroups.includes(framework)
+                  ? [...topGroups, framework]
+                  : topGroups
+              const hiddenCount = groups.length - TOP_N
+              return (
+                <>
+                  {visible.map(g => (
+                    <Pill key={g} active={framework === g} onClick={() => toggle('framework', g)}>
+                      {g}
+                      {groupCounts[g] ? (
+                        <span className="ml-1 opacity-50 text-[10px]">{groupCounts[g]}</span>
+                      ) : null}
+                    </Pill>
+                  ))}
+                  {!showAllFrameworks && hiddenCount > 0 && (
+                    <button
+                      onClick={() => setShowAllFrameworks(true)}
+                      className="text-xs px-2.5 py-1 rounded-full border border-dashed border-border/50 text-muted-foreground hover:border-border hover:text-foreground transition-colors whitespace-nowrap"
+                    >
+                      +{hiddenCount} more
+                    </button>
+                  )}
+                  {showAllFrameworks && hiddenCount > 0 && (
+                    <button
+                      onClick={() => setShowAllFrameworks(false)}
+                      className="text-xs px-2.5 py-1 rounded-full border border-dashed border-border/50 text-muted-foreground hover:border-border hover:text-foreground transition-colors whitespace-nowrap"
+                    >
+                      Show less
+                    </button>
+                  )}
+                </>
+              )
+            })()}
           </div>
         </div>
       )}
