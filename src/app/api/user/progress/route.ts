@@ -4,9 +4,9 @@ import { db } from '@/db'
 import { userProgress, userStreaks } from '@/db/schema'
 import { eq, and } from 'drizzle-orm'
 
-const HOUR_MS = 60 * 60 * 1000
-const STREAK_BREAK_MS  = 72 * HOUR_MS  // streak resets after 72h of inactivity
-const STREAK_WINDOW_MS = 24 * HOUR_MS  // must wait 24h before incrementing again
+// Streak rule: increments once per calendar day when a capability is marked complete.
+// Missing one day is OK (streak holds). Missing two or more consecutive days resets to 1.
+// Streak is ONLY driven by mark-complete actions — never by logins or page visits.
 
 export async function GET() {
   const { userId } = await auth()
@@ -53,8 +53,13 @@ export async function DELETE(req: NextRequest) {
   return NextResponse.json({ ok: true })
 }
 
+function toUTCDateStr(d: Date): string {
+  return d.toISOString().slice(0, 10) // "YYYY-MM-DD"
+}
+
 async function updateStreak(userId: string) {
   const now = new Date()
+  const todayStr = toUTCDateStr(now)
 
   const [current] = await db
     .select()
@@ -72,18 +77,17 @@ async function updateStreak(userId: string) {
     return
   }
 
-  const last = current.lastActivityAt
-  if (!last) {
-    // first activity on upgraded schema
-    await db.update(userStreaks).set({ currentStreak: 1, longestStreak: Math.max(1, current.longestStreak), lastActivityAt: now, updatedAt: now }).where(eq(userStreaks.clerkId, userId))
-    return
-  }
+  const lastStr = current.lastActivityAt ? toUTCDateStr(current.lastActivityAt) : null
 
-  const elapsed = now.getTime() - last.getTime()
+  // Already marked something complete today — no change
+  if (lastStr === todayStr) return
 
-  if (elapsed < STREAK_WINDOW_MS) return // same window, already counted
+  // Was active yesterday → increment; 2+ days ago → reset to 1
+  const yesterday = new Date(now)
+  yesterday.setUTCDate(yesterday.getUTCDate() - 1)
+  const yesterdayStr = toUTCDateStr(yesterday)
 
-  const newStreak = elapsed < STREAK_BREAK_MS ? current.currentStreak + 1 : 1
+  const newStreak = lastStr === yesterdayStr ? current.currentStreak + 1 : 1
   const longest = Math.max(newStreak, current.longestStreak)
 
   await db

@@ -11,9 +11,12 @@ export async function GET() {
   const [profile] = await db.select().from(userProfiles).where(eq(userProfiles.clerkId, userId)).limit(1)
   const [streak] = await db.select().from(userStreaks).where(eq(userStreaks.clerkId, userId)).limit(1)
 
-  const STREAK_BREAK_MS = 72 * 60 * 60 * 1000
+  // Streak expires if last mark-complete was 2+ days ago (calendar days, UTC)
+  function daysDiff(a: Date, b: Date) {
+    return Math.floor((b.getTime() - a.getTime()) / 86_400_000)
+  }
   const streakExpired = streak?.lastActivityAt
-    ? Date.now() - streak.lastActivityAt.getTime() >= STREAK_BREAK_MS
+    ? daysDiff(streak.lastActivityAt, new Date()) >= 2
     : true
   const currentStreak = streakExpired ? 0 : (streak?.currentStreak ?? 0)
 

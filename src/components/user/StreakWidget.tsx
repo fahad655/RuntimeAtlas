@@ -17,7 +17,7 @@ export function StreakWidget() {
   const active = streak > 0
 
   return (
-    <div className="flex items-center gap-1 text-sm" title={`${streak}-day streak`}>
+    <div className="flex items-center gap-1 text-sm" title={streak > 0 ? `${streak}-day streak · Mark a capability complete each day to keep it going` : 'Mark a capability complete to start your streak'}>
       <Flame className={active ? 'h-4 w-4 text-orange-400' : 'h-4 w-4 text-muted-foreground'} />
       <span className={active ? 'font-semibold text-orange-400' : 'text-muted-foreground'}>
         {streak}

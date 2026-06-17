@@ -38,9 +38,8 @@ export default async function HomePage() {
       .onConflictDoUpdate({ target: userProfiles.clerkId, set: { email: clerkEmail, updatedAt: sql`now()` } })
   }
 
-  const STREAK_BREAK_MS = 72 * 60 * 60 * 1000
   const streakExpired = streak?.lastActivityAt
-    ? Date.now() - streak.lastActivityAt.getTime() >= STREAK_BREAK_MS
+    ? Math.floor((Date.now() - streak.lastActivityAt.getTime()) / 86_400_000) >= 2
     : true
   const currentStreak = streakExpired ? 0 : (streak?.currentStreak ?? 0)
   const longestStreak = streak?.longestStreak ?? 0
