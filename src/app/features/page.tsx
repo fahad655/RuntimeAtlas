@@ -32,7 +32,6 @@ async function getCapabilities(sp: Awaited<PageProps['searchParams']>) {
     .orderBy(orderCol)
     .limit(200)
 
-  // Framework filter: sp.framework is a group name — expand to individual framework strings
   if (sp.framework) {
     const groupFws = getGroupFrameworks(sp.framework)
     rows = rows.filter(c => c.frameworks.some(fw => groupFws.includes(fw)))
@@ -50,11 +49,36 @@ async function getCapabilities(sp: Awaited<PageProps['searchParams']>) {
   return rows
 }
 
-function wwdcLabel(availability: string): string {
-  const match = availability.match(/iOS\s*(\d+)/)
-  if (!match) return 'WWDC'
-  return `WWDC ${1999 + parseInt(match[1], 10)}`
+// ── Platform detection ────────────────────────────────────────────────────────
+
+const OS_ORDER = ['iOS', 'macOS', 'watchOS', 'tvOS', 'visionOS', 'Developer Tools'] as const
+type OS = typeof OS_ORDER[number]
+
+const OS_CONFIG: Record<OS, {
+  label: string
+  dot: string
+  ring: string
+  ping: string
+  badge: string
+}> = {
+  iOS:               { label: 'iOS',            dot: 'bg-blue-500',   ring: 'ring-blue-500/30',   ping: 'bg-blue-400',   badge: 'border-blue-500/20 bg-blue-500/10 text-blue-400' },
+  macOS:             { label: 'macOS',          dot: 'bg-purple-500', ring: 'ring-purple-500/30', ping: 'bg-purple-400', badge: 'border-purple-500/20 bg-purple-500/10 text-purple-400' },
+  watchOS:           { label: 'watchOS',        dot: 'bg-teal-500',   ring: 'ring-teal-500/30',   ping: 'bg-teal-400',   badge: 'border-teal-500/20 bg-teal-500/10 text-teal-400' },
+  tvOS:              { label: 'tvOS',           dot: 'bg-orange-500', ring: 'ring-orange-500/30', ping: 'bg-orange-400', badge: 'border-orange-500/20 bg-orange-500/10 text-orange-400' },
+  visionOS:          { label: 'visionOS',       dot: 'bg-violet-500', ring: 'ring-violet-500/30', ping: 'bg-violet-400', badge: 'border-violet-500/20 bg-violet-500/10 text-violet-400' },
+  'Developer Tools': { label: 'Developer Tools',dot: 'bg-zinc-500',   ring: 'ring-zinc-500/30',   ping: 'bg-zinc-400',   badge: 'border-zinc-500/20 bg-zinc-500/10 text-zinc-400' },
 }
+
+function primaryPlatform(availability: string): OS {
+  if (/iOS/i.test(availability))        return 'iOS'
+  if (/macOS/i.test(availability))      return 'macOS'
+  if (/watchOS/i.test(availability))    return 'watchOS'
+  if (/tvOS/i.test(availability))       return 'tvOS'
+  if (/visionOS/i.test(availability))   return 'visionOS'
+  return 'Developer Tools'
+}
+
+// ── Change-type subsection config ─────────────────────────────────────────────
 
 const CHANGE_ORDER = ['new', 'updated', 'deprecated'] as const
 
@@ -69,8 +93,8 @@ const SECTION_CONFIG: Record<string, {
 }> = {
   new: {
     icon: <Sparkles className="h-4 w-4" />,
-    label: 'New in iOS 27',
-    desc: 'APIs and frameworks introduced at WWDC 2026',
+    label: 'New APIs',
+    desc: 'Introduced at WWDC 2026',
     border: 'border-emerald-500/20',
     gradient: 'from-emerald-500/[0.08] via-emerald-500/[0.03] to-transparent',
     iconBox: 'bg-emerald-500/10 border border-emerald-500/25 text-emerald-400',
@@ -78,8 +102,8 @@ const SECTION_CONFIG: Record<string, {
   },
   updated: {
     icon: <RefreshCw className="h-4 w-4" />,
-    label: 'Updated from iOS 26',
-    desc: 'Existing APIs that changed at WWDC 2026',
+    label: 'Updated APIs',
+    desc: 'Changed or enhanced at WWDC 2026',
     border: 'border-amber-500/20',
     gradient: 'from-amber-500/[0.08] via-amber-500/[0.03] to-transparent',
     iconBox: 'bg-amber-500/10 border border-amber-500/25 text-amber-400',
@@ -88,7 +112,7 @@ const SECTION_CONFIG: Record<string, {
   deprecated: {
     icon: <AlertTriangle className="h-4 w-4" />,
     label: 'Deprecated',
-    desc: 'APIs removed or replaced in iOS 27',
+    desc: 'Removed or replaced at WWDC 2026',
     border: 'border-red-500/20',
     gradient: 'from-red-500/[0.08] via-red-500/[0.03] to-transparent',
     iconBox: 'bg-red-500/10 border border-red-500/25 text-red-400',
@@ -96,41 +120,39 @@ const SECTION_CONFIG: Record<string, {
   },
 }
 
+// ── Grouping ──────────────────────────────────────────────────────────────────
+
 type Cap = Awaited<ReturnType<typeof getCapabilities>>[0]
 
-function groupByWWDC(caps: Cap[]) {
-  // Top level: by availability (iOS version → WWDC year)
-  const byAvail = new Map<string, Cap[]>()
+function groupByPlatform(caps: Cap[]) {
+  const byOS = new Map<OS, Map<string, Cap[]>>()
+
   for (const cap of caps) {
-    const avail = cap.availability ?? 'iOS 27+'
-    if (!byAvail.has(avail)) byAvail.set(avail, [])
-    byAvail.get(avail)!.push(cap)
+    const os = primaryPlatform(cap.availability ?? 'iOS 27+')
+    const ct = cap.changeType ?? 'new'
+    if (!byOS.has(os)) byOS.set(os, new Map())
+    const ctMap = byOS.get(os)!
+    if (!ctMap.has(ct)) ctMap.set(ct, [])
+    ctMap.get(ct)!.push(cap)
   }
 
-  return Array.from(byAvail.entries())
-    .sort(([a], [b]) => b.localeCompare(a, undefined, { numeric: true }))
-    .map(([avail, group]) => {
-      const byCT = new Map<string, Cap[]>()
-      for (const cap of group) {
-        const ct = cap.changeType ?? 'new'
-        if (!byCT.has(ct)) byCT.set(ct, [])
-        byCT.get(ct)!.push(cap)
-      }
-      return {
-        avail,
-        wwdc: wwdcLabel(avail),
-        total: group.length,
-        subGroups: CHANGE_ORDER
-          .filter(ct => byCT.has(ct))
-          .map(ct => ({ ct, caps: byCT.get(ct)! })),
-      }
-    })
+  return OS_ORDER
+    .filter(os => byOS.has(os))
+    .map(os => ({
+      os,
+      total: Array.from(byOS.get(os)!.values()).reduce((s, a) => s + a.length, 0),
+      subGroups: CHANGE_ORDER
+        .filter(ct => byOS.get(os)!.has(ct))
+        .map(ct => ({ ct, caps: byOS.get(os)!.get(ct)! })),
+    }))
 }
+
+// ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function FeaturesPage({ searchParams }: PageProps) {
   const sp = await searchParams
   const caps = await getCapabilities(sp)
-  const wwdcGroups = groupByWWDC(caps)
+  const platformGroups = groupByPlatform(caps)
   const isFiltered = !!(sp.category && sp.category !== 'All') || !!sp.framework || !!sp.changeType || sp.hasDemo === 'true' || !!sp.q
 
   return (
@@ -141,7 +163,7 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
           <h1 className="text-4xl font-bold tracking-tight">Capabilities</h1>
           <p className="text-muted-foreground text-sm mt-2">
             <span className="text-foreground font-semibold tabular-nums">{caps.length}</span>{' '}
-            {caps.length === 1 ? 'capability' : 'capabilities'} tracked
+            {caps.length === 1 ? 'capability' : 'capabilities'} tracked across Apple platforms
           </p>
         </div>
         <div className="mt-1">
@@ -158,71 +180,72 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
           <p className="text-base">No capabilities match your filters.</p>
         </div>
       ) : isFiltered ? (
-        // Filtered view — no grouping, just the flat grid
+        // Filtered: flat grid, no grouping
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mt-6">
           {caps.map(cap => <CapabilityCard key={cap.id} capability={cap} />)}
         </div>
       ) : (
-        // WWDC → change type two-level grouping
+        // Grouped: platform → change type
         <div className="space-y-16 mt-8">
-          {wwdcGroups.map(({ avail, wwdc, total, subGroups }) => (
-            <section key={avail}>
-              {/* WWDC top-level header */}
-              <div className="flex items-center gap-3 mb-8">
-                <div className="flex items-center gap-2.5">
-                  <span className="relative flex h-2 w-2 shrink-0">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-60" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500" />
-                  </span>
-                  <h2 className="text-2xl font-bold tracking-tight">{wwdc}</h2>
-                  <span className="text-sm text-muted-foreground font-mono">{avail}</span>
+          {platformGroups.map(({ os, total, subGroups }) => {
+            const osCfg = OS_CONFIG[os]
+            return (
+              <section key={os}>
+                {/* Platform header */}
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="flex items-center gap-2.5">
+                    <span className="relative flex h-2.5 w-2.5 shrink-0">
+                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${osCfg.ping} opacity-60`} />
+                      <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${osCfg.dot}`} />
+                    </span>
+                    <h2 className="text-2xl font-bold tracking-tight">{osCfg.label}</h2>
+                    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${osCfg.badge}`}>
+                      {total} {total === 1 ? 'capability' : 'capabilities'}
+                    </span>
+                  </div>
+                  <div className="flex-1 h-px bg-border/40 dark:bg-white/[0.06]" />
                 </div>
-                <div className="flex-1 h-px bg-border/40 dark:bg-white/[0.06]" />
-                <span className="text-xs text-muted-foreground tabular-nums shrink-0">
-                  {total} {total === 1 ? 'capability' : 'capabilities'}
-                </span>
-              </div>
 
-              {/* Sub-groups by change type */}
-              <div className="space-y-12">
-                {subGroups.map(({ ct, caps: subCaps }) => {
-                  const cfg = SECTION_CONFIG[ct]
-                  const demoCount = subCaps.filter(c => c.demoId != null).length
-                  return (
-                    <div key={ct}>
-                      {/* Banner header */}
-                      <div className={`relative rounded-2xl border ${cfg.border} overflow-hidden mb-5`}>
-                        <div className={`absolute inset-0 bg-gradient-to-r ${cfg.gradient}`} />
-                        <div className="relative flex items-center justify-between px-5 py-4">
-                          <div className="flex items-center gap-3.5">
-                            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${cfg.iconBox}`}>
-                              {cfg.icon}
-                            </div>
-                            <div>
-                              <p className={`font-bold text-sm leading-tight ${cfg.color}`}>{cfg.label}</p>
-                              <p className="text-[11px] text-muted-foreground mt-0.5">{cfg.desc}</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3 shrink-0">
-                            {demoCount > 0 && (
-                              <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-muted-foreground border border-white/[0.07] rounded-full px-2.5 py-1">
-                                <FlaskConical className="h-3 w-3" />
-                                {demoCount} with demo
+                {/* Change-type subsections */}
+                <div className="space-y-10">
+                  {subGroups.map(({ ct, caps: subCaps }) => {
+                    const cfg = SECTION_CONFIG[ct]
+                    const demoCount = subCaps.filter(c => c.demoId != null).length
+                    return (
+                      <div key={ct}>
+                        <div className={`relative rounded-2xl border ${cfg.border} overflow-hidden mb-5`}>
+                          <div className={`absolute inset-0 bg-gradient-to-r ${cfg.gradient}`} />
+                          <div className="relative flex items-center justify-between px-5 py-4">
+                            <div className="flex items-center gap-3.5">
+                              <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${cfg.iconBox}`}>
+                                {cfg.icon}
                               </div>
-                            )}
-                            <span className={`text-3xl font-bold tabular-nums ${cfg.color}`}>{subCaps.length}</span>
+                              <div>
+                                <p className={`font-bold text-sm leading-tight ${cfg.color}`}>{cfg.label}</p>
+                                <p className="text-[11px] text-muted-foreground mt-0.5">{cfg.desc}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-3 shrink-0">
+                              {demoCount > 0 && (
+                                <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-muted-foreground border border-white/[0.07] rounded-full px-2.5 py-1">
+                                  <FlaskConical className="h-3 w-3" />
+                                  {demoCount} with demo
+                                </div>
+                              )}
+                              <span className={`text-3xl font-bold tabular-nums ${cfg.color}`}>{subCaps.length}</span>
+                            </div>
                           </div>
                         </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                          {subCaps.map(cap => <CapabilityCard key={cap.id} capability={cap} />)}
+                        </div>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                        {subCaps.map(cap => <CapabilityCard key={cap.id} capability={cap} />)}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </section>
-          ))}
+                    )
+                  })}
+                </div>
+              </section>
+            )
+          })}
         </div>
       )}
     </div>
