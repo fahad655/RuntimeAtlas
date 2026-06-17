@@ -1,7 +1,7 @@
 'use client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Search, X, Sparkles, RefreshCw, AlertTriangle, FlaskConical } from 'lucide-react'
+import { Search, X, Sparkles, RefreshCw, AlertTriangle, FlaskConical, ChevronDown, ChevronUp } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { trackEvent } from '@/lib/analytics'
@@ -220,17 +220,19 @@ export function FilterBar() {
                   {!showAllFrameworks && hiddenCount > 0 && (
                     <button
                       onClick={() => setShowAllFrameworks(true)}
-                      className="text-xs px-2.5 py-1 rounded-full border border-dashed border-border/50 text-muted-foreground hover:border-border hover:text-foreground transition-colors whitespace-nowrap"
+                      className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border border-violet-500/25 bg-violet-500/[0.06] text-violet-400 hover:bg-violet-500/15 hover:border-violet-500/40 transition-all whitespace-nowrap"
                     >
                       +{hiddenCount} more
+                      <ChevronDown className="h-3 w-3" />
                     </button>
                   )}
                   {showAllFrameworks && hiddenCount > 0 && (
                     <button
                       onClick={() => setShowAllFrameworks(false)}
-                      className="text-xs px-2.5 py-1 rounded-full border border-dashed border-border/50 text-muted-foreground hover:border-border hover:text-foreground transition-colors whitespace-nowrap"
+                      className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border border-violet-500/25 bg-violet-500/[0.06] text-violet-400 hover:bg-violet-500/15 hover:border-violet-500/40 transition-all whitespace-nowrap"
                     >
                       Show less
+                      <ChevronUp className="h-3 w-3" />
                     </button>
                   )}
                 </>
