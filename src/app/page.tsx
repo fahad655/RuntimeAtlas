@@ -258,6 +258,36 @@ export default async function LandingPage() {
         )}
       </section>
 
+      {/* ── Why keeping up is hard ── */}
+      <section className="py-16 max-w-7xl mx-auto px-5 sm:px-8">
+        <p className="text-xs font-semibold text-muted-foreground/60 uppercase tracking-widest mb-6">Why keeping up is hard</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[
+            {
+              icon: '🌊',
+              title: 'The firehose never stops',
+              desc: 'Apple ships 250+ new APIs every June — across UIKit, SwiftUI, Foundation, Core ML, ARKit, and dozens more. No one watches every session.',
+            },
+            {
+              icon: '⏳',
+              title: 'Docs lag the release',
+              desc: 'Official documentation trickles out over weeks. By the time it\'s complete, the beta cycle is half over and your competitors have already shipped.',
+            },
+            {
+              icon: '🧩',
+              title: 'Context is scattered',
+              desc: 'Code examples live in WWDC transcripts, sample projects, and blog posts spread across the internet — not in one place you can actually track.',
+            },
+          ].map(item => (
+            <div key={item.title} className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6 space-y-3">
+              <div className="text-2xl">{item.icon}</div>
+              <h3 className="font-semibold text-sm text-foreground">{item.title}</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ── Email capture ── */}
       <section className="py-16 max-w-7xl mx-auto px-5 sm:px-8">
         <div className="relative rounded-2xl border border-violet-500/15 bg-violet-500/[0.03] overflow-hidden p-8 sm:p-12">
