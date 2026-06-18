@@ -102,52 +102,6 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* ── Apple by the numbers ── */}
-      <section className="border-y border-border/50 dark:border-white/[0.05] bg-muted/20 dark:bg-white/[0.01]">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-8">
-            Why keeping up is hard
-          </p>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {[
-              {
-                icon: <Zap className="h-4 w-4 text-violet-400" />,
-                stat: '250+',
-                label: 'new APIs per WWDC',
-                note: 'Across frameworks, Swift packages, and platform updates',
-              },
-              {
-                icon: <Layers className="h-4 w-4 text-blue-400" />,
-                stat: '40+',
-                label: 'frameworks updated',
-                note: 'UIKit, SwiftUI, Foundation, ARKit, Core ML, and more',
-              },
-              {
-                icon: <Calendar className="h-4 w-4 text-emerald-400" />,
-                stat: '16 yrs',
-                label: 'of annual releases',
-                note: 'Apple has shipped a major SDK update every June since 2008',
-              },
-              {
-                icon: <Users className="h-4 w-4 text-orange-400" />,
-                stat: '34M+',
-                label: 'Apple developers',
-                note: 'All competing to learn and implement the same new APIs first',
-              },
-            ].map(item => (
-              <div key={item.stat} className="space-y-2">
-                <div className="flex items-center gap-2 mb-1">
-                  {item.icon}
-                </div>
-                <div className="text-3xl sm:text-4xl font-bold text-foreground tabular-nums">{item.stat}</div>
-                <div className="text-sm font-medium text-foreground/80">{item.label}</div>
-                <div className="text-xs text-muted-foreground leading-relaxed hidden sm:block">{item.note}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── How it works ── */}
       <section className="py-20 border-b border-border/50 dark:border-white/[0.05]">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
@@ -258,33 +212,49 @@ export default async function LandingPage() {
         )}
       </section>
 
-      {/* ── Why keeping up is hard ── */}
-      <section className="py-16 max-w-7xl mx-auto px-5 sm:px-8">
-        <p className="text-xs font-semibold text-muted-foreground/60 uppercase tracking-widest mb-6">Why keeping up is hard</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {[
-            {
-              icon: '🌊',
-              title: 'The firehose never stops',
-              desc: 'Apple ships 250+ new APIs every June — across UIKit, SwiftUI, Foundation, Core ML, ARKit, and dozens more. No one watches every session.',
-            },
-            {
-              icon: '⏳',
-              title: 'Docs lag the release',
-              desc: 'Official documentation trickles out over weeks. By the time it\'s complete, the beta cycle is half over and your competitors have already shipped.',
-            },
-            {
-              icon: '🧩',
-              title: 'Context is scattered',
-              desc: 'Code examples live in WWDC transcripts, sample projects, and blog posts spread across the internet — not in one place you can actually track.',
-            },
-          ].map(item => (
-            <div key={item.title} className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6 space-y-3">
-              <div className="text-2xl">{item.icon}</div>
-              <h3 className="font-semibold text-sm text-foreground">{item.title}</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
+      {/* ── Apple by the numbers ── */}
+      <section className="border-y border-border/50 dark:border-white/[0.05] bg-muted/20 dark:bg-white/[0.01]">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-8">
+            Why keeping up is hard
+          </p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {[
+              {
+                icon: <Zap className="h-4 w-4 text-violet-400" />,
+                stat: '250+',
+                label: 'new APIs per WWDC',
+                note: 'Across frameworks, Swift packages, and platform updates',
+              },
+              {
+                icon: <Layers className="h-4 w-4 text-blue-400" />,
+                stat: '40+',
+                label: 'frameworks updated',
+                note: 'UIKit, SwiftUI, Foundation, ARKit, Core ML, and more',
+              },
+              {
+                icon: <Calendar className="h-4 w-4 text-emerald-400" />,
+                stat: '16 yrs',
+                label: 'of annual releases',
+                note: 'Apple has shipped a major SDK update every June since 2008',
+              },
+              {
+                icon: <Users className="h-4 w-4 text-orange-400" />,
+                stat: '34M+',
+                label: 'Apple developers',
+                note: 'All competing to learn and implement the same new APIs first',
+              },
+            ].map(item => (
+              <div key={item.stat} className="space-y-2">
+                <div className="flex items-center gap-2 mb-1">
+                  {item.icon}
+                </div>
+                <div className="text-3xl sm:text-4xl font-bold text-foreground tabular-nums">{item.stat}</div>
+                <div className="text-sm font-medium text-foreground/80">{item.label}</div>
+                <div className="text-xs text-muted-foreground leading-relaxed hidden sm:block">{item.note}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
