@@ -14,6 +14,7 @@ import { ShareButtons } from '@/components/features/ShareButtons'
 import { AdminEditButton } from '@/components/admin/AdminEditButton'
 import { highlightSwift } from '@/lib/highlighter'
 import { SubscribeForm } from '@/components/layout/SubscribeForm'
+import { LoginGate } from '@/components/features/LoginGate'
 import { auth } from '@clerk/nextjs/server'
 import type { Metadata } from 'next'
 
@@ -225,99 +226,138 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
         </section>
       )}
 
-      {/* ── Demo ── */}
-      {demo && (
-        <section className="mb-12">
-          <div className="flex items-center gap-2.5 mb-5">
-            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
-              <FlaskConical className="h-3.5 w-3.5 text-emerald-400" />
-            </div>
-            <h2 className="text-lg font-semibold">Tiny Demo</h2>
-          </div>
-
-          <DemoSection
-            title={demo.title}
-            description={demo.description}
-            complexity={demo.complexity}
-            changeType={cap.changeType}
-            newCodeHtml={newCodeHtml}
-            oldCodeHtml={oldCodeHtml}
-            rawNewCode={demo.codeSnippet ?? null}
-            rawOldCode={demo.previousCodeSnippet ?? null}
-          />
-
-          {demo.repoUrl && (
-            <div className="mt-3 px-1">
-              <a
-                href={demo.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition-colors"
-              >
-                View full repo <ExternalLink className="h-3.5 w-3.5" />
-              </a>
-            </div>
-          )}
-        </section>
-      )}
-
-      {/* ── Sources ── */}
-      {allSources.length > 0 && (
-        <section className="mb-12">
-          <div className="flex items-center gap-2.5 mb-5">
-            <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
-              <BookOpen className="h-3.5 w-3.5 text-blue-400" />
-            </div>
-            <h2 className="text-lg font-semibold">Source map</h2>
-          </div>
-          <div className="space-y-2">
-            {allSources.map(src => (
-              <a
-                key={src.id}
-                href={src.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3.5 rounded-xl border border-white/[0.07] bg-white/[0.02] hover:border-violet-500/20 hover:bg-white/[0.05] transition-all group"
-              >
-                <span className="text-muted-foreground shrink-0">
-                  {SOURCE_ICONS[src.type] ?? <BookOpen className="h-4 w-4" />}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium group-hover:text-violet-400 transition-colors truncate">
-                    {src.title}
-                  </div>
-                  <div className="text-xs text-muted-foreground capitalize mt-0.5">
-                    {src.type.replace(/_/g, ' ')}{src.official ? ' · Official' : ''}
-                  </div>
+      {/* ── Gated content: Demo, Sources, Gotchas, Requirements ── */}
+      {userId ? (
+        <>
+          {/* ── Demo ── */}
+          {demo && (
+            <section className="mb-12">
+              <div className="flex items-center gap-2.5 mb-5">
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
+                  <FlaskConical className="h-3.5 w-3.5 text-emerald-400" />
                 </div>
-                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </a>
-            ))}
-          </div>
-        </section>
-      )}
+                <h2 className="text-lg font-semibold">Tiny Demo</h2>
+              </div>
 
-      {/* ── Gotchas ── */}
-      {cap.gotchas && (
-        <section className="mb-12">
-          <div className="flex items-center gap-2.5 mb-5">
-            <div className="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
-              <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
+              <DemoSection
+                title={demo.title}
+                description={demo.description}
+                complexity={demo.complexity}
+                changeType={cap.changeType}
+                newCodeHtml={newCodeHtml}
+                oldCodeHtml={oldCodeHtml}
+                rawNewCode={demo.codeSnippet ?? null}
+                rawOldCode={demo.previousCodeSnippet ?? null}
+              />
+
+              {demo.repoUrl && (
+                <div className="mt-3 px-1">
+                  <a
+                    href={demo.repoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition-colors"
+                  >
+                    View full repo <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* ── Sources ── */}
+          {allSources.length > 0 && (
+            <section className="mb-12">
+              <div className="flex items-center gap-2.5 mb-5">
+                <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+                  <BookOpen className="h-3.5 w-3.5 text-blue-400" />
+                </div>
+                <h2 className="text-lg font-semibold">Source map</h2>
+              </div>
+              <div className="space-y-2">
+                {allSources.map(src => (
+                  <a
+                    key={src.id}
+                    href={src.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-3.5 rounded-xl border border-white/[0.07] bg-white/[0.02] hover:border-violet-500/20 hover:bg-white/[0.05] transition-all group"
+                  >
+                    <span className="text-muted-foreground shrink-0">
+                      {SOURCE_ICONS[src.type] ?? <BookOpen className="h-4 w-4" />}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium group-hover:text-violet-400 transition-colors truncate">
+                        {src.title}
+                      </div>
+                      <div className="text-xs text-muted-foreground capitalize mt-0.5">
+                        {src.type.replace(/_/g, ' ')}{src.official ? ' · Official' : ''}
+                      </div>
+                    </div>
+                    <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* ── Gotchas ── */}
+          {cap.gotchas && (
+            <section className="mb-12">
+              <div className="flex items-center gap-2.5 mb-5">
+                <div className="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
+                  <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
+                </div>
+                <h2 className="text-lg font-semibold">Gotchas</h2>
+              </div>
+              <div className="rounded-2xl border border-amber-500/15 bg-amber-500/[0.04] p-5">
+                <p className="text-sm text-muted-foreground leading-relaxed">{cap.gotchas}</p>
+              </div>
+            </section>
+          )}
+
+          {/* ── Requirements ── */}
+          {cap.hardwareConstraints && (
+            <section className="mb-12">
+              <h2 className="text-lg font-semibold mb-3">Requirements</h2>
+              <p className="text-sm text-muted-foreground leading-relaxed">{cap.hardwareConstraints}</p>
+            </section>
+          )}
+        </>
+      ) : (
+        <div className="mb-12">
+          {/* Blurred teaser of what's below */}
+          <div className="relative mb-4 rounded-2xl overflow-hidden pointer-events-none select-none">
+            <div className="p-5 space-y-3 opacity-40 blur-[3px]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20" />
+                <div className="h-4 w-24 rounded bg-white/10" />
+              </div>
+              <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 space-y-2">
+                <div className="h-3 w-3/4 rounded bg-white/10" />
+                <div className="h-3 w-full rounded bg-white/10" />
+                <div className="h-3 w-2/3 rounded bg-white/10" />
+                <div className="h-3 w-5/6 rounded bg-white/10" />
+                <div className="h-3 w-1/2 rounded bg-white/10" />
+              </div>
+              <div className="flex items-center gap-2.5 mt-5">
+                <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20" />
+                <div className="h-4 w-16 rounded bg-white/10" />
+              </div>
+              <div className="rounded-xl border border-amber-500/15 p-4 space-y-2">
+                <div className="h-3 w-full rounded bg-white/10" />
+                <div className="h-3 w-4/5 rounded bg-white/10" />
+              </div>
             </div>
-            <h2 className="text-lg font-semibold">Gotchas</h2>
+            {/* Fade gradient over the bottom half */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/60 to-background" />
           </div>
-          <div className="rounded-2xl border border-amber-500/15 bg-amber-500/[0.04] p-5">
-            <p className="text-sm text-muted-foreground leading-relaxed">{cap.gotchas}</p>
-          </div>
-        </section>
-      )}
 
-      {/* ── Requirements ── */}
-      {cap.hardwareConstraints && (
-        <section className="mb-12">
-          <h2 className="text-lg font-semibold mb-3">Requirements</h2>
-          <p className="text-sm text-muted-foreground leading-relaxed">{cap.hardwareConstraints}</p>
-        </section>
+          <LoginGate
+            title="Sign in to unlock the full breakdown"
+            description={`Code demos, gotchas, source references${allSources.length > 0 ? ` (${allSources.length} sources)` : ''} and progress tracking are available to registered users — free.`}
+          />
+        </div>
       )}
 
       {/* ── Email nudge for logged-out users ── */}

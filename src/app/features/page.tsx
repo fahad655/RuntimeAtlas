@@ -7,6 +7,8 @@ import { RequestForm } from '@/components/features/RequestForm'
 import { Suspense } from 'react'
 import { getGroupFrameworks } from '@/lib/frameworkGroups'
 import { Sparkles, RefreshCw, AlertTriangle, FlaskConical } from 'lucide-react'
+import { LoginGate } from '@/components/features/LoginGate'
+import { auth } from '@clerk/nextjs/server'
 import type { Category } from '@/types'
 
 export const revalidate = 60
@@ -151,6 +153,7 @@ function groupByPlatform(caps: Cap[]) {
 
 export default async function FeaturesPage({ searchParams }: PageProps) {
   const sp = await searchParams
+  const { userId } = await auth()
   const caps = await getCapabilities(sp)
   const platformGroups = groupByPlatform(caps)
   const isFiltered = !!(sp.category && sp.category !== 'All') || !!sp.framework || !!sp.changeType || sp.hasDemo === 'true' || !!sp.q
@@ -187,8 +190,10 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
       ) : (
         // Grouped: platform → change type
         <div className="space-y-16 mt-8">
-          {platformGroups.map(({ os, total, subGroups }) => {
+          {platformGroups.map(({ os, total, subGroups }, idx) => {
             const osCfg = OS_CONFIG[os]
+            // Gate all platforms after the first one for logged-out users
+            if (!userId && idx > 0) return null
             return (
               <section key={os}>
                 {/* Platform header */}
@@ -246,6 +251,51 @@ export default async function FeaturesPage({ searchParams }: PageProps) {
               </section>
             )
           })}
+
+          {/* Gate for logged-out users — shown after first platform */}
+          {!userId && platformGroups.length > 1 && (
+            <div className="relative">
+              {/* Skeleton preview of locked platforms */}
+              <div className="pointer-events-none select-none space-y-8 opacity-40 blur-[2px]">
+                {[...Array(2)].map((_, i) => (
+                  <div key={i}>
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="h-3 w-3 rounded-full bg-white/20" />
+                      <div className="h-6 w-20 rounded-lg bg-white/10" />
+                      <div className="h-5 w-16 rounded-full bg-white/[0.06]" />
+                      <div className="flex-1 h-px bg-white/[0.06]" />
+                    </div>
+                    <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl bg-white/[0.06]" />
+                        <div className="space-y-1.5">
+                          <div className="h-3 w-24 rounded bg-white/10" />
+                          <div className="h-2.5 w-40 rounded bg-white/[0.06]" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                      {[...Array(4)].map((_, j) => (
+                        <div key={j} className="h-36 rounded-2xl border border-white/[0.06] bg-white/[0.02]" />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Fade + gate overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/70 to-background" />
+              <div className="absolute inset-x-0 bottom-0 flex justify-center pb-8 px-4">
+                <div className="w-full max-w-md">
+                  <LoginGate
+                    variant="banner"
+                    title={`${caps.length - platformGroups[0].total} more capabilities across ${platformGroups.length - 1} other platform${platformGroups.length > 2 ? 's' : ''}`}
+                    description="macOS, watchOS, visionOS and Developer Tools capabilities are available to registered users — free to sign up."
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
