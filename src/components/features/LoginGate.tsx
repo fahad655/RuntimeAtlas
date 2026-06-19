@@ -1,6 +1,6 @@
 'use client'
 import { SignInButton, SignUpButton } from '@clerk/nextjs'
-import { Lock } from 'lucide-react'
+import { Lock, Code2, FlaskConical, TrendingUp, Flame } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -34,7 +34,22 @@ export function LoginGate({ title, description, variant = 'inline' }: Props) {
         </div>
 
         <h3 className="text-base font-semibold mb-1.5">{title}</h3>
-        <p className="text-sm text-muted-foreground max-w-sm leading-relaxed mb-6">{description}</p>
+        <p className="text-sm text-muted-foreground max-w-sm leading-relaxed mb-5">{description}</p>
+
+        {/* Feature highlights */}
+        <div className="flex flex-col gap-2 mb-6 text-left w-full max-w-xs">
+          {[
+            { icon: <Code2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />, text: 'Runnable Swift code for every API' },
+            { icon: <FlaskConical className="h-3.5 w-3.5 text-violet-400 shrink-0" />, text: 'Before/after diffs and gotchas' },
+            { icon: <TrendingUp className="h-3.5 w-3.5 text-blue-400 shrink-0" />, text: 'Track which APIs you\'ve shipped' },
+            { icon: <Flame className="h-3.5 w-3.5 text-orange-400 shrink-0" />, text: 'Daily streak to stay consistent' },
+          ].map(({ icon, text }) => (
+            <div key={text} className="flex items-center gap-2.5 text-xs text-muted-foreground">
+              {icon}
+              {text}
+            </div>
+          ))}
+        </div>
 
         <div className="flex items-center gap-2.5">
           <SignUpButton mode="modal">
