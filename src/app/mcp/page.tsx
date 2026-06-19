@@ -112,12 +112,16 @@ export default async function McpPage() {
           Connect your AI coding assistant directly to SwiftChronicle. Query iOS 27 capabilities, pull real Swift code demos, and get migration estimates — without leaving your editor.
         </p>
 
-        {/* Connection URL */}
-        <div className="mt-8 flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3">
-          <code className="flex-1 text-sm font-mono text-violet-300 truncate">{MCP_URL}</code>
-          <CopyButton code={MCP_URL} />
-        </div>
-        <p className="text-xs text-muted-foreground mt-2">No authentication required · Public read access · Stateless</p>
+        {/* Connection URL — only shown to logged-in users */}
+        {userId && (
+          <>
+            <div className="mt-8 flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3">
+              <code className="flex-1 text-sm font-mono text-violet-300 truncate">{MCP_URL}</code>
+              <CopyButton code={MCP_URL} />
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">No authentication required · Public read access · Stateless</p>
+          </>
+        )}
       </div>
 
       {/* Gated content */}
