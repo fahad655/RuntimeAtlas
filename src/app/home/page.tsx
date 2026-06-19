@@ -38,9 +38,12 @@ export default async function HomePage() {
       .onConflictDoUpdate({ target: userProfiles.clerkId, set: { email: clerkEmail, updatedAt: sql`now()` } })
   }
 
-  const streakExpired = streak?.lastActivityAt
-    ? Math.floor((Date.now() - streak.lastActivityAt.getTime()) / 86_400_000) >= 2
-    : true
+  const todayStr = new Date().toISOString().slice(0, 10)
+  const lastStr = streak?.lastActivityAt ? streak.lastActivityAt.toISOString().slice(0, 10) : null
+  const calDayDiff = lastStr
+    ? Math.round((new Date(todayStr).getTime() - new Date(lastStr).getTime()) / 86_400_000)
+    : Infinity
+  const streakExpired = calDayDiff >= 2
   const currentStreak = streakExpired ? 0 : (streak?.currentStreak ?? 0)
   const longestStreak = streak?.longestStreak ?? 0
 
@@ -159,7 +162,7 @@ export default async function HomePage() {
               {currentStreak}
               <span className="text-muted-foreground text-base font-normal"> days</span>
             </p>
-            <p className="text-xs text-muted-foreground mt-0.5">best: {longestStreak} · resets 72h</p>
+            <p className="text-xs text-muted-foreground mt-0.5">best: {longestStreak} · skipping 2 days resets it</p>
           </div>
         </div>
 

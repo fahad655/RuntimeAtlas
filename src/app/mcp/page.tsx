@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { CopyButton } from '@/components/features/CopyButton'
+import { LoginGate } from '@/components/features/LoginGate'
+import { auth } from '@clerk/nextjs/server'
 
 export const metadata: Metadata = {
   title: 'MCP Server',
@@ -94,7 +96,9 @@ const INTEGRATIONS = [
   },
 ]
 
-export default function McpPage() {
+export default async function McpPage() {
+  const { userId } = await auth()
+
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 animate-page-enter">
 
@@ -116,76 +120,86 @@ export default function McpPage() {
         <p className="text-xs text-muted-foreground mt-2">No authentication required · Public read access · Stateless</p>
       </div>
 
-      {/* Tools */}
-      <section className="mb-16">
-        <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">5 tools available</h2>
-        <div className="space-y-4">
-          {TOOLS.map(tool => (
-            <div key={tool.name} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-5">
-              <div className="flex items-start justify-between gap-4 mb-3">
-                <code className="text-sm font-mono font-semibold text-violet-300">{tool.name}</code>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4">{tool.description}</p>
-
-              {/* Parameters */}
-              <div className="space-y-1.5 mb-4">
-                {tool.params.map(p => (
-                  <div key={p.name} className="flex items-start gap-3 text-xs">
-                    <code className="text-emerald-400 shrink-0 w-36">{p.name}</code>
-                    <span className="text-muted-foreground/50 shrink-0 font-mono">{p.type}</span>
-                    <span className="text-muted-foreground">{p.desc}</span>
+      {/* Gated content */}
+      {userId ? (
+        <>
+          {/* Tools */}
+          <section className="mb-16">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">5 tools available</h2>
+            <div className="space-y-4">
+              {TOOLS.map(tool => (
+                <div key={tool.name} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-5">
+                  <div className="flex items-start justify-between gap-4 mb-3">
+                    <code className="text-sm font-mono font-semibold text-violet-300">{tool.name}</code>
                   </div>
-                ))}
-              </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{tool.description}</p>
 
-              {/* Example */}
-              <div className="rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2">
-                <p className="text-[11px] text-muted-foreground/50 uppercase tracking-wider mb-1">Example prompt</p>
-                <p className="text-xs text-muted-foreground italic">&ldquo;{tool.example}&rdquo;</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+                  {/* Parameters */}
+                  <div className="space-y-1.5 mb-4">
+                    {tool.params.map(p => (
+                      <div key={p.name} className="flex items-start gap-3 text-xs">
+                        <code className="text-emerald-400 shrink-0 w-36">{p.name}</code>
+                        <span className="text-muted-foreground/50 shrink-0 font-mono">{p.type}</span>
+                        <span className="text-muted-foreground">{p.desc}</span>
+                      </div>
+                    ))}
+                  </div>
 
-      {/* Integrations */}
-      <section className="mb-16">
-        <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">Connect your editor</h2>
-        <div className="space-y-4">
-          {INTEGRATIONS.map(int => (
-            <div key={int.name} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-5">
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <h3 className="font-semibold text-sm">{int.name}</h3>
-                <CopyButton code={int.code} />
-              </div>
-              <p className="text-xs text-muted-foreground mb-3">{int.description}</p>
-              <pre className="text-xs font-mono bg-white/[0.03] rounded-lg p-3 overflow-x-auto text-muted-foreground whitespace-pre-wrap break-all">
-                {int.code}
-              </pre>
+                  {/* Example */}
+                  <div className="rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2">
+                    <p className="text-[11px] text-muted-foreground/50 uppercase tracking-wider mb-1">Example prompt</p>
+                    <p className="text-xs text-muted-foreground italic">&ldquo;{tool.example}&rdquo;</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
 
-      {/* What you can ask */}
-      <section>
-        <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">What you can ask</h2>
-        <div className="rounded-xl border border-white/[0.07] overflow-hidden divide-y divide-white/[0.05]">
-          {[
-            'What are the highest-impact new APIs in iOS 27 for a notes app?',
-            'Show me how to use the Foundation Models framework with a Swift code example.',
-            'My app uses ObservableObject and ActivityKit. What changed in iOS 27?',
-            'What\'s the before/after diff for the updated App Intents API?',
-            'How long would it take to add Liquid Glass controls to my app?',
-            'List all deprecated APIs in iOS 27 that I need to remove.',
-          ].map((q, i) => (
-            <div key={i} className="flex items-start gap-3 px-5 py-3.5">
-              <span className="text-muted-foreground/30 font-mono text-xs shrink-0 mt-0.5 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-              <p className="text-sm text-muted-foreground italic">&ldquo;{q}&rdquo;</p>
+          {/* Integrations */}
+          <section className="mb-16">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">Connect your editor</h2>
+            <div className="space-y-4">
+              {INTEGRATIONS.map(int => (
+                <div key={int.name} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-5">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <h3 className="font-semibold text-sm">{int.name}</h3>
+                    <CopyButton code={int.code} />
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-3">{int.description}</p>
+                  <pre className="text-xs font-mono bg-white/[0.03] rounded-lg p-3 overflow-x-auto text-muted-foreground whitespace-pre-wrap break-all">
+                    {int.code}
+                  </pre>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
+
+          {/* What you can ask */}
+          <section>
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">What you can ask</h2>
+            <div className="rounded-xl border border-white/[0.07] overflow-hidden divide-y divide-white/[0.05]">
+              {[
+                'What are the highest-impact new APIs in iOS 27 for a notes app?',
+                'Show me how to use the Foundation Models framework with a Swift code example.',
+                'My app uses ObservableObject and ActivityKit. What changed in iOS 27?',
+                'What\'s the before/after diff for the updated App Intents API?',
+                'How long would it take to add Liquid Glass controls to my app?',
+                'List all deprecated APIs in iOS 27 that I need to remove.',
+              ].map((q, i) => (
+                <div key={i} className="flex items-start gap-3 px-5 py-3.5">
+                  <span className="text-muted-foreground/30 font-mono text-xs shrink-0 mt-0.5 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                  <p className="text-sm text-muted-foreground italic">&ldquo;{q}&rdquo;</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </>
+      ) : (
+        <LoginGate
+          title="Sign in to access the MCP server"
+          description="Connect Claude Code, Cursor, or Windsurf directly to SwiftChronicle — query iOS 27 capabilities and get Swift code without leaving your editor."
+        />
+      )}
     </div>
   )
 }

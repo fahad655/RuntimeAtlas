@@ -1,6 +1,6 @@
 'use client'
 import { SignInButton, SignUpButton } from '@clerk/nextjs'
-import { Lock, Code2, FlaskConical, TrendingUp, Flame } from 'lucide-react'
+import { Lock, Code2, FlaskConical, TrendingUp, Flame, Terminal } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -43,6 +43,7 @@ export function LoginGate({ title, description, variant = 'inline' }: Props) {
             { icon: <FlaskConical className="h-3.5 w-3.5 text-violet-400 shrink-0" />, text: 'Before/after diffs and gotchas' },
             { icon: <TrendingUp className="h-3.5 w-3.5 text-blue-400 shrink-0" />, text: 'Track which APIs you\'ve shipped' },
             { icon: <Flame className="h-3.5 w-3.5 text-orange-400 shrink-0" />, text: 'Daily streak to stay consistent' },
+            { icon: <Terminal className="h-3.5 w-3.5 text-zinc-400 shrink-0" />, text: 'MCP server for AI coding assistants' },
           ].map(({ icon, text }) => (
             <div key={text} className="flex items-center gap-2.5 text-xs text-muted-foreground">
               {icon}
