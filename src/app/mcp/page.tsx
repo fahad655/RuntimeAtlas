@@ -3,9 +3,23 @@ import { CopyButton } from '@/components/features/CopyButton'
 import { LoginGate } from '@/components/features/LoginGate'
 import { auth } from '@clerk/nextjs/server'
 
+const MCP_OG_IMG = '/api/og?name=SwiftChronicle+MCP+Server&summary=Connect+Claude+Code%2C+Cursor%2C+or+Windsurf+to+iOS+27+capability+data.+5+tools%3A+query+APIs%2C+get+Swift+code%2C+estimate+migration.&category=System&impact=5'
+
 export const metadata: Metadata = {
   title: 'MCP Server',
   description: 'Connect your AI coding assistant to SwiftChronicle — query iOS 27 capabilities, get Swift code, and estimate migration effort directly from your editor.',
+  openGraph: {
+    title: 'SwiftChronicle MCP Server',
+    description: 'Connect Claude Code, Cursor, or Windsurf to iOS 27 capability data. 5 tools: query APIs, get Swift code, estimate migration effort.',
+    url: 'https://swiftchronicle.com/mcp',
+    images: [{ url: MCP_OG_IMG, width: 1200, height: 630, alt: 'SwiftChronicle MCP Server' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SwiftChronicle MCP Server',
+    description: 'Connect Claude Code, Cursor, or Windsurf directly to iOS 27 capability data — 5 tools, no auth required.',
+    images: [MCP_OG_IMG],
+  },
 }
 
 const MCP_URL = 'https://swiftchronicle.com/api/mcp'

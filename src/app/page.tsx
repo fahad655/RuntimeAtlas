@@ -8,8 +8,28 @@ import { ParallaxContent } from '@/components/layout/HeroParallax'
 import Link from 'next/link'
 import { ArrowRight, Bell, TrendingUp, Code2, CheckCircle, ChevronRight, Calendar, Users, Layers, Zap } from 'lucide-react'
 import { SubscribeForm } from '@/components/layout/SubscribeForm'
+import type { Metadata } from 'next'
 
 export const revalidate = 60
+
+const HOME_OG_IMG = '/api/og?name=SwiftChronicle&summary=Every+iOS+27+SDK+capability+from+WWDC+2026.+Real+Swift+code%2C+before%2Fafter+diffs%2C+and+progress+tracking.&category=System&impact=5'
+
+export const metadata: Metadata = {
+  title: 'SwiftChronicle — iOS 27 SDK Reference',
+  description: 'Every new Swift & Apple platform capability from WWDC 2026 — real compilable Swift code, before/after diffs, and progress tracking.',
+  openGraph: {
+    title: 'SwiftChronicle — iOS 27 SDK Reference',
+    description: 'Every new Swift & Apple platform capability from WWDC 2026 — real compilable Swift code, before/after diffs, and progress tracking.',
+    url: 'https://swiftchronicle.com',
+    images: [{ url: HOME_OG_IMG, width: 1200, height: 630, alt: 'SwiftChronicle — iOS 27 SDK Reference' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SwiftChronicle — iOS 27 SDK Reference',
+    description: 'Every new Swift & Apple platform capability from WWDC 2026 — real compilable Swift code, before/after diffs, and progress tracking.',
+    images: [HOME_OG_IMG],
+  },
+}
 
 async function getData() {
   const [featured, countRow] = await Promise.all([

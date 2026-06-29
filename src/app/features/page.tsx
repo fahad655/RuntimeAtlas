@@ -9,8 +9,42 @@ import { getGroupFrameworks } from '@/lib/frameworkGroups'
 import { Sparkles, RefreshCw, AlertTriangle, FlaskConical } from 'lucide-react'
 import { PlatformLoginBanner } from '@/components/features/PlatformLoginBanner'
 import type { Category } from '@/types'
+import type { Metadata } from 'next'
 
 export const revalidate = 60
+
+const OG_IMG = '/api/og?name=iOS+27+Capabilities&summary=Browse+every+new%2C+updated%2C+and+deprecated+iOS+27+SDK+capability+from+WWDC+2026+across+Apple+platforms.&category=System&impact=5'
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const sp = await searchParams
+  const isFiltered = !!(sp.category && sp.category !== 'All') || !!sp.framework || !!sp.changeType || sp.hasDemo === 'true' || !!sp.q
+
+  if (isFiltered) {
+    return {
+      title: 'Browse iOS 27 Capabilities',
+      robots: { index: false, follow: true },
+      alternates: { canonical: 'https://swiftchronicle.com/features' },
+    }
+  }
+
+  return {
+    title: 'iOS 27 Capabilities',
+    description: 'Browse every new, updated, and deprecated iOS 27 SDK capability from WWDC 2026 — real Swift code, before/after diffs, and implementation guides.',
+    alternates: { canonical: 'https://swiftchronicle.com/features' },
+    openGraph: {
+      title: 'iOS 27 Capabilities — SwiftChronicle',
+      description: 'Browse every new, updated, and deprecated iOS 27 SDK capability from WWDC 2026 — real Swift code, before/after diffs, and implementation guides.',
+      url: 'https://swiftchronicle.com/features',
+      images: [{ url: OG_IMG, width: 1200, height: 630, alt: 'iOS 27 Capabilities — SwiftChronicle' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'iOS 27 Capabilities — SwiftChronicle',
+      description: 'Browse every new, updated, and deprecated iOS 27 SDK capability from WWDC 2026.',
+      images: [OG_IMG],
+    },
+  }
+}
 
 interface PageProps {
   searchParams: Promise<{ category?: string; framework?: string; changeType?: string; sort?: string; hasDemo?: string; q?: string }>

@@ -5,6 +5,7 @@ import { ArrowRight, Zap, BookOpen, CheckCircle, Code2, RefreshCw } from 'lucide
 export const metadata: Metadata = {
   title: 'About',
   description: 'SwiftChronicle turns Apple\'s annual SDK release into a structured, searchable reference — with real Swift code for every capability.',
+  authors: [{ name: 'Fahad Shafique' }],
 }
 
 export default function AboutPage() {
@@ -17,6 +18,7 @@ export default function AboutPage() {
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-tight mb-6">
           Built for developers who can&apos;t afford to miss a release.
         </h1>
+        <p className="text-xs text-muted-foreground mb-5">By Fahad Shafique</p>
         <p className="text-lg text-muted-foreground leading-relaxed">
           Every WWDC, Apple ships 250+ new APIs across dozens of frameworks. Most developers catch 20% of it in the keynote and spend the rest of the year discovering things they missed. SwiftChronicle exists to fix that.
         </p>

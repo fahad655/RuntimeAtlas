@@ -13,6 +13,8 @@ import Script from 'next/script'
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
 
+const DEFAULT_OG_IMG = '/api/og?name=SwiftChronicle&summary=Every+iOS+27+SDK+capability+from+WWDC+2026.+Real+Swift+code%2C+before%2Fafter+diffs%2C+progress+tracking.&category=System&impact=5'
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://swiftchronicle.com'),
   title: { default: 'SwiftChronicle', template: '%s — SwiftChronicle' },
@@ -22,6 +24,13 @@ export const metadata: Metadata = {
     description: 'Every new Swift & Apple platform capability from WWDC — real code, before/after diffs, and progress tracking.',
     type: 'website',
     url: 'https://swiftchronicle.com',
+    images: [{ url: DEFAULT_OG_IMG, width: 1200, height: 630, alt: 'SwiftChronicle — iOS 27 SDK reference' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SwiftChronicle',
+    description: 'Every new Swift & Apple platform capability from WWDC — real code, before/after diffs, and progress tracking.',
+    images: [DEFAULT_OG_IMG],
   },
 }
 

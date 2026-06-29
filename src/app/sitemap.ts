@@ -3,7 +3,20 @@ import { db } from '@/db'
 import { capabilities } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 
+export const revalidate = 3600
+
 const BASE = 'https://swiftchronicle.com'
+
+const STATIC_PAGES: MetadataRoute.Sitemap = [
+  { url: BASE,                   priority: 1.0, changeFrequency: 'daily' },
+  { url: `${BASE}/features`,     priority: 0.9, changeFrequency: 'daily' },
+  { url: `${BASE}/demos`,        priority: 0.8, changeFrequency: 'weekly' },
+  { url: `${BASE}/mcp`,          priority: 0.7, changeFrequency: 'monthly' },
+  { url: `${BASE}/launch`,       priority: 0.5, changeFrequency: 'monthly' },
+  { url: `${BASE}/about`,        priority: 0.5, changeFrequency: 'monthly' },
+  { url: `${BASE}/privacy`,      priority: 0.3, changeFrequency: 'yearly' },
+  { url: `${BASE}/terms`,        priority: 0.3, changeFrequency: 'yearly' },
+]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const caps = await db
@@ -11,18 +24,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .from(capabilities)
     .where(eq(capabilities.status, 'ready'))
 
-  const capUrls = caps.map(c => ({
+  const capUrls: MetadataRoute.Sitemap = caps.map(c => ({
     url: `${BASE}/features/${c.slug}`,
-    lastModified: c.updatedAt ?? new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
+    lastModified: c.updatedAt ?? undefined,
   }))
 
-  return [
-    { url: BASE,             lastModified: new Date(), changeFrequency: 'daily',  priority: 1.0 },
-    { url: `${BASE}/features`, lastModified: new Date(), changeFrequency: 'daily',  priority: 0.9 },
-    { url: `${BASE}/demos`,    lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${BASE}/mcp`,      lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-    ...capUrls,
-  ]
+  return [...STATIC_PAGES, ...capUrls]
 }

@@ -1,0 +1,38 @@
+# SwiftChronicle
+
+> Every new Swift & Apple platform capability from WWDC — real Swift code, before/after diffs, and progress tracking.
+
+SwiftChronicle is an independent iOS SDK reference that catalogues every new, updated, and deprecated API from WWDC 2026 (iOS 27, macOS 15, watchOS 11, visionOS 3). Each capability includes a real compilable Swift code demo, an impact score (1–5), and for updated APIs, a before/after diff showing exactly what changed.
+
+## Browse capabilities
+
+- All capabilities: https://swiftchronicle.com/features
+- Filter by category: ?category=AI, ?category=UI, ?category=Performance, ?category=Safety, ?category=Store, ?category=System
+- Filter by change type: ?changeType=new, ?changeType=updated, ?changeType=deprecated
+- Filter by framework: ?framework=FoundationModels, ?framework=SwiftUI, ?framework=ActivityKit, etc.
+- Full-text search: ?q=your+search+term
+
+## MCP Server
+
+SwiftChronicle exposes a Streamable HTTP MCP server for AI coding assistants.
+
+URL: https://swiftchronicle.com/api/mcp
+
+Tools available:
+- list_capabilities — Search and filter iOS 27 capabilities by category, framework, change type, or keyword
+- get_capability — Get full details, compilable Swift code demo, and gotchas for a specific capability
+- find_affected_apis — Given framework names or API symbols, find which iOS 27 capabilities are relevant
+- get_migration_diff — Get side-by-side before/after Swift code for updated APIs
+- estimate_migration — Estimate the effort and risk to adopt a capability in a given project context
+
+Compatible with: Claude Code, Cursor, Windsurf, Zed, and any MCP-compatible assistant.
+
+## Content provenance
+
+All capability content is derived from Apple's official WWDC 2026 session videos and developer documentation at developer.apple.com. Classification and Swift code generation is done using Claude (Anthropic). Each capability goes through human review before publishing.
+
+SwiftChronicle is an independent project and is not affiliated with or endorsed by Apple Inc.
+
+## Contact
+
+Built by Fahad Shafique — https://swiftchronicle.com/about
