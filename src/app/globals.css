@@ -47,7 +47,7 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
   /* Page-enter animation — used as className="animate-page-enter" on every page root */
-  --animate-page-enter: page-enter 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-page-enter: page-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-float: float 7s ease-in-out infinite;
   --animate-shimmer: shimmer 2.2s linear infinite;
 }
@@ -125,8 +125,8 @@
 
 /* Page-enter keyframe */
 @keyframes page-enter {
-  from { opacity: 0; transform: translateY(28px) scale(0.96); filter: blur(4px); }
-  to   { opacity: 1; transform: translateY(0)    scale(1);    filter: blur(0px); }
+  from { opacity: 0.001; transform: translateY(28px) scale(0.96); }
+  to   { opacity: 1;     transform: translateY(0)    scale(1);    }
 }
 
 @keyframes float {

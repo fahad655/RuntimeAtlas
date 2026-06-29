@@ -21,7 +21,7 @@ const PUBLIC_NAV = [
 
 function AuthSection() {
   const { isSignedIn, isLoaded } = useUser()
-  if (!isLoaded) return <div className="w-20" />
+  if (!isLoaded) return <div className="w-32" />
   if (isSignedIn) {
     return (
       <div className="flex items-center gap-3">

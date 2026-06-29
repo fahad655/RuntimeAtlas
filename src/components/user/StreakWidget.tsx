@@ -12,7 +12,8 @@ export function StreakWidget() {
     fetch('/api/user/profile').then(r => r.json()).then(d => setStreak(d.currentStreak ?? 0))
   }, [isSignedIn])
 
-  if (!isLoaded || !isSignedIn || streak === null) return null
+  if (!isLoaded || !isSignedIn) return null
+  if (streak === null) return <div className="w-8 h-4" aria-hidden />
 
   const active = streak > 0
 
