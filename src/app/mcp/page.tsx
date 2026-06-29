@@ -96,11 +96,36 @@ const INTEGRATIONS = [
   },
 ]
 
+const mcpJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://swiftchronicle.com/mcp',
+    name: 'SwiftChronicle MCP Server',
+    description: 'Connect your AI coding assistant to SwiftChronicle — query iOS 27 capabilities, get Swift code, and estimate migration effort directly from your editor.',
+    url: 'https://swiftchronicle.com/mcp',
+    publisher: { '@type': 'Organization', name: 'SwiftChronicle', url: 'https://swiftchronicle.com' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'SwiftChronicle MCP Server',
+    description: 'Model Context Protocol server for Claude Code, Cursor, and Windsurf — provides iOS 27 capability queries, Swift code snippets, before/after diffs, and migration estimates.',
+    applicationCategory: 'DeveloperApplication',
+    applicationSubCategory: 'MCP Server',
+    operatingSystem: 'Web',
+    url: 'https://swiftchronicle.com/mcp',
+    publisher: { '@type': 'Organization', name: 'SwiftChronicle', url: 'https://swiftchronicle.com' },
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  },
+]
+
 export default async function McpPage() {
   const { userId } = await auth()
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 animate-page-enter">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(mcpJsonLd) }} />
 
       {/* Hero */}
       <div className="mb-14">

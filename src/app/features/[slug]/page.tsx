@@ -16,6 +16,7 @@ import { highlightSwift } from '@/lib/highlighter'
 import { SubscribeForm } from '@/components/layout/SubscribeForm'
 import { LoginGate } from '@/components/features/LoginGate'
 import { auth } from '@clerk/nextjs/server'
+import { cache } from 'react'
 import type { Metadata } from 'next'
 
 export const revalidate = 300
@@ -36,7 +37,7 @@ const SOURCE_ICONS: Record<string, React.ReactNode> = {
   doc_page:      <BookOpen className="h-4 w-4" />,
 }
 
-async function getData(slug: string) {
+const getData = cache(async function getData(slug: string) {
   const [cap] = await db.select().from(capabilities).where(eq(capabilities.slug, slug)).limit(1)
   if (!cap) return null
   const [capSources, capDemos] = await Promise.all([
@@ -44,7 +45,7 @@ async function getData(slug: string) {
     cap.demoId ? db.select().from(demos).where(eq(demos.id, cap.demoId)) : Promise.resolve([]),
   ])
   return { cap, sources: capSources, demo: capDemos[0] ?? null }
-}
+})
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
@@ -87,22 +88,42 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
       : null,
   ])
 
+  const ogImageUrl = `https://swiftchronicle.com/api/og?name=${encodeURIComponent(cap.name)}&summary=${encodeURIComponent(cap.summary)}&category=${cap.category}&impact=${cap.impactScore}&changeType=${cap.changeType}`
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'TechArticle',
     headline: cap.name,
     description: cap.summary,
+    url: `https://swiftchronicle.com/features/${cap.slug}`,
     keywords: [...cap.frameworks, 'iOS 27', 'WWDC 2026', 'Swift', cap.category].join(', '),
     datePublished: cap.createdAt.toISOString(),
     dateModified: cap.updatedAt.toISOString(),
+    image: { '@type': 'ImageObject', url: ogImageUrl, width: 1200, height: 630 },
     author: { '@type': 'Organization', name: 'SwiftChronicle', url: 'https://swiftchronicle.com' },
-    publisher: { '@type': 'Organization', name: 'SwiftChronicle', url: 'https://swiftchronicle.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'SwiftChronicle',
+      url: 'https://swiftchronicle.com',
+      logo: { '@type': 'ImageObject', url: 'https://swiftchronicle.com/apple-touch-icon.png', width: 180, height: 180 },
+    },
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://swiftchronicle.com/features/${cap.slug}` },
+  }
+
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://swiftchronicle.com' },
+      { '@type': 'ListItem', position: 2, name: 'Capabilities', item: 'https://swiftchronicle.com/features' },
+      { '@type': 'ListItem', position: 3, name: cap.name, item: `https://swiftchronicle.com/features/${cap.slug}` },
+    ],
   }
 
   return (
     <div className="max-w-2xl mx-auto px-5 sm:px-6 py-12 animate-page-enter">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <ViewTracker slug={slug} />
 
       {/* Back */}

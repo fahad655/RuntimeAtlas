@@ -22,11 +22,48 @@ async function getData() {
   return { featured, total: Number(countRow[0]?.count ?? 0) }
 }
 
+const homepageJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': 'https://swiftchronicle.com/#website',
+    name: 'SwiftChronicle',
+    url: 'https://swiftchronicle.com',
+    description: 'Every new Swift & Apple platform capability from WWDC — real code, before/after diffs, and progress tracking.',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: { '@type': 'EntryPoint', urlTemplate: 'https://swiftchronicle.com/features?q={search_term_string}' },
+      'query-input': 'required name=search_term_string',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': 'https://swiftchronicle.com/#org',
+    name: 'SwiftChronicle',
+    url: 'https://swiftchronicle.com',
+    logo: { '@type': 'ImageObject', url: 'https://swiftchronicle.com/apple-touch-icon.png', width: 180, height: 180 },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    '@id': 'https://swiftchronicle.com/#app',
+    name: 'SwiftChronicle',
+    url: 'https://swiftchronicle.com',
+    description: 'Every new Swift & Apple platform capability from WWDC — real code, before/after diffs, and progress tracking.',
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Web',
+    publisher: { '@id': 'https://swiftchronicle.com/#org' },
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  },
+]
+
 export default async function LandingPage() {
   const { featured, total } = await getData()
 
   return (
     <div className="min-h-screen animate-page-enter">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageJsonLd) }} />
 
       {/* ── Hero ── */}
       <section className="relative min-h-[calc(100dvh-4rem)] flex items-center overflow-hidden">
