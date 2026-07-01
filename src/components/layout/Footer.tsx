@@ -4,6 +4,7 @@ const PRODUCT_LINKS = [
   { href: '/features', label: 'Capabilities' },
   { href: '/demos',    label: 'Demos' },
   { href: '/mcp',      label: 'MCP Server' },
+  { href: '/blog',     label: 'Blog' },
   { href: '/launch',   label: 'What\'s New' },
 ]
 

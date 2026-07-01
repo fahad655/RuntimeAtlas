@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { capabilities, sources, demos } from '@/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, ne, and, desc } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
 import { ExternalLink, FlaskConical, Zap, BookOpen, Video, Code2, Sparkles, RefreshCw, ChevronLeft } from 'lucide-react'
@@ -77,11 +77,17 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
   const docSources = capSources.filter(s => s.type !== 'wwdc_session')
   const allSources = [...wwdcSources, ...docSources]
 
-  const [newCodeHtml, oldCodeHtml] = await Promise.all([
+  const [newCodeHtml, oldCodeHtml, related] = await Promise.all([
     demo?.codeSnippet ? highlightSwift(demo.codeSnippet) : null,
     demo?.previousCodeSnippet && cap.changeType === 'updated'
       ? highlightSwift(demo.previousCodeSnippet)
       : null,
+    db
+      .select({ slug: capabilities.slug, name: capabilities.name, summary: capabilities.summary, category: capabilities.category, changeType: capabilities.changeType })
+      .from(capabilities)
+      .where(and(eq(capabilities.status, 'ready'), eq(capabilities.category, cap.category), ne(capabilities.slug, cap.slug)))
+      .orderBy(desc(capabilities.impactScore))
+      .limit(4),
   ])
 
   const ogImageUrl = `https://swiftchronicle.com/api/og?name=${encodeURIComponent(cap.name)}&summary=${encodeURIComponent(cap.summary)}&category=${cap.category}&impact=${cap.impactScore}&changeType=${cap.changeType}`
@@ -295,6 +301,35 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
         hardwareConstraints={cap.hardwareConstraints ?? null}
         changeType={cap.changeType}
       />
+
+      {/* Related capabilities */}
+      {related.length >= 2 && (
+        <section className="mt-14 pt-10 border-t border-white/[0.05]">
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-5">
+            More in {cap.category}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {related.map(r => (
+              <Link
+                key={r.slug}
+                href={`/features/${r.slug}`}
+                className="group p-4 rounded-xl border border-white/[0.07] bg-white/[0.02] hover:border-violet-500/20 hover:bg-white/[0.04] transition-all"
+              >
+                <div className="flex items-start justify-between gap-2 mb-1.5">
+                  <span className="text-sm font-semibold group-hover:text-violet-400 transition-colors leading-snug">{r.name}</span>
+                  {r.changeType === 'new' && (
+                    <span className="shrink-0 text-[10px] font-semibold text-emerald-400 border border-emerald-500/25 bg-emerald-500/10 rounded-full px-1.5 py-0.5 mt-0.5">New</span>
+                  )}
+                  {r.changeType === 'deprecated' && (
+                    <span className="shrink-0 text-[10px] font-semibold text-red-400 border border-red-500/25 bg-red-500/10 rounded-full px-1.5 py-0.5 mt-0.5">Deprecated</span>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{r.summary}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Footer actions */}
       <div className="pt-4 border-t border-white/[0.05] space-y-4">
