@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { db } from '@/db'
 import { capabilities } from '@/db/schema'
-import { eq, desc, sql } from 'drizzle-orm'
+import { eq, desc } from 'drizzle-orm'
 import Link from 'next/link'
 import { Sparkles, RefreshCw, AlertTriangle, ChevronLeft, ArrowRight } from 'lucide-react'
 

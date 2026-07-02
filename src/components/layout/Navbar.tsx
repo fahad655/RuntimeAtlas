@@ -15,7 +15,7 @@ const PUBLIC_NAV = [
   { href: '/features', label: 'Capabilities' },
   { href: '/demos', label: 'Demos' },
   { href: '/mcp', label: 'MCP' },
-  { href: '/launch', label: 'Launch' },
+  { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'About' },
 ]
 

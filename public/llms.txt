@@ -12,6 +12,17 @@ SwiftChronicle is an independent iOS SDK reference that catalogues every new, up
 - Filter by framework: ?framework=FoundationModels, ?framework=SwiftUI, ?framework=ActivityKit, etc.
 - Full-text search: ?q=your+search+term
 
+## Blog — in-depth developer guides
+
+- Blog index: https://swiftchronicle.com/blog
+- iOS 27 On-Device AI & Apple Intelligence: https://swiftchronicle.com/blog/ios-27-apple-intelligence-apis
+- SwiftUI & Liquid Glass in iOS 27: https://swiftchronicle.com/blog/swiftui-ios-27-whats-new
+- WWDC 2026 Complete iOS 27 SDK API Reference: https://swiftchronicle.com/blog/wwdc-2026-complete-api-list
+- iOS 26 → iOS 27 Migration Guide: https://swiftchronicle.com/blog/ios-26-to-ios-27-migration
+- iOS 27 Breaking Changes & Deprecations: https://swiftchronicle.com/blog/ios-27-deprecations-breaking-changes
+- RealityKit & USDKit in iOS 27: https://swiftchronicle.com/blog/realitykit-usdkit-ios-27-spatial-computing
+- SwiftChronicle MCP Guide (Claude Code, Cursor, Windsurf): https://swiftchronicle.com/blog/swiftchronicle-mcp-ai-coding-assistant-guide
+
 ## MCP Server
 
 SwiftChronicle exposes a Streamable HTTP MCP server for AI coding assistants.

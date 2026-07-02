@@ -18,6 +18,19 @@ import type { Metadata } from 'next'
 
 export const revalidate = 300
 
+const SPATIAL_KWS = ['RealityKit', 'Reality Composer', 'USDKit', 'ARKit', 'RealityFoundation']
+
+function getClusterGuide(category: string, frameworks: string[], changeType: string): { url: string; title: string } | null {
+  if (frameworks.some(f => SPATIAL_KWS.some(kw => f.includes(kw)))) {
+    return { url: '/blog/realitykit-usdkit-ios-27-spatial-computing', title: 'RealityKit & USDKit in iOS 27' }
+  }
+  if (category === 'AI') return { url: '/blog/ios-27-apple-intelligence-apis', title: 'iOS 27 On-Device AI & Apple Intelligence' }
+  if (category === 'UI') return { url: '/blog/swiftui-ios-27-whats-new', title: 'SwiftUI & Liquid Glass in iOS 27' }
+  if (changeType === 'deprecated') return { url: '/blog/ios-27-deprecations-breaking-changes', title: 'iOS 27 Breaking Changes & Deprecations' }
+  if (changeType === 'updated') return { url: '/blog/ios-26-to-ios-27-migration', title: 'iOS 26 → iOS 27 Migration Guide' }
+  return null
+}
+
 const CATEGORY_COLORS: Record<string, string> = {
   AI:          'bg-purple-500/10 text-purple-400 border-purple-500/20',
   UI:          'bg-blue-500/10 text-blue-400 border-blue-500/20',
@@ -331,8 +344,26 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
         </section>
       )}
 
+      {/* Cluster guide — spoke-to-pillar link */}
+      {(() => {
+        const guide = getClusterGuide(cap.category, cap.frameworks, cap.changeType)
+        if (!guide) return null
+        return (
+          <div className="mt-12">
+            <div className="flex items-center gap-3 p-4 rounded-xl border border-white/[0.07] bg-white/[0.01] hover:border-violet-500/15 transition-colors">
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] text-muted-foreground/50 uppercase tracking-widest font-semibold mb-0.5">In-depth guide</p>
+                <Link href={guide.url} className="text-sm font-medium text-violet-400 hover:text-violet-300 transition-colors">
+                  {guide.title} →
+                </Link>
+              </div>
+            </div>
+          </div>
+        )
+      })()}
+
       {/* Footer actions */}
-      <div className="pt-4 border-t border-white/[0.05] space-y-4">
+      <div className="mt-6 pt-4 border-t border-white/[0.05] space-y-4">
         {/* Mark as completed — bottom CTA */}
         <ProgressButton capabilityId={cap.id} placement="bottom" />
 
