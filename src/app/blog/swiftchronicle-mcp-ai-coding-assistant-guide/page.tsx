@@ -88,8 +88,11 @@ export default function MCPGuidePage() {
         <p className="text-lg text-muted-foreground leading-relaxed mb-4">
           SwiftChronicle's MCP server lets your AI coding assistant query iOS 27 APIs in real time — without leaving your editor. Ask your assistant to find the Swift code for a capability, check which APIs changed in iOS 27, estimate migration effort, or list all deprecated UIKit methods. It speaks directly to the SwiftChronicle database via the Model Context Protocol.
         </p>
-        <p className="text-sm text-muted-foreground leading-relaxed">
+        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
           Setup takes under two minutes in any MCP-compatible editor. Here's how.
+        </p>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          The server requires a personal access token. <Link href="/mcp" className="text-violet-400 hover:text-violet-300">Sign in and generate one for free at swiftchronicle.com/mcp</Link>, then swap it in for <code className="text-xs bg-white/[0.07] rounded px-1.5 py-0.5">YOUR_TOKEN</code> below.
         </p>
       </div>
 
@@ -132,7 +135,10 @@ export default function MCPGuidePage() {
   "mcpServers": {
     "swiftchronicle": {
       "type": "http",
-      "url": "https://swiftchronicle.com/api/mcp"
+      "url": "https://swiftchronicle.com/api/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_TOKEN"
+      }
     }
   }
 }`}</pre>
@@ -152,9 +158,10 @@ export default function MCPGuidePage() {
               Open <strong>Settings → Cursor Settings → MCP</strong> and add a new server:
             </p>
             <div className="rounded-xl border border-white/[0.08] bg-black/40 p-4 overflow-x-auto">
-              <pre className="text-xs text-muted-foreground font-mono leading-relaxed whitespace-pre">{`Name: SwiftChronicle
-Type: Streamable HTTP
-URL:  https://swiftchronicle.com/api/mcp`}</pre>
+              <pre className="text-xs text-muted-foreground font-mono leading-relaxed whitespace-pre">{`Name:    SwiftChronicle
+Type:    Streamable HTTP
+URL:     https://swiftchronicle.com/api/mcp
+Headers: Authorization: Bearer YOUR_TOKEN`}</pre>
             </div>
             <p className="text-xs text-muted-foreground mt-2">
               Cursor will auto-discover tools on save. Ask anything in Composer with <code className="text-xs bg-white/[0.07] rounded px-1 py-0.5">@SwiftChronicle</code>.
@@ -172,7 +179,8 @@ URL:  https://swiftchronicle.com/api/mcp`}</pre>
             </p>
             <div className="rounded-xl border border-white/[0.08] bg-black/40 p-4 overflow-x-auto">
               <pre className="text-xs text-muted-foreground font-mono leading-relaxed whitespace-pre">{`Server URL: https://swiftchronicle.com/api/mcp
-Transport:  Streamable HTTP`}</pre>
+Transport:  Streamable HTTP
+Headers:    Authorization: Bearer YOUR_TOKEN`}</pre>
             </div>
           </div>
 
@@ -183,14 +191,18 @@ Transport:  Streamable HTTP`}</pre>
               Zed
             </h3>
             <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
-              In <code className="text-xs bg-white/[0.07] rounded px-1.5 py-0.5">~/.config/zed/settings.json</code>:
+              Zed connects over stdio, so it needs <code className="text-xs bg-white/[0.07] rounded px-1.5 py-0.5">mcp-remote</code> to bridge to our HTTP server and attach the token. In <code className="text-xs bg-white/[0.07] rounded px-1.5 py-0.5">~/.config/zed/settings.json</code>:
             </p>
             <div className="rounded-xl border border-white/[0.08] bg-black/40 p-4 overflow-x-auto">
               <pre className="text-xs text-muted-foreground font-mono leading-relaxed whitespace-pre">{`{
   "context_servers": {
     "swiftchronicle": {
-      "settings": {
-        "url": "https://swiftchronicle.com/api/mcp"
+      "command": {
+        "path": "npx",
+        "args": [
+          "-y", "mcp-remote", "https://swiftchronicle.com/api/mcp",
+          "--header", "Authorization:Bearer YOUR_TOKEN"
+        ]
       }
     }
   }
