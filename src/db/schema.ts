@@ -118,3 +118,16 @@ export const userStreaks = pgTable('user_streaks', {
   lastActivityAt: timestamp('last_activity_at'),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
+
+// ── MCP server access tokens ────────────────────────────────────────────────
+// One active token per user. Only the SHA-256 hash is stored — the raw token
+// is shown once at generation time and never persisted in plaintext.
+
+export const mcpTokens = pgTable('mcp_tokens', {
+  id: serial('id').primaryKey(),
+  clerkId: varchar('clerk_id', { length: 255 }).notNull().unique(),
+  tokenHash: varchar('token_hash', { length: 64 }).notNull().unique(), // sha256 hex
+  lastUsedAt: timestamp('last_used_at'),
+  revokedAt: timestamp('revoked_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
