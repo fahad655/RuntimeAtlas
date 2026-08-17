@@ -1,7 +1,14 @@
 import type { Metadata } from 'next'
 import { CopyButton } from '@/components/features/CopyButton'
-import { LoginGate } from '@/components/features/LoginGate'
-import { auth } from '@clerk/nextjs/server'
+import { McpTokenPanel } from '@/components/features/McpTokenPanel'
+
+// Turbopack (Next 16.2.9) fails to statically prerender this route when a
+// page-level (non-Navbar) component calls Clerk's useUser() directly — throws
+// "useUser can only be used within ClerkProvider" during the build's static
+// worker despite ClerkProvider wrapping the app correctly (reproduced with a
+// minimal repro component; Navbar's own useUser() usage is unaffected on
+// every other static page). Forcing this one route dynamic sidesteps it.
+export const dynamic = 'force-dynamic'
 
 const MCP_OG_IMG = '/api/og?name=SwiftChronicle+MCP+Server&summary=Connect+Claude+Code%2C+Cursor%2C+or+Windsurf+to+iOS+27+capability+data.+5+tools%3A+query+APIs%2C+get+Swift+code%2C+estimate+migration.&category=System&impact=5'
 
@@ -17,7 +24,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'SwiftChronicle MCP Server',
-    description: 'Connect Claude Code, Cursor, or Windsurf directly to iOS 27 capability data — 5 tools, no auth required.',
+    description: 'Connect Claude Code, Cursor, or Windsurf directly to iOS 27 capability data — 5 tools, personal access token required.',
     images: [MCP_OG_IMG],
   },
 }
@@ -28,7 +35,10 @@ const MCP_JSON = `{
   "mcpServers": {
     "swiftchronicle": {
       "type": "http",
-      "url": "https://swiftchronicle.com/api/mcp"
+      "url": "https://swiftchronicle.com/api/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_TOKEN"
+      }
     }
   }
 }`
@@ -88,22 +98,25 @@ const INTEGRATIONS = [
   },
   {
     name: 'Cursor',
-    description: 'Go to Settings → MCP → Add Server, paste the URL.',
-    code: MCP_URL,
+    description: 'Go to Settings → MCP → Add Server, paste the config into .cursor/mcp.json.',
+    code: MCP_JSON,
   },
   {
     name: 'Windsurf',
-    description: 'Open the MCP panel and add a new HTTP server with the URL.',
-    code: MCP_URL,
+    description: 'Open the MCP panel and add a new HTTP server with the URL and header below.',
+    code: MCP_JSON,
   },
   {
     name: 'Zed',
-    description: 'Add to your Zed settings under assistant.context_servers.',
+    description: 'Zed connects over stdio via mcp-remote — pass the token as a custom header.',
     code: `{
   "swiftchronicle": {
     "command": {
       "path": "npx",
-      "args": ["-y", "mcp-remote", "${MCP_URL}"]
+      "args": [
+        "-y", "mcp-remote", "${MCP_URL}",
+        "--header", "Authorization:Bearer YOUR_TOKEN"
+      ]
     }
   }
 }`,
@@ -134,9 +147,7 @@ const mcpJsonLd = [
   },
 ]
 
-export default async function McpPage() {
-  const { userId } = await auth()
-
+export default function McpPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 animate-page-enter">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(mcpJsonLd) }} />
@@ -151,98 +162,90 @@ export default async function McpPage() {
           Connect your AI coding assistant directly to SwiftChronicle. Query iOS 27 capabilities, pull real Swift code demos, and get migration estimates — without leaving your editor.
         </p>
 
-        {/* Connection URL — only shown to logged-in users */}
-        {userId && (
-          <>
-            <div className="mt-8 flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3">
-              <code className="flex-1 text-sm font-mono text-violet-300 truncate">{MCP_URL}</code>
-              <CopyButton code={MCP_URL} />
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">No authentication required · Public read access · Stateless</p>
-          </>
-        )}
+        <div className="mt-8 flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3">
+          <code className="flex-1 text-sm font-mono text-violet-300 truncate">{MCP_URL}</code>
+          <CopyButton code={MCP_URL} />
+        </div>
+        <p className="text-xs text-muted-foreground mt-2">Streamable HTTP · Requires a personal access token — free to sign up</p>
       </div>
 
-      {/* Gated content */}
-      {userId ? (
-        <>
-          {/* Tools */}
-          <section className="mb-16">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">5 tools available</h2>
-            <div className="space-y-4">
-              {TOOLS.map(tool => (
-                <div key={tool.name} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-5">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <code className="text-sm font-mono font-semibold text-violet-300">{tool.name}</code>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{tool.description}</p>
+      {/* Access token */}
+      <section className="mb-16">
+        <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">Access token</h2>
+        <McpTokenPanel />
+      </section>
 
-                  {/* Parameters */}
-                  <div className="space-y-1.5 mb-4">
-                    {tool.params.map(p => (
-                      <div key={p.name} className="flex items-start gap-3 text-xs">
-                        <code className="text-emerald-400 shrink-0 w-36">{p.name}</code>
-                        <span className="text-muted-foreground/50 shrink-0 font-mono">{p.type}</span>
-                        <span className="text-muted-foreground">{p.desc}</span>
-                      </div>
-                    ))}
-                  </div>
+      {/* Tools */}
+      <section className="mb-16">
+        <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">5 tools available</h2>
+        <div className="space-y-4">
+          {TOOLS.map(tool => (
+            <div key={tool.name} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-5">
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <code className="text-sm font-mono font-semibold text-violet-300">{tool.name}</code>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-4">{tool.description}</p>
 
-                  {/* Example */}
-                  <div className="rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2">
-                    <p className="text-[11px] text-muted-foreground/50 uppercase tracking-wider mb-1">Example prompt</p>
-                    <p className="text-xs text-muted-foreground italic">&ldquo;{tool.example}&rdquo;</p>
+              {/* Parameters */}
+              <div className="space-y-1.5 mb-4">
+                {tool.params.map(p => (
+                  <div key={p.name} className="flex items-start gap-3 text-xs">
+                    <code className="text-emerald-400 shrink-0 w-36">{p.name}</code>
+                    <span className="text-muted-foreground/50 shrink-0 font-mono">{p.type}</span>
+                    <span className="text-muted-foreground">{p.desc}</span>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+
+              {/* Example */}
+              <div className="rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2">
+                <p className="text-[11px] text-muted-foreground/50 uppercase tracking-wider mb-1">Example prompt</p>
+                <p className="text-xs text-muted-foreground italic">&ldquo;{tool.example}&rdquo;</p>
+              </div>
             </div>
-          </section>
+          ))}
+        </div>
+      </section>
 
-          {/* Integrations */}
-          <section className="mb-16">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">Connect your editor</h2>
-            <div className="space-y-4">
-              {INTEGRATIONS.map(int => (
-                <div key={int.name} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-5">
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <h3 className="font-semibold text-sm">{int.name}</h3>
-                    <CopyButton code={int.code} />
-                  </div>
-                  <p className="text-xs text-muted-foreground mb-3">{int.description}</p>
-                  <pre className="text-xs font-mono bg-white/[0.03] rounded-lg p-3 overflow-x-auto text-muted-foreground whitespace-pre-wrap break-all">
-                    {int.code}
-                  </pre>
-                </div>
-              ))}
+      {/* Integrations */}
+      <section className="mb-16">
+        <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">Connect your editor</h2>
+        <p className="text-xs text-muted-foreground mb-6">Replace <code className="text-violet-400">YOUR_TOKEN</code> with the token generated above.</p>
+        <div className="space-y-4">
+          {INTEGRATIONS.map(int => (
+            <div key={int.name} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-5">
+              <div className="flex items-start justify-between gap-2 mb-2">
+                <h3 className="font-semibold text-sm">{int.name}</h3>
+                <CopyButton code={int.code} />
+              </div>
+              <p className="text-xs text-muted-foreground mb-3">{int.description}</p>
+              <pre className="text-xs font-mono bg-white/[0.03] rounded-lg p-3 overflow-x-auto text-muted-foreground whitespace-pre-wrap break-all">
+                {int.code}
+              </pre>
             </div>
-          </section>
+          ))}
+        </div>
+      </section>
 
-          {/* What you can ask */}
-          <section>
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">What you can ask</h2>
-            <div className="rounded-xl border border-white/[0.07] overflow-hidden divide-y divide-white/[0.05]">
-              {[
-                'What are the highest-impact new APIs in iOS 27 for a notes app?',
-                'Show me how to use the Foundation Models framework with a Swift code example.',
-                'My app uses ObservableObject and ActivityKit. What changed in iOS 27?',
-                'What\'s the before/after diff for the updated App Intents API?',
-                'How long would it take to add Liquid Glass controls to my app?',
-                'List all deprecated APIs in iOS 27 that I need to remove.',
-              ].map((q, i) => (
-                <div key={i} className="flex items-start gap-3 px-5 py-3.5">
-                  <span className="text-muted-foreground/30 font-mono text-xs shrink-0 mt-0.5 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-                  <p className="text-sm text-muted-foreground italic">&ldquo;{q}&rdquo;</p>
-                </div>
-              ))}
+      {/* What you can ask */}
+      <section>
+        <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-6">What you can ask</h2>
+        <div className="rounded-xl border border-white/[0.07] overflow-hidden divide-y divide-white/[0.05]">
+          {[
+            'What are the highest-impact new APIs in iOS 27 for a notes app?',
+            'Show me how to use the Foundation Models framework with a Swift code example.',
+            'My app uses ObservableObject and ActivityKit. What changed in iOS 27?',
+            'What\'s the before/after diff for the updated App Intents API?',
+            'How long would it take to add Liquid Glass controls to my app?',
+            'List all deprecated APIs in iOS 27 that I need to remove.',
+          ].map((q, i) => (
+            <div key={i} className="flex items-start gap-3 px-5 py-3.5">
+              <span className="text-muted-foreground/30 font-mono text-xs shrink-0 mt-0.5 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+              <p className="text-sm text-muted-foreground italic">&ldquo;{q}&rdquo;</p>
             </div>
-          </section>
-        </>
-      ) : (
-        <LoginGate
-          title="Sign in to access the MCP server"
-          description="Connect Claude Code, Cursor, or Windsurf directly to SwiftChronicle — query iOS 27 capabilities and get Swift code without leaving your editor."
-        />
-      )}
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

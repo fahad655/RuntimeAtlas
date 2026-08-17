@@ -1,11 +1,42 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js'
 import { z } from 'zod'
 import { db } from '@/db'
-import { capabilities, demos } from '@/db/schema'
-import { and, eq, or, ilike } from 'drizzle-orm'
+import { capabilities, demos, mcpTokens } from '@/db/schema'
+import { and, eq, or, ilike, isNull } from 'drizzle-orm'
+import { hashMcpToken } from '@/lib/mcpToken'
 import type { Category } from '@/types'
+
+// Every tool call must present a personal access token generated at /mcp.
+// Static bearer token — deliberately NOT an OAuth challenge, so MCP clients
+// that support the `headers` config field (Claude Code, Cursor, Windsurf,
+// mcp-remote for Zed) attach it directly instead of falling back to an
+// OAuth discovery flow.
+async function authenticate(req: NextRequest): Promise<string | null> {
+  const authHeader = req.headers.get('authorization') ?? ''
+  const [scheme, rawToken] = authHeader.split(' ')
+  if (scheme?.toLowerCase() !== 'bearer' || !rawToken) return null
+
+  const tokenHash = hashMcpToken(rawToken)
+  const [row] = await db
+    .select({ clerkId: mcpTokens.clerkId })
+    .from(mcpTokens)
+    .where(and(eq(mcpTokens.tokenHash, tokenHash), isNull(mcpTokens.revokedAt)))
+    .limit(1)
+
+  if (!row) return null
+
+  db.update(mcpTokens).set({ lastUsedAt: new Date() }).where(eq(mcpTokens.tokenHash, tokenHash)).catch(() => {})
+  return row.clerkId
+}
+
+function unauthorized() {
+  return NextResponse.json(
+    { error: 'Unauthorized — generate a personal access token at https://swiftchronicle.com/mcp and pass it as "Authorization: Bearer <token>".' },
+    { status: 401 },
+  )
+}
 
 function buildServer() {
   const server = new McpServer({
@@ -178,6 +209,7 @@ function buildServer() {
 
 // Next.js App Router handler
 export async function POST(req: NextRequest) {
+  if (!(await authenticate(req))) return unauthorized()
   const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined })
   const server = buildServer()
   await server.connect(transport)
@@ -185,6 +217,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+  if (!(await authenticate(req))) return unauthorized()
   const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined })
   const server = buildServer()
   await server.connect(transport)
@@ -192,6 +225,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  if (!(await authenticate(req))) return unauthorized()
   const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined })
   const server = buildServer()
   await server.connect(transport)

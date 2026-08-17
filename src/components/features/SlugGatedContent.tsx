@@ -1,9 +1,6 @@
-'use client'
-import { useUser } from '@clerk/nextjs'
 import { FlaskConical, AlertTriangle, ExternalLink } from 'lucide-react'
-import { LoginGate } from '@/components/features/LoginGate'
 import { DemoSection } from '@/components/features/DemoSection'
-import { SubscribeForm } from '@/components/layout/SubscribeForm'
+import { DismissibleLoginBanner } from '@/components/features/DismissibleLoginBanner'
 
 interface DemoData {
   title: string
@@ -23,6 +20,10 @@ interface Props {
   changeType: string
 }
 
+// Public — every visitor (and Googlebot) sees the full demo code, gotchas,
+// and requirements. Sign-in is only needed to track progress/streaks, not
+// to read content, so this now just renders the sections plus a dismissible
+// nudge instead of blocking anything behind a login wall.
 export function SlugGatedContent({
   demo,
   newCodeHtml,
@@ -33,57 +34,6 @@ export function SlugGatedContent({
   hardwareConstraints,
   changeType,
 }: Props) {
-  const { isSignedIn, isLoaded } = useUser()
-
-  if (!isLoaded || !isSignedIn) {
-    return (
-      <>
-        <div className="mb-12">
-          {/* Blurred teaser */}
-          <div className="relative mb-4 rounded-2xl overflow-hidden pointer-events-none select-none">
-            <div className="p-5 space-y-3 opacity-40 blur-[3px]">
-              <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20" />
-                <div className="h-4 w-24 rounded bg-white/10" />
-              </div>
-              <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 space-y-2">
-                <div className="h-3 w-3/4 rounded bg-white/10" />
-                <div className="h-3 w-full rounded bg-white/10" />
-                <div className="h-3 w-2/3 rounded bg-white/10" />
-                <div className="h-3 w-5/6 rounded bg-white/10" />
-                <div className="h-3 w-1/2 rounded bg-white/10" />
-              </div>
-              <div className="flex items-center gap-2.5 mt-5">
-                <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20" />
-                <div className="h-4 w-16 rounded bg-white/10" />
-              </div>
-              <div className="rounded-xl border border-amber-500/15 p-4 space-y-2">
-                <div className="h-3 w-full rounded bg-white/10" />
-                <div className="h-3 w-4/5 rounded bg-white/10" />
-              </div>
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/60 to-background" />
-          </div>
-
-          {isLoaded && !isSignedIn && (
-            <LoginGate
-              title="Sign in to unlock the full breakdown"
-              description="Compilable Swift code demos and implementation gotchas are available to registered users — free to sign up."
-            />
-          )}
-        </div>
-
-        {isLoaded && !isSignedIn && (
-          <section className="mb-8 rounded-2xl border border-violet-500/15 bg-violet-500/[0.03] p-5">
-            <p className="text-sm font-semibold mb-0.5">More iOS 27 APIs land every week.</p>
-            <p className="text-xs text-muted-foreground mb-4">Get notified when new capabilities are published — no noise, just signal.</p>
-            <SubscribeForm source="capability-detail" compact />
-          </section>
-        )}
-      </>
-    )
-  }
-
   return (
     <>
       {/* Demo */}
@@ -144,6 +94,12 @@ export function SlugGatedContent({
           <p className="text-sm text-muted-foreground leading-relaxed">{hardwareConstraints}</p>
         </section>
       )}
+
+      <DismissibleLoginBanner
+        storageKey="sc_dismissed_detail_banner"
+        title="Sign in to track your progress"
+        description="Mark capabilities complete, build a streak, and get notified about new APIs — free to sign up."
+      />
     </>
   )
 }
