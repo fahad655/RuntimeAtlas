@@ -1,4 +1,4 @@
-export type Category = 'AI' | 'UI' | 'Performance' | 'Safety' | 'Store' | 'System'
+export type Category = 'AI' | 'UI' | 'Performance' | 'Safety' | 'Store' | 'System' | 'Foldables'
 export type CapabilityStatus = 'draft' | 'needs_review' | 'ready' | 'deprecated'
 export type Complexity = 'Simple' | 'Medium' | 'Advanced'
 export type DemoStatus = 'planned' | 'implemented' | 'deprecated'

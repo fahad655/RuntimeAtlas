@@ -37,9 +37,10 @@ const CATEGORY_COLORS: Record<string, string> = {
   Safety:      'bg-orange-500/10 text-orange-400 border-orange-500/20',
   Store:       'bg-teal-500/10 text-teal-400 border-teal-500/20',
   System:      'bg-zinc-500/10 text-zinc-400 border-zinc-500/20',
+  Foldables:   'bg-pink-500/10 text-pink-400 border-pink-500/20',
 }
 
-const CATEGORY_ORDER = ['AI', 'UI', 'Performance', 'Safety', 'Store', 'System'] as const
+const CATEGORY_ORDER = ['AI', 'UI', 'Performance', 'Safety', 'Store', 'System', 'Foldables'] as const
 
 const CHANGE_BADGES: Record<string, { label: string; icon: React.ReactNode; cls: string }> = {
   new:        { label: 'New',        icon: <Sparkles className="h-2.5 w-2.5" />,       cls: 'text-emerald-400 border-emerald-500/25 bg-emerald-500/10' },

@@ -37,6 +37,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   Safety:      'bg-orange-500/10 text-orange-400 border-orange-500/20',
   Store:       'bg-teal-500/10   text-teal-400   border-teal-500/20',
   System:      'bg-zinc-500/10   text-zinc-400   border-zinc-500/20',
+  Foldables:   'bg-pink-500/10   text-pink-400   border-pink-500/20',
 }
 
 export default async function MigrationPage() {

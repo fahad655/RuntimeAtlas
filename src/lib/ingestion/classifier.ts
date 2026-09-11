@@ -18,7 +18,7 @@ const CapabilitySchema = z.object({
   slug: z.string().describe('URL-friendly kebab-case slug, all lowercase, no special chars'),
   summary: z.string().describe('1-2 sentence plain-English summary of what this is'),
   whyItMatters: z.string().describe('2-3 bullet points (one per line, starting with "•") on why developers should care'),
-  category: z.enum(['AI', 'UI', 'Performance', 'Safety', 'Store', 'System']),
+  category: z.enum(['AI', 'UI', 'Performance', 'Safety', 'Store', 'System', 'Foldables']),
   frameworks: z.array(z.string()).describe('Apple frameworks involved, e.g. ["FoundationModels", "SwiftUI"]'),
   availability: z.string().describe('Min OS requirement, e.g. "iOS 27+" or "iOS 27+ (Apple Intelligence device required)"'),
   hardwareConstraints: z.string().optional().describe('Hardware, region, or device model limitations if any'),

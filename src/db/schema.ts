@@ -3,7 +3,7 @@ import {
   timestamp, jsonb, real, pgEnum,
 } from 'drizzle-orm/pg-core'
 
-export const categoryEnum = pgEnum('category', ['AI', 'UI', 'Performance', 'Safety', 'Store', 'System'])
+export const categoryEnum = pgEnum('category', ['AI', 'UI', 'Performance', 'Safety', 'Store', 'System', 'Foldables'])
 export const capabilityStatusEnum = pgEnum('capability_status', ['draft', 'needs_review', 'ready', 'deprecated'])
 export const complexityEnum = pgEnum('complexity', ['Simple', 'Medium', 'Advanced'])
 export const demoStatusEnum = pgEnum('demo_status', ['planned', 'implemented', 'deprecated'])

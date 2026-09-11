@@ -49,7 +49,7 @@ function buildServer() {
     'list_capabilities',
     'List iOS 27 SDK capabilities. Filter by category, framework, or changeType (new/updated/deprecated).',
     {
-      category:   z.enum(['AI', 'UI', 'Performance', 'Safety', 'Store', 'System']).optional(),
+      category:   z.enum(['AI', 'UI', 'Performance', 'Safety', 'Store', 'System', 'Foldables']).optional(),
       framework:  z.string().optional().describe('e.g. "FoundationModels", "SwiftUI", "ActivityKit"'),
       changeType: z.enum(['new', 'updated', 'deprecated']).optional(),
       q:          z.string().optional().describe('Full-text search across name and summary'),

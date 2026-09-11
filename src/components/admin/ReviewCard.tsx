@@ -19,8 +19,9 @@ const CATEGORY_COLORS: Record<string, string> = {
   Safety:      'bg-orange-500/10 text-orange-400 border-orange-500/20',
   Store:       'bg-teal-500/10 text-teal-400 border-teal-500/20',
   System:      'bg-gray-500/10 text-gray-400 border-gray-500/20',
+  Foldables:   'bg-pink-500/10 text-pink-400 border-pink-500/20',
 }
-const CATEGORIES = ['AI', 'UI', 'Performance', 'Safety', 'Store', 'System']
+const CATEGORIES = ['AI', 'UI', 'Performance', 'Safety', 'Store', 'System', 'Foldables']
 
 interface Props {
   capability: Capability

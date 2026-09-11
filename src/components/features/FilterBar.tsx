@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { trackEvent } from '@/lib/analytics'
 
-const CATEGORIES = ['AI', 'UI', 'Performance', 'Safety', 'Store', 'System']
+const CATEGORIES = ['AI', 'UI', 'Performance', 'Safety', 'Store', 'System', 'Foldables']
 const SORT_OPTIONS = [
   { value: 'rank',     label: 'Most relevant' },
   { value: 'trending', label: 'Trending' },

@@ -10,6 +10,7 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
   Safety:      { bg: '#4a2e1d', text: '#fb923c' },
   Store:       { bg: '#1d4a4a', text: '#2dd4bf' },
   System:      { bg: '#2e2e2e', text: '#9ca3af' },
+  Foldables:   { bg: '#4a1d3a', text: '#f472b6' },
 }
 
 const CHANGE_LABELS: Record<string, string> = {
