@@ -26,6 +26,7 @@ function getClusterGuide(category: string, frameworks: string[], changeType: str
   }
   if (category === 'AI') return { url: '/blog/ios-27-apple-intelligence-apis', title: 'iOS 27 On-Device AI & Apple Intelligence' }
   if (category === 'UI') return { url: '/blog/swiftui-ios-27-whats-new', title: 'SwiftUI & Liquid Glass in iOS 27' }
+  if (category === 'Foldables') return { url: '/blog/iphone-duo-ios-27-foldables-guide', title: 'iPhone Duo & Foldables in iOS 27' }
   if (changeType === 'deprecated') return { url: '/blog/ios-27-deprecations-breaking-changes', title: 'iOS 27 Breaking Changes & Deprecations' }
   if (changeType === 'updated') return { url: '/blog/ios-26-to-ios-27-migration', title: 'iOS 26 → iOS 27 Migration Guide' }
   return null

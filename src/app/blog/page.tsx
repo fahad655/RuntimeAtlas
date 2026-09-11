@@ -11,6 +11,13 @@ export const metadata: Metadata = {
 
 const POSTS = [
   {
+    slug: 'iphone-duo-ios-27-foldables-guide',
+    title: 'iPhone Duo & Foldables in iOS 27: The Complete Developer Guide',
+    description: 'App resizability, ArrangementView and reserved regions, vertical toolbars, hinge angle, scene accessories, and the dual front camera system — every iPhone Duo capability tracked.',
+    tag: 'Foldables',
+    tagColor: 'text-pink-400 bg-pink-500/10 border-pink-500/20',
+  },
+  {
     slug: 'ios-27-apple-intelligence-apis',
     title: 'iOS 27 On-Device AI & Apple Intelligence: Foundation Models and Beyond',
     description: 'Every AI capability in iOS 27 — Foundation Models for on-device LLM inference, Image Playground integration, Writing Tools APIs, and more from WWDC 2026.',

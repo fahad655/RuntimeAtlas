@@ -15,6 +15,7 @@ SwiftChronicle is an independent iOS SDK reference that catalogues every new, up
 ## Blog — in-depth developer guides
 
 - Blog index: https://swiftchronicle.com/blog
+- iPhone Duo & Foldables in iOS 27: https://swiftchronicle.com/blog/iphone-duo-ios-27-foldables-guide
 - iOS 27 On-Device AI & Apple Intelligence: https://swiftchronicle.com/blog/ios-27-apple-intelligence-apis
 - SwiftUI & Liquid Glass in iOS 27: https://swiftchronicle.com/blog/swiftui-ios-27-whats-new
 - WWDC 2026 Complete iOS 27 SDK API Reference: https://swiftchronicle.com/blog/wwdc-2026-complete-api-list

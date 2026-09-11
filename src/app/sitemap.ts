@@ -13,6 +13,7 @@ const STATIC_PAGES: MetadataRoute.Sitemap = [
   { url: `${BASE}/demos`,        priority: 0.8, changeFrequency: 'weekly' },
   { url: `${BASE}/mcp`,          priority: 0.7, changeFrequency: 'monthly' },
   { url: `${BASE}/blog`,         priority: 0.7, changeFrequency: 'weekly' },
+  { url: `${BASE}/blog/iphone-duo-ios-27-foldables-guide`,                 priority: 0.8, changeFrequency: 'weekly' },
   { url: `${BASE}/blog/ios-27-apple-intelligence-apis`,                    priority: 0.8, changeFrequency: 'weekly' },
   { url: `${BASE}/blog/swiftui-ios-27-whats-new`,                          priority: 0.8, changeFrequency: 'weekly' },
   { url: `${BASE}/blog/wwdc-2026-complete-api-list`,                        priority: 0.8, changeFrequency: 'daily'  },
