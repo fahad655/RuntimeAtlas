@@ -81,8 +81,12 @@ export function SlugGatedContent({
             </div>
             <h2 className="text-lg font-semibold">Gotchas</h2>
           </div>
-          <div className="rounded-2xl border border-amber-500/15 bg-amber-500/[0.04] p-5">
-            <p className="text-sm text-muted-foreground leading-relaxed">{gotchas}</p>
+          <div className="rounded-2xl border border-amber-500/15 bg-amber-500/[0.04] p-5 space-y-2.5">
+            {gotchas.split('\n').filter(Boolean).map((line, i) => (
+              <p key={i} className="text-sm text-muted-foreground leading-relaxed">
+                {line.replace(/^[•\-\*]\s*/, '• ')}
+              </p>
+            ))}
           </div>
         </section>
       )}
